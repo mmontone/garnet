@@ -23,7 +23,8 @@
 			 #+cmu "opal:"
 			 #+(not cmu) Garnet-Opal-PathName)))
 
-(garnet-mkdir-if-needed Garnet-ps-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-ps-Pathname))
 
 (Defparameter Garnet-PS-Files
   '(

@@ -43,7 +43,8 @@
     "scalable-aggregraph-image"
     ))
 
-(garnet-mkdir-if-needed Garnet-Aggregadgets-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Aggregadgets-Pathname))
 
 (dolist (file Garnet-Aggregadgets-Files)
   (let ((gfile (concatenate 'string "aggregadgets:" file)))

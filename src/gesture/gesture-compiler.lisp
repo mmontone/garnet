@@ -35,7 +35,8 @@
 (defpackage :AGATE (:use :KR :INTER :COMMON-LISP)
   (:export DO-GO DO-STOP))
 
-(garnet-mkdir-if-needed Garnet-Gesture-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Gesture-Pathname))
 
 
 (Defvar Garnet-Gesture-Files

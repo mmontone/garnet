@@ -71,7 +71,8 @@ Change log:
 #+allegroV3.1
 (user::gc t)
 
-(garnet-mkdir-if-needed Garnet-gilt-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-gilt-Pathname))
 
 (defvar gilt-files
   '(

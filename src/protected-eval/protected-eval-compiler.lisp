@@ -13,7 +13,8 @@
 ;;; 10/02/03 RGA Moved to scrolling-unlabeled-box to gadgets.
 ;;; 8/31/93 RGA Added search path stuff for CMU lisp.
 
-(garnet-mkdir-if-needed Garnet-Protected-Eval-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Protected-Eval-Pathname))
 
 (garnet-compile "protected-eval:protected-eval")
 (garnet-load "protected-eval:protected-eval")

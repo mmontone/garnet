@@ -55,7 +55,8 @@
 			 #+cmu "opal:"
 			 #+(not cmu) user::Garnet-Opal-PathName)))
 
-(garnet-mkdir-if-needed Garnet-Gadgets-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Gadgets-Pathname))
 		    
 (Defvar Garnet-Gadgets-Files
   '(

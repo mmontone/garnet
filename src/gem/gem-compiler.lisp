@@ -23,7 +23,8 @@
     "define-methods"
     ))
 
-(garnet-mkdir-if-needed Garnet-gem-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-gem-Pathname))
 
 (dolist (file Garnet-Gem-Files)
   (let ((gfile (concatenate 'string "gem:" file)))

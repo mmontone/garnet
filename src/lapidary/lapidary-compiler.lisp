@@ -50,7 +50,8 @@
   (load garnet-c32-loader))
 
 ;;; Create the Lapidary Directory
-(garnet-mkdir-if-needed Garnet-Lapidary-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Lapidary-Pathname))
 
 
 ;;; Compile and load the constraint gadget

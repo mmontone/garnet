@@ -71,6 +71,10 @@ Change log:
   (error "** Must load Garnet-Prepare-Compile and Garnet-Loader before
   loading this file"))
 
+;;; RGA create bin directory if needed.
+(when Multiple-Garnet-Bin-Dirs
+  (garnet-mkdir-if-needed Garnet-Binary-Pathname))
+
 (when compile-utils-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Utils %%%%%%%%%%%%%%% ~%")
   (garnet-load "utils-src:utils-compiler"))

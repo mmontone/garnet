@@ -38,7 +38,7 @@
 ;;;Set this to T if you want the name of the bin directory to
 ;;;vary with the version of garnet, handy if you are debugging
 ;;;with multiple Lisp versions.
-;(setq Multiple-Garnet-Bin-Dirs t)
+(setq Multiple-Garnet-Bin-Dirs t)
 
 
 ;;; The :GARNET-DEBUG option allows many different kinds of run-time checking,
@@ -51,7 +51,7 @@
 (defvar Garnet-Garnet-Debug T)
 
 ;;; The extra test code described above (mainly examples of how to use
-;;;gadgets) is now controlled by an new feature.  Uncommend the
+;;;gadgets) is now controlled by an new feature.  Uncomment the
 ;;;following line if you want to load/compile it.  Note that this is separate
 ;;;test code from the demos.
 ;(pushnew :garnet-test *features*)
@@ -116,8 +116,8 @@
 ;;; This flag controls that.
 ;(setq *kr-only* t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; MCL stuff.  This only relates to the Macintosh Common Lisp version
 ;;; of garnet and not the X windows version.

@@ -21,7 +21,8 @@ Change log:
 
 (in-package "USER")
 
-(garnet-mkdir-if-needed Garnet-Utils-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-Utils-Pathname))
 
 (Defparameter Garnet-Utils-Files
   '(

@@ -30,7 +30,8 @@
 
 (in-package "USER")
 
-(garnet-mkdir-if-needed Garnet-opal-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-opal-Pathname))
 
 (Defparameter Garnet-Opal-Files
   '(

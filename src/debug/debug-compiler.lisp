@@ -30,7 +30,8 @@
 (unless (get :garnet-modules :error-gadget-utils)
   (user::garnet-load "gg:error-gadget-utils"))
 
-(garnet-mkdir-if-needed Garnet-debug-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-debug-Pathname))
 
 (Defvar Garnet-Debug-Files   ;; defvar rather than defparameter so can setq
 			     ;; this variable before loading if only want

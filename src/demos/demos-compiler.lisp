@@ -46,7 +46,8 @@
 (unless (get :garnet-modules :gesture)
   (load user::Garnet-Gesture-Loader))
 
-(garnet-mkdir-if-needed Garnet-demos-Pathname)
+(eval-when (eval load compile)
+  (garnet-mkdir-if-needed Garnet-demos-Pathname))
 
 
   (defvar Garnet-Demos-Files   ;; defvar rather than defparameter so can setq

@@ -8,6 +8,7 @@
 ;;; please contact garnet@cs.cmu.edu to be put on the mailing list. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Changes:
+;;;  6/26/03 rpg         Figured that the +allegro-3.1 should be +allegro.
 ;;;  8/27/93 Mickish     Added suggest-constants
 ;;;  1/10/93 Brad Myers  Added inspector
 ;;;  2/20/92 Mickish     Moved make-package call into Garnet-Loader
@@ -38,6 +39,6 @@
 (dolist (file Garnet-Debug-Files)
   (compile-file (user::garnet-pathnames file Garnet-Debug-Src)))
 
-#+allegroV3.1 (gc t)
+#+allegro (gc t)
 
 (setf (get :garnet-modules :debug) T)

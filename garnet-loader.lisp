@@ -367,8 +367,8 @@ Garnet-Loader again."))
 
 (defvar Your-CLX-Pathname
   (if (eq garnet-version :external)
-      "/usr/local/lib/cmucl/lib/subsystems/"                ;; SET THIS
-    
+      #+cmu "/usr/local/lib/cmucl/lib/subsystems/"                ;; SET THIS
+      #+clisp "/usr/lib/clisp/"                                   ;; SET THIS
       ;; Values useful at CMU:
       #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp700_ux90/omega/usr/local/depot/lucid/non-kanji/"
 			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
@@ -778,11 +778,11 @@ to a 31 character filename with a .lisp suffix."
 
 
 ;; On newer versions of clisp, this makes the renaming .lisp -> .lsp obsolete.
-#+clisp
-(when (boundp 'system::*source-file-types*)
-  (pushnew (pathname ".lisp") system::*source-file-types*)
-)
-
+;;#+clisp
+;;(when (boundp 'system::*source-file-types*)
+;;  (pushnew (pathname ".lisp") system::*source-file-types*)
+;;)
+#+clisp (setq CUSTOM:*WARN-ON-FLOATING-POINT-CONTAGION* nil)
 
 (defun Garnet-Load (filename)
   (let ((pos (position #\: filename)))

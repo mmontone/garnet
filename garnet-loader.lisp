@@ -965,7 +965,7 @@ to a 31 character filename with a .lisp suffix."
   ;; They should promote it.
   #+ccl-5.0               (namestring ccl::*.fasl-pathname*)
   #+clisp                (if (boundp 'system::*compiled-file-types*)
-			     (namestring (first system::*compiled-file-types*))
+                             (concatenate 'string "." (namestring (first system::*compiled-file-types*)))
 			     ".fas"))
 
 

@@ -13,5 +13,6 @@ clean: clispclean cmuclclean
 		
 clispclean:
 		rm */*.fas
+		rm */*.lib
 cmuclclean:
 		rm */*.x86f

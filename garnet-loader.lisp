@@ -977,22 +977,12 @@ to a 31 character filename with a .lisp suffix."
 		     #-(or allegro clisp) (machine-instance)
 		     #+clisp ""
 		     #+allegro (short-site-name)))
-	 (d-number (get-display-number full-display-name))
-	 auth-name auth-data)
-    #-allegro
-    (declare (ignore auth-name auth-data))
-    #+allegro
-    (multiple-value-setq (auth-name auth-data)
-      ;; ~/.Xauthority should be UN-hard-coded to follow rules used
-      ;; by xdm. Note heinous use of unexported xcw function.
-      ;; [2003/09/29:rpg]
-      (xlib::get-authorization-key d-name d-number :tcp "~/.Xauthority"))
+	 (d-number (get-display-number full-display-name)))
     (multiple-value-bind (val errorp)
 	#+cmu (ignore-errors (xlib:open-display d-name :display d-number))
-	#+allegro (excl::ignore-errors
-		   (xlib:open-display d-name :display d-number
-				      :authorization-name auth-name
-				      :authorization-data auth-data))
+	#+allegro
+	(excl::ignore-errors
+	 (common-windows::open-display-with-auth d-name d-number))
 	#+lispworks (common-lisp:ignore-errors
 		     (xlib:open-display d-name :display d-number))
 	#-(or cmu allegro lispworks)

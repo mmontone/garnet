@@ -38,11 +38,10 @@ Change log:
   (let* ((dir (g-value inter :direction-to-scroll))
 	 (obj (g-value inter :obj-being-changed))
 	 (line NIL) (char NIL))
-    
     (multiple-value-setq (line char) (opal:get-cursor-line-char-position obj))
     (case dir
-      ('UP (opal:set-cursor-to-line-char-position obj (1- line) char))
-      ('DOWN (opal:set-cursor-to-line-char-position obj (1+ line) char)))
+      ((UP)   (opal:set-cursor-to-line-char-position obj (1- line) char))
+      ((DOWN) (opal:set-cursor-to-line-char-position obj (1+ line) char)))
     (kr-send obj :auto-scroll obj)
     (curs-move inter obj)  ;; curs-move defined in multifont-textinter.lisp
     ))
@@ -95,7 +94,7 @@ Change log:
 	    (setf frag-pos 0)
 	    (incf char-pos)))
 	(incf char-pos)))))
-	
+
 ;;;============================================================
 ;;; Default Procedures to go into the slots
 ;;;============================================================
@@ -220,7 +219,7 @@ Change log:
 
 
 (defun Selection-Int-Back-Inside-Action (an-interactor outside-control
-                                         object points) 
+                                         object points)
    (declare (ignore outside-control))
    (if-debug an-interactor (format T "Selection int-back-in, new points=~s~%"
          points))
@@ -253,7 +252,7 @@ Change log:
    (curs-move an-interactor object)
 )
 
-  
+
 ;;;============================================================
 ;;; Go procedure utilities
 ;;;============================================================
@@ -358,9 +357,9 @@ Change log:
 				   (g-value an-interactor :timer-repeat-wait)
 				   NIL)
 	     (kill-timer-process an-interactor))))
-	    
+
      ;;;;;;;;;;;;;;;;;;;; The above stuff is for the timer.
-     
+
      (when (g-value an-interactor :outside) ;needed if stop while outside
        (set-obj-list4-slot-no-db an-interactor :saved-last-points points)
        )

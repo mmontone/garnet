@@ -1,0 +1,74 @@
+Garnet stands for Generating an Amalgam of Real-time, Novel Editors and 
+Toolkits. It was originally developed by the User Interface Software Group 
+in the Human Computer Interaction Institute in the School of Computer Science 
+at Carnegie Mellon University in the early to mid 1990s. It is an environment 
+for creating interfaces to Common Lisp software.
+
+In 1995, active support for Garnet at CMU was dropped as key people moved on 
+and development focus shifted.  Various people made minor updates over the 
+years, with Fred Gilham's version emerging as the most up to date.  The 
+current version in sourceforge is based off of that distribution, and includes
+more recent work by him as well.
+
+The sourceforge website is at http://garnetlisp.sf.net
+
+Other pages for Garnet:
+
+The original Garnet homepage:  http://www-2.cs.cmu.edu/~garnet/
+
+Fred Gilman' s Garnet:  ftp://ftp.csl.sri.com/pub/users/gilham/garnet/
+
+************************
+Building
+************************
+
+To build Garnet, set all the variables in the file garnet-loader.lisp to 
+values consistent with your system.  Then, to build for CMUCL type:
+
+make cmucl
+
+or for Clisp:
+
+make clisp
+
+You can build for both versions with the command:
+
+make all
+
+and there should be no conflict between the two.
+
+To clean out the built files, for CMUCL only type:
+
+make cmuclclean
+
+or for Clisp:
+
+make clispclean
+
+or both versions at once:
+
+make clean
+
+
+***************************
+Running
+***************************
+
+To load Garnet and run the demos, do the following:
+
+Clisp:  (tested with 2.29)
+
+clisp -K full rundemos.lisp
+
+CMUCL:  (tested with 18e)
+
+lisp < rundemos.lisp
+
+You can use this with both compiled and uncompiled Garnet.  Compiled,
+however, will be many times faster.
+
+Note:
+
+   For some reason in clisp, when one wants to exit after loading Garnet by
+   hand, the (quit) command doesn't work.  Instead, use (ext:quit).  CMUCL 
+   doesn't appear to have this problem.

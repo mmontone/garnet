@@ -209,6 +209,7 @@
 	    ;; From virtual-aggregates.lisp
 	    virtual-aggregate remove-item add-item change-item point-to-rank
 	    recalculate-virtual-aggregate-bboxes do-in-clip-rect
+	    do-items ;; [2003/09/16:rpg]
 	    
 	    get-standard-font
 	    )))

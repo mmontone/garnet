@@ -476,3 +476,18 @@ Change log:
 ;  (when (g-local-value my-agg-list :components)
 ;    (fix-update-slots my-agg-list))
   )
+
+(define-method :do-items aggrelist (a-aggregate a-function 
+						&key (type t))
+   (block do-items-method
+     (when (numberp (g-local-value a-aggregate :items))
+       (warn "Can't iterate over the items of a non-itemized aggrelist.")
+       (return-from do-items-method (values)))
+     (let ((items (g-local-value a-aggregate :items)))
+       (loop for child in items
+	     ;; there may be "holes" in the virtual aggregate's
+	     ;; :item-array [2003/09/16:rpg]
+	     unless (null child)
+	       when (or (eq type t)
+			(is-a-p child type))
+		 do (funcall a-function child)))))

@@ -94,6 +94,15 @@
   `(let ((the-schema ,schema))
     (kr-send the-schema :do-components the-schema ,@args)))
 
+;;;---------------------------------------------------------------------------
+;;; Added do-items because it would be very helpful to operate over the
+;;; items of a virtual-aggregate or an aggrelist. [2003/09/16:rpg]
+;;;---------------------------------------------------------------------------
+
+(defmacro do-items (schema &rest args)
+  `(let ((the-schema ,schema))
+    (kr-send the-schema :do-items the-schema ,@args)))
+
 (defmacro point-to-component (schema &rest args)
   `(let ((the-schema ,schema))
     (kr-send the-schema :point-to-component the-schema ,@args)))

@@ -407,3 +407,13 @@
 (define-method :destroy-me opal:virtual-aggregate (gob &optional (top-level-p t))
   (call-prototype-method gob top-level-p))
 
+(define-method :do-items opal:virtual-aggregate (a-aggregate a-function 
+							     &key (type t))
+   (let ((item-array (g-value a-aggregate :item-array)))
+     (loop for child across item-array
+	   ;; there may be "holes" in the virtual aggregate's
+	   ;; :item-array [2003/09/16:rpg]
+	   unless (null child)
+	     when (or (eq type t)
+		      (is-a-p child type))
+	       do (funcall a-function child))))

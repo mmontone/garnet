@@ -14,6 +14,9 @@
 ;;;  are called by the gadgets.
 ;;;
 ;;; CHANGE LOG:
+;;; 09/17/03 Robert Goldman - Modified PUT-FILENAMES-IN-MENU to make a 
+;;;            happier fit for CMUCL (by turning off some of the extensions
+;;;            to DIRECTORY).
 ;;; 08/20/98 Fred Gilham - Wrote CMUCL version of real-path that made better
 ;;;            substitutions for "." and "" pathnames.
 ;;; 12/06/94 Bruno Haible - Commented out :directories keyword for CLISP 
@@ -294,6 +297,11 @@
 	#-clisp
 	(dir (directory #+apple (concatenate 'string dir-name "*") 
                         #-apple dir-name
+			;; cmucl has a few keyword options that
+			;; default to values we might not like...
+			#+cmu :check-for-subdirs #+cmu NIL
+			#+cmu :truenamep #+cmu NIL
+			#+cmu :follow-links #+cmu NIL
                         #-(or cmu clisp) :directories #-(or cmu clisp) t))
 	(save-win (g-value save-gad :window)))
     (dolist (name dir)

@@ -81,7 +81,7 @@
 	 `(:name "Garnet event loop"
 	   :initial-bindings
 	   ,(acons '*terminal-io* tty
-	     excl:*cl-default-special-bindings*))
+		   excl:*cl-default-special-bindings*))
 	 #-(or allegro-v4.0 allegro-v4.1 allegro-v4.2)
 	 "Garnet event loop"
 	 #'(lambda (t-io)
@@ -141,36 +141,6 @@
    (setf (mp:process-priority *main-event-loop-process*) 1)
    *main-event-loop-process*)
 
-;;; This was needed in order to survive the debugger on the HP.
-;;; There is probably something wrong with Lucid on the HP, since this is needed.
-#+lucid
-(unless (fboundp 'lucid::machine-specific-restart-current-process)
-  (defun lucid::machine-specific-restart-current-process ()))
-
-#+lucid
-(defun launch-main-event-loop-process ()
-  "Spawn a process which is doing Garnet interaction all of the time.
-   RETURN the process."
-  ;; If there was already a process running, kill it.
-  (when (and *main-event-loop-process*
-             (lcl:processp *main-event-loop-process*))
-    (lcl:kill-process *main-event-loop-process*))
-  (setf *main-event-loop-process*
-	(lcl:make-process
-	 :name "Garnet event loop"
-	 :priority 50
-	 :function 
-	 #'(lambda ()
-	     ;; first, throw away any pending events
-	     (discard-all-pending-events)
-	     (lcl:handler-bind
-	      ((lcl::error #'lcl:invoke-debugger))
-	      (let ((root-window (gv device-info :current-root)))
-		(restart-case
-		 (loop
-		  (inter::default-event-handler root-window))
-		 (abort () :report "Discard pending X events, restart loop"
-			(discard-all-pending-events)))))))))
 
 #+(and cmu mp)
 (defun launch-main-event-loop-process ()
@@ -197,7 +167,8 @@
    (setf lisp::*max-event-to-sec* 0)
    *main-event-loop-process*)
 
-#-(or allegro lucid lispworks (and cmu mp))
+
+#-(or allegro lispworks (and cmu mp))
 (defun launch-main-event-loop-process ())
 
 
@@ -216,15 +187,6 @@
     (mp:process-kill *main-event-loop-process*)
     (setf *main-event-loop-process* nil)))
 
-#+lucid
-(defun kill-main-event-loop-process ()
-  "
-  Kill the current main-event-loop process.
-  "
-  (when (and *main-event-loop-process*
-             (lcl:processp *main-event-loop-process*))
-    (lcl:kill-process *main-event-loop-process*)
-    (setf *main-event-loop-process* nil)))
 
 #+(and cmu mp)
 (defun kill-main-event-loop-process ()
@@ -236,7 +198,7 @@
     (mp:destroy-process *main-event-loop-process*)
     (setf *main-event-loop-process* nil)))
 
-#-(or allegro lucid lispworks (and cmu mp))
+#-(or allegro lispworks (and cmu mp))
 (defun kill-main-event-loop-process ())
 
 ;;;===========================================================================
@@ -247,10 +209,6 @@
 
 (defun main-event-loop-process-running-p ()
   (and opal::*main-event-loop-process*
-       #+lucid
-       (not (equal "Run"
-		   (lcl:process-whostate
-			opal::*main-event-loop-process*)))
        ;;; Franz's comments about mp:process-runnable-p:  It is true of any
        ;;; process that has a stack-group (meaning that is has been reset and
        ;;; has not yet exhausted its computation), has at least one run reason,
@@ -283,8 +241,7 @@
   (and opal::*main-event-loop-process*
        (not (eq opal::*main-event-loop-process*
 		#+(or allegro lispworks (and cmu mp)) mp:*current-process*
-		#+lucid user::*current-process*
-		#-(or allegro lucid lispworks (and cmu mp)) T)
+		#-(or allegro lispworks (and cmu mp)) T)
 	    )))
 
 
@@ -310,11 +267,7 @@
   (if user::update-locking-p
       (unless (eq (mp:lock-owner *update-lock*) mp:*current-process*)
 	;; Lock only if lock is held by a different process, or unlocked.
-	(mp:process-lock *update-lock*)))
-      
-  #+LUCID
-  (if user::update-locking-p
-      (lcl:process-lock *update-lock*)))
+	(mp:process-lock *update-lock*))))
 
 
 (defun update-stop-fn (window)
@@ -331,8 +284,4 @@
   ;; CT 3Sep93
   (if (and user::update-locking-p
 	   (eq (mp:lock-owner *update-lock*) mp:*current-process*))
-      (mp:process-unlock *update-lock*))
-    
-  #+LUCID
-  (if user::update-locking-p
-      (lcl:process-unlock *update-lock* user::*current-process* :ignore)))
+      (mp:process-unlock *update-lock*)))

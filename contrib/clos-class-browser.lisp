@@ -1,9 +1,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; A simple CLOS class browser using Garnet, by Jose E. Hernandez, LLNL ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load garnet-aggregraphs-loader)
-(load (user::garnet-pathnames "scrolling-window-loader"
-		       user::Garnet-Gadgets-PathName))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (load garnet-aggregraphs-loader)
+  (load (user::garnet-pathnames "motif-scrolling-window-loader"
+				user::Garnet-Gadgets-PathName)))
+
+(defpackage "PORTABLE-MOP"
+  (:nicknames "PMOP")
+  (:use)
+  (:import-from #+cmu "PCL" #-cmu "CLOS"
+		class-of class-name find-class 
+		class-direct-superclasses class-direct-subclasses
+		#-clisp
+		specializer-direct-methods
+		standard-object)
+  (:export class-of class-name find-class 
+	   class-direct-superclasses class-direct-subclasses
+	   #-clisp
+	   specializer-direct-methods
+	   standard-object))
 
 
 (defparameter *clos-class-browser-max-width* 900) ;max width for the window
@@ -32,9 +49,6 @@
 ;;;       clos::standard-object, clos::class-direct-superclasses,
 ;;;       clos::class-direct-subclasses, clos::specializer-direct-methods
 
-(defpackage "PCL"
-  (:nicknames "CLOS"))
-
 (Let ((-clos-class-browser-window-objects- ()))
       
       (defun browse-clos-class (arg &key ((:depth max-depth) nil)
@@ -45,14 +59,16 @@
 	"make a graph of the subclasses or superclasses a CLOS class"
 	
 	(let ((class-object (cond
-			     ((symbolp arg) (find-class arg))
-			     ((subtypep (type-of arg) 'clos::standard-object)
-			      (class-of arg))
+			     ((symbolp arg)
+			      (pmop:find-class arg))
+			     ((subtypep (type-of arg)
+					'pmop::standard-object)
+			      (pmop:class-of arg))
 			     (t (error "Illegal object."))))
 	      (window (gensym)))
 	  
 	  ;; create the window to hold the graph
-	  (kr:create-instance window garnet-gadgets:scrolling-window-with-bars
+	  (kr:create-instance window garnet-gadgets:motif-scrolling-window-with-bars
 	      (:left left) (:top top) (:visible nil)
 	      (:width (if width width
 			(kr:o-formula
@@ -74,16 +90,16 @@
 			      (case direction
 				(:down "Subclass")
 				(t "Superclass"))
-			      (class-name class-object))))
+			      (pmop:class-name class-object))))
 	  (when message
 	    (format t "~%Generating Graph for Class ~s, Please Wait!"
-		    (class-name class-object)))
+		    (pmop:class-name class-object)))
 	  (opal:update (eval window))
 	  
 	  (let ((childrens-of
 		 (case direction
-		   (:up #'clos::class-direct-superclasses)
-		   (:down #'clos::class-direct-subclasses)
+		   (:up #'pmop:class-direct-superclasses)
+		   (:down #'pmop:class-direct-subclasses)
 		   (t (error "Illegal keyword for direction, must be :up or :down")))))
 	    
 	    ;; create the graph
@@ -95,7 +111,7 @@
 						    (funcall childrens-of class))
 						(funcall childrens-of class))))
 		      (:info-function #'(lambda (class)
-					  (string (class-name class))))
+					  (string (pmop:class-name class))))
 		      (:source-roots `(,class-object))
 		      (:node-prototype
 		       (kr:create-instance nil opal:aggregraph-node-prototype
@@ -126,7 +142,7 @@
 				   (declare (ignore inter))
 				   (push
 				    (browse-clos-class
-				     (class-name (kr:g-value node :source-node))
+				     (pmop:class-name (kr:g-value node :source-node))
 				     :direction :down
 				     :depth max-depth
 				     :message nil)
@@ -147,7 +163,7 @@
 				   (declare (ignore inter))
 				   (push
 				    (browse-clos-class
-				     (class-name (kr:g-value node :source-node))
+				     (pmop:class-name (kr:g-value node :source-node))
 				     :direction :up
 				     :depth max-depth
 				     :message nil)
@@ -167,8 +183,12 @@
 			      ,#'(lambda (inter node)
 				   (declare (ignore inter))
 				   (mapc #'print
-					 (clos::specializer-direct-methods
-					  (kr:g-value node :source-node)))
+					 #-clisp
+					 (pmop:specializer-direct-methods
+					  (kr:g-value node :source-node))
+					 ;; CLISP doesn't have this.
+					 #+clisp nil
+					 )
 				   (format t "~%")))))))))
 	  
 	  (kr:s-value (eval window) :visible t)

@@ -49,12 +49,11 @@
 (defvar CONTROL-PANEL)
 (defvar STATUS)
 
-
 (defun PATHNAME-TO-STRING-FN (pathname)
   (if pathname
       (let ((file (file-namestring pathname)))
-      
-	(if (string= file "")   ; then pathname is a directory.
+	;; CMU file-namestring can return null.
+	(if (or (null file) (string= file "")) ; then pathname is a directory.
 	                        ; So strip off the "/", get the directory name,
 	                        ; and restore the "/".
             #+apple (file-namestring (string-right-trim ":" (namestring pathname)))

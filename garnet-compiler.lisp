@@ -56,6 +56,10 @@ Change log:
 	     (boundp 'load-aggregraphs-p-copy)  
 	     (boundp 'load-debug-p-copy)        (boundp 'Garnet-Debug-Src)
 	     (boundp 'load-gadgets-p-copy)      (boundp 'Garnet-Gadgets-Src)
+	     #+garnet-protected-eval
+	     (boundp 'load-protected-eval-p-copy)
+	     #+garnet-protected-eval	     
+	     (boundp 'Garnet-Protected-Eval-Src)
 	     (boundp 'load-gesture-p-copy)      (boundp 'Garnet-Gesture-Src)
 	     (boundp 'load-demos-p-copy)        (boundp 'Garnet-Demos-Src)
 	     (boundp 'load-C32-p-copy)          (boundp 'Garnet-C32-Src)
@@ -129,9 +133,17 @@ Change log:
 (when compile-gadgets-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gadgets %%%%%%%%%%%%%%% ~%")
   (load (merge-pathnames "gadgets-compiler" Garnet-Gadgets-Src)))
-(when (or load-gadgets-p-copy compile-demos-p compile-lapidary-p)
+(when (or load-gadgets-p-copy #+garnet-protected-eval compile-protected-eval-p compile-demos-p compile-lapidary-p)
   (unless compile-gadgets-p
     (load Garnet-Gadgets-Loader)))
+
+#+garnet-protected-eval
+(when compile-protected-eval-p
+  (format T "~%  %%%%%%%%%%%%%%  Compiling Protected-eval %%%%%%%%%%%%%%% ~%")
+  (load (merge-pathnames "protected-eval-compiler" Garnet-Protected-Eval-Src)))
+#+garnet-protected-eval
+(unless compile-protected-eval-p
+  (load Garnet-Protected-Eval-Loader)) ; have to load this to go on
 
 
 (when compile-debug-p

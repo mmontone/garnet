@@ -827,6 +827,7 @@ Change log:
 (when user::launch-process-p
   (opal:launch-main-event-loop-process))
 
+
 (defun main-event-loop (&key (exit-when-no-window-visible :on))
   "Event handler for the interactor windows"
   #+(or (and cmu (not mp)) apple)

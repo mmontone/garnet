@@ -154,6 +154,7 @@
 	    font cursor-text graphic-quality font-from-file cursor-font
 	    arrow-cursor arrow-cursor-mask arrow-pair
 	    hourglass-cursor hourglass-cursor-mask hourglass-pair
+	    garbage-cursor garbage-cursor-mask garbage-pair
 	    with-hourglass-cursor with-cursor default-font
 	    display-info-display display-info-screen
 	    display-info-root-window display-info-line-style-gc

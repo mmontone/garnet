@@ -48,7 +48,7 @@ endif
 if (! $?GarnetSrcDir) set GarnetSrcDir = "$GarnetDir/src"
 if (! $?GarnetBinDir) set GarnetBinDir = "$GarnetDir/bin"
 
-set SrcDirs = (utils kr gworld gem opal inter gesture ps aggregadgets gadgets debug lapidary demos gilt c32)
+set SrcDirs = (utils kr gworld gem opal inter gesture ps aggregadgets gadgets protected-eval debug lapidary demos gilt c32)
 set DirCnt  = $#SrcDirs
 set ThisDir = 0
 

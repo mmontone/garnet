@@ -360,7 +360,8 @@
 				       ;; if it is being kept in storage
 				       ;; (e.g., after a remove-item call)
 				       (gv obj-over :parent)))))
-	  (:fast-redraw-p T)(:draw-function :xor)
+	  (:fast-redraw-p T)
+          (:draw-function :xor)
 	  (:line-style NIL)
 	  (:filling-style ,opal:black-fill))))
 

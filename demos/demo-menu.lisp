@@ -66,7 +66,7 @@ Change log:
 		  MENU1 MENU2 MENU3 MENU4 MENU5 MENU6 PLUS-FEEDBACK
 		  ARROW-FEEDBACK MENU4-ITEM-PROTOTYPE MENU6-ITEM-PROTOTYPE
 		  MENU-WIN MENU-TOP-AGG TEXT1 TEXT2 TEXT3 DASHED-ITEM
-		  MENU1-OBJ MENU6-OBJ MENU3-OBJ MENU3-OBJ MENU5-OBJ BIG-TEXT
+		  MENU1-OBJ MENU6-OBJ MENU3-OBJ MENU5-OBJ BIG-TEXT
 		  MEDIUM-TEXT SMALL-TEXT SQUARE-ITEM CIRCLE-ITEM))
 
 
@@ -348,6 +348,7 @@ Change log:
        (if *color-p*
          (list opal:red opal:purple opal:green opal:blue opal:yellow)
 	 (list opal:black opal:black opal:black opal:black opal:black)))
+   ;; (:final-feedback-p t)
    (:font (opal:get-standard-font :serif :roman :large)))
 
 ;;; ********************************************************************
@@ -723,13 +724,14 @@ Change log:
 		  		  (:foreground-color button-color)))
         (s-value (g-value button :shadow) :filling-style
 	         (create-instance nil opal:black-fill
-				  (:foreground-color button-color)))
+				  (:foreground-color button-color)
+				  (:background-color button-color)))
         (s-value (g-value button :gray-outline) :filling-style
 	         (create-instance nil opal:gray-fill
 				  (:foreground-color button-color))))))
 
   (s-value (g-value MENU3-OBJ :final-feedback) :filling-style
-    (o-formula (gv MENU3-OBJ :text-button-list :selected :shadow :filling-style)))
+	   (o-formula (gv MENU3-OBJ :text-button-list :selected :shadow :filling-style)))
 
 
   ;; Create and add objects to the aggrelist in MENU5-OBJ.  (Since MENU5

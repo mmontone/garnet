@@ -437,6 +437,30 @@
 
 (defparameter HourGlass-Pair (cons HOURGLASS-CURSOR HOURGLASS-CURSOR-MASK))
 
+#+cmu
+(progn
+
+  (create-instance 'opal::garbage-CURSOR opal:bitmap
+		   (:constant :image)
+		   (:image (o-formula (Get-Garnet-Bitmap "garbage.cursor"))))
+
+  (create-instance 'opal::garbage-CURSOR-MASK opal:bitmap
+		   (:constant :image)
+		   (:image (o-formula (Get-Garnet-Bitmap "garbage.mask"))))
+
+  (defparameter garbage-Pair (cons garbage-CURSOR garbage-CURSOR-MASK))
+
+  (defun set-gc-cursor ()
+    (opal:change-cursors garbage-pair))
+
+  (defun unset-gc-cursor ()
+    (opal:restore-cursors))
+
+  (pushnew #'set-gc-cursor ext:*before-gc-hooks*)
+  (pushnew #'unset-gc-cursor ext:*after-gc-hooks*)
+  )
+
+
 (create-instance 'opal:ARROWHEAD opal:polyline
   :declare ((:parameters :head-x :head-y :from-x :from-y :length :diameter
 			 :open-p :line-style :filling-style :draw-function

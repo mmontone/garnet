@@ -317,7 +317,7 @@
 ;;;	V.	Demo code
 ;;;
 
-#|  
+
 ;;; Take off # | comments markers at front and end to run
 
 (defparameter test-choice NIL)
@@ -346,5 +346,3 @@
 
 (export '(choice-gadget-go choice-gadget-Stop)
 	(find-package "GARNET-GADGETS"))
-|#
-

@@ -1,18 +1,20 @@
-# 
+#
 #Makefile for building Garnet
 #
+CLISP=clisp
+CMUCL=lisp
+
 all: clisp cmucl
 
-clisp: 
-		clisp -K full build.lisp
+clisp:
+		$(CLISP) -K full -interactive-debug build.lisp
 
 cmucl:
-		lisp < build.lisp
+		$(CMUCL) < build.lisp
 
 clean: clispclean cmuclclean
-		
+
 clispclean:
-		rm */*.fas
-		rm */*.lib
+		rm */*.fas */*.lib
 cmuclclean:
 		rm */*.x86f

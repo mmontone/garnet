@@ -1,0 +1,8 @@
+contrib/clos-class-browser.lisp
+
+There seem to be a bunch of patches to make this work with CMU and
+CLISP, but does that break Allegro implementation?
+
+Do we still want to support Lucid?
+
+

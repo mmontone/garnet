@@ -1,0 +1,25 @@
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+
+;;; Created 6/25/92 RGA
+;;; 11/19/03 RGA
+;;; Changed to use garnet-load to get around long file name problems in MacOS.
+
+
+;;; Loader for protected eval stuff.
+
+(in-package "USER")
+
+(unless (get :garnet-modules :scrolling-unlabeled-box)
+  (format t "Loading Scrolling Unlabeled Box~%")
+  (dolist (pair '(			;(:new-types "new-types")
+		  (:scrolling-labeled-box "gadgets:scrolling-labeled-box-loader")
+		  (:scrolling-unlabeled-box "gadgets:scrolling-unlabeled-box")
+		  ))
+    (unless (get :garnet-modules (car pair))
+      (garnet-load (cadr pair))
+	    :verbose T)))
+  (format t "...Done Scrolling Unlabeled box.~%"))
+
+(setf (get :garnet-modules :new-types) t)
+(setf (get :garnet-modules :scrolling-unlabeled-box) t)
+

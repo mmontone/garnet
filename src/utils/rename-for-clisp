@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Provided by Bruno Haible <haible@ma2s2.mathematik.uni-karlsruhe.de>
+#
+# Renames the files to CLISP conventions: .lsp for lisp source
+
+for d in . aggregadgets c32 debug demos gadgets gesture gilt inter kr \
+         lapidary opal ps utils contrib contrib/graph-editor contrib/prompter
+do
+(cd $d
+for f in *.lisp
+do
+mv $f `basename $f .lisp`.lsp
+done)
+done
+

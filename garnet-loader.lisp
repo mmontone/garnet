@@ -1158,6 +1158,11 @@ running Garnet."
   (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
 |#
 
+;; Clisp doesn't seem to preserve the normal quit syntax after the Garnet
+;; load - these definitions fix that.  Probably not the best way but it works.
+#+clisp (defun quit () (ext:quit))
+#+clisp (defun exit () (ext:quit))
+#+clisp (defun bye () (ext:quit))
 
 (format t "~%... Garnet Load Complete ...~%")
 

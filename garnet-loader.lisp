@@ -530,6 +530,7 @@ directory."
 (defun Get-Garnet-Binary-Pathname (version)
   (let ((directory-name
 	 (case version
+	   (:external-6.2-solaris "bin6.2")
 	   (:external-6.1-solaris "bin6.1")
 	   (:external-5.0-solaris "bin5.0")
 	   (:external-5.0-sunos "bin5.0.sunos")

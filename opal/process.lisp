@@ -66,6 +66,12 @@
 (defun discard-all-pending-events ()
   (gem:discard-pending-events (g-value device-info :current-root)))
 
+;;;---------------------------------------------------------------------------
+;;; I'm not sure whether we need the allegro 4.0 bindings.  So
+;;; for now I'm changing RGA's #+(or allegro-v4.0 allegro-v4.1 allegro-v4.2)
+;;; to (and allegro-version>= (version>= 4.0))
+;;;---------------------------------------------------------------------------
+
 
 #+allegro
    ;; RGA --- The optional tty parameter ensures that processes will not
@@ -77,12 +83,12 @@
     (mp:process-kill *main-event-loop-process*))
   (setf *main-event-loop-process*
 	(mp:process-run-restartable-function
-	 #+(or allegro-v4.0 allegro-v4.1 allegro-v4.2)
+	 #+(and allegro-version>= (version>= 4.0))
 	 `(:name "Garnet event loop"
 	   :initial-bindings
 	   ,(acons '*terminal-io* tty
 		   excl:*cl-default-special-bindings*))
-	 #-(or allegro-v4.0 allegro-v4.1 allegro-v4.2)
+	 #-(and allegro-version>= (version>= 4.0))
 	 "Garnet event loop"
 	 #'(lambda (t-io)
 	     ;; RGA --- This gets around a "feature" of Allegro 4.1

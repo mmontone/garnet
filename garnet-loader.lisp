@@ -1393,7 +1393,7 @@ running Garnet."
   #+lispworks
   (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
   #+clisp
-  (system::make-pipe-input-stream (string command))
+  (ext:make-pipe-input-stream (string command))
   #-(or allegro lucid cmu lispworks clisp)
   (error "Don't know how to execute shell functions in this lisp"))
 

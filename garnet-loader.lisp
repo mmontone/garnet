@@ -662,7 +662,7 @@ directory."
 ;;; RGA commented this out.  We can just use the garnet-compile
 ;;; function to compile directly into the source directory, no muss, no fuss.
 ;;; This way compilation does not depend on a unix utility.
-(when (and (boundp '*Garnet-Going-To-Compile*)
+ (when (and (boundp '*Garnet-Going-To-Compile*)
 	   *Garnet-Going-To-Compile*)
   (setf Garnet-Utils-Pathname Garnet-Utils-Src)
   (setf Garnet-KR-Pathname Garnet-KR-Src)
@@ -1017,6 +1017,8 @@ to a 31 character filename with a .lisp suffix."
 
           (format T "Compiling ~s~%" src-finalname)
           (format T "for output to ~s~%" bin-finalname)
+          ;; sds: make sure that bin/foo directory is already there
+          (garnet-mkdir-if-needed bin-finalname)
           (compile-file src-finalname :output-file bin-finalname))
         ;; else no colon, abort
         (error "NO COLON, aborting compile"))))

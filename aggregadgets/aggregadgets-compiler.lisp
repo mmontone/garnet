@@ -46,7 +46,7 @@
   (compile-file (user::garnet-pathnames file Garnet-Aggregadgets-Src))
   (load (user::garnet-pathnames file Garnet-Aggregadgets-Src)))
 
-#+allegro-V3.1 (gc t)
+#+allegro (gc t)
 
 (setf (get :garnet-modules :aggregadgets) t)
 (setf (get :garnet-modules :aggregraphs) t)

@@ -15,6 +15,15 @@
 ;;;;	II.	Popup-soar-status-window
 ;;;; 
 ;;;; (C) Copyright 1990, Frank Ritter, all rights reserved.
+;;;; The material in this file is made available according to the
+;;;; terms of the GNU LGPL, modified by the Lisp LGPL preamble.  Both
+;;;; of those documents are available in the doc subdirectory of the
+;;;; Garnet distribution.
+
+;;;; 21Jun04 - per agreement with Frank Ritter, the license terms of
+;;;; this file are clarified to be LLGPL. [2004/06/21:rpg]
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

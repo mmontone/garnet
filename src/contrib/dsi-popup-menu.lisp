@@ -16,6 +16,13 @@
 ;;;;	I.  Future home of a pull-down menu
 ;;;; 
 ;;;; (C) Copyright 1991, Carnegie Mellon University, all rights reserved.
+;;;; The material in this file is made available according to the
+;;;; terms of the GNU LGPL, modified by the Lisp LGPL preamble.  Both
+;;;; of those documents are available in the doc subdirectory of the
+;;;; Garnet distribution.
+;;;; The above was added per correspondence with Frank Ritter, and
+;;;; addresses IP issues with him.  I assume that any such issues with
+;;;; CMU are addressed by their open-sourcing of Garnet. [2004/06/21:rpg]
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

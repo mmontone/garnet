@@ -19,6 +19,14 @@
 ;;;; 	I.	popup-interactor schema
 ;;;; 
 ;;;; (C) Copyright 1990, Frank Ritter, all rights reserved.
+;;;; The material in this file is made available according to the
+;;;; terms of the GNU LGPL, modified by the Lisp LGPL preamble.  Both
+;;;; of those documents are available in the doc subdirectory of the
+;;;; Garnet distribution.
+
+;;;; 21Jun04 - per agreement with Frank Ritter, the license terms of
+;;;; this file are clarified to be LLGPL. [2004/06/21:rpg]
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;
@@ -28,6 +36,7 @@
 
 ============================================================
 Change log:
+        [2004/06/16:rpg] Modified in-package for ANSI CL
         1/17/91  Frank Ritter - wrote a popup-interactor.
         ...
 	8/8/88 Brad Myers - analogous code started
@@ -38,7 +47,7 @@ Change log:
 ;;;	i.	minor inits
 ;;;
 
-(in-package "INTERACTORS" :use '("LISP" "KR") :nicknames '("INTER"))
+(in-package "INTERACTORS")
 (export '(popup-interactor))
 (proclaim '(special popup-Interactor))
 ;; requires move-grow interactors
@@ -143,6 +152,7 @@ Change log:
      (:outside-action 'popup-Int-Outside-Action)
      (:back-inside-action 'popup-Int-Back-Inside-Action)
      (:obj-to-change NIL)  ;supplied by application program
+     ;; this slot seems unused...
      (:attach-popup :where-hit) ; where attach to object
      (:x-off 0) ; needed for :where-hit.  Offset from where
      (:y-off 0)    ;    hit to top left of object

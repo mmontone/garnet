@@ -1871,14 +1871,21 @@ pixmap format in the list of valid formats."
 
 
 
-(defun x-set-device-variables (root-window)
-  (declare (ignore root-window))
+(defun x-set-device-variables (root-window &aux auth-name auth-data)
+  (declare (ignore root-window)
+	   #-allegro (ignore auth-name auth-data)
+	   )
   (setq *default-x-display-number*
 	(get-display-number opal::*default-x-display-name*))
 
   (setq opal::*default-x-display*
+	#-allegro
 	(xlib:open-display opal::*default-x-display-name*
-			   :display *default-x-display-number*))
+			   :display *default-x-display-number*)
+	#+allegro
+	(common-windows::open-display-with-auth
+	 opal::*default-x-display-name* *default-x-display-number*)
+	)
   (setq opal::*default-x-screen*
         (nth opal::*default-x-screen-number*
              (xlib:display-roots opal::*default-x-display*)))
@@ -1898,9 +1905,13 @@ pixmap format in the list of valid formats."
 	 #-cmu
 	 (nth opal::*default-x-screen-number*
 	      (xlib:display-roots
+	       #-allegro
 	       (xlib:open-display
 		opal::*default-x-display-name*
-		:display *default-x-display-number*)))))
+		:display *default-x-display-number*)
+	       #+allegro
+	       (xcw::open-display-with-auth opal::*default-x-display-name* *default-x-display-number*)
+	       ))))
   (setq opal::*white* (xlib:screen-white-pixel opal::*default-x-screen*))
   (setq opal::*black* (xlib:screen-black-pixel opal::*default-x-screen*))
   (setf opal::*exposure-event-mask*

@@ -7,9 +7,9 @@
 ;;; domain.  If you are using this code or any part of Garnet,      ;;;
 ;;; please contact garnet@cs.cmu.edu to be put on the mailing list. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 
+;;;
 ;;; This file loads all the garnet modules.
-;;; 
+;;;
 ;;; ** To prevent certain parts from being loaded, first set
 ;;;      user::load-XX-p to NIL.
 ;;; ** To get some of the parts which are not loaded by default to be loaded,
@@ -21,7 +21,7 @@
 ;;;    before loading this file and/or Garnet-xx-src
 ;;;
 ;;; The controlling variables are:
-;;; 
+;;;
 ;;;      load-clx-p          (Default: NIL => clx not loaded)
 ;;;      load-utils-p        (Default: T   => utilities loaded)
 ;;;      load-kr-p           (Default: T   => kr loaded)
@@ -61,7 +61,7 @@
 ============================================================
 Change log:
 10/04/03 Russell Almond - Changed #+garnet-protected-eval to
-                          (load-protected-eval-p) (Protected-eval 
+                          (load-protected-eval-p) (Protected-eval
 			  basically replaces code in processes.lisp
 10/04/03 Russell Almond - Added fix for MCL #\return vs #\linefeed
                           issue. (do-load function).
@@ -75,7 +75,7 @@ Change log:
                           code to be compiled appropriately.
 08/20/98 Fred Gilham    - Auto-detect CMUCL binary name.  Make
                           :external the default for garnet-version.
-???????? Russell Almond - Changed to use (require :clx) instead of 
+???????? Russell Almond - Changed to use (require :clx) instead of
                           loading CLX explicitly.
 ???????? Russell Almond - Better support for multiple external
                           versions of Garnet.
@@ -179,8 +179,8 @@ mcl (Macintosh Common Lisp, Commercial).  Common Lisp for Macintosh.
 
 apple This nominally refers to lisps running on Apple Macintosh
       computers.  Apple paid for/assisted in support for porting
-      Garnet to Mac OS in early 90s.  With Mac OS X, Apple provides X 
-      windows support, so nominally we could run under CLX too.  
+      Garnet to Mac OS in early 90s.  With Mac OS X, Apple provides X
+      windows support, so nominally we could run under CLX too.
       Probably many of these switches need to be changed to
       (and apple (not clx)).  I'm still experimenting with Mac OS X
       version of garnet.
@@ -348,7 +348,7 @@ which may make it easier to run cross platform.
 				    #+cmu :EXTENSIONS)
   #-(or lucid cmu)
   (:nicknames :CL-USER :USER))
-#-(or lucid cmu)
+#-(or lucid ansi-cl)
 (defpackage :COMMON-LISP (:nicknames :CL :LISP))
 
 ;;; *dont-load-modules-twice* tells whether to re-load modules
@@ -412,7 +412,7 @@ Garnet-Loader again."))
                  #+allegro-v4.2 :sparc-allegro4.2
                  #+cmu     :sparc-cmucl
                  #+lucid   :sparc-lucid
-                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2 
+                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2
 			cmu lucid)
 		   (version-error))
   #+dec3100  (or #+allegro-v3.1 :pmax-allegro
@@ -462,14 +462,14 @@ Garnet-Loader again."))
 ;;; before loading garnet-loader.lisp.
 
 ;;; RGA --- This can be made mostly obsolete by simply doing (require
-;;; :clx) before loading garnet.  
+;;; :clx) before loading garnet.
 					;(require :clx)
 ;;; RGA I moved this line up earlier to make register in the defvar.
 
 (defvar Your-CLX-Pathname
   (if (eq garnet-version :external)
       "**FILL THIS IN**"                ;; SET THIS
-    
+
       ;; Values useful at CMU:
       #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp700_ux90/omega/usr/local/depot/lucid/non-kanji/"
 			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
@@ -513,7 +513,7 @@ not support it."
   )
 
 ;;; RGA added this function as a cleaner way of handling the differences
-;;; between Unix and Mac file naming conventions.  This will loose on pre-ansi 
+;;; between Unix and Mac file naming conventions.  This will loose on pre-ansi
 ;;; lisps, but I can live with that (I think).
 (defun append-directory (pathnme dirstring)
   "This is a little utility for accessing the subdirectory of a
@@ -659,7 +659,7 @@ directory."
 
 #|
 ;;; RGA commented this out.  We can just use the garnet-compile
-;;; function to compile directly into the source directory, no muss, no fuss.  
+;;; function to compile directly into the source directory, no muss, no fuss.
 ;;; This way compilation does not depend on a unix utility.
 (when (and (boundp '*Garnet-Going-To-Compile*)
 	   *Garnet-Going-To-Compile*)
@@ -941,7 +941,7 @@ to a 31 character filename with a .lisp suffix."
 	  (format T "NO COLON, Loading ~s~%" filename)
 	  (load filename)))))
 
-;;; 
+;;;
 ;;; This function will compile your garnet files while keeping the
 ;;; sources and binaries separated.  If you want to just compile one
 ;;; file from Garnet, like the gadget file gauge.lisp, then you could
@@ -949,7 +949,7 @@ to a 31 character filename with a .lisp suffix."
 ;;; save the binary file in the bin directory.
 ;;;
 ;;; Example:
-;;;    (garnet-compile "gadgets:gauge") 
+;;;    (garnet-compile "gadgets:gauge")
 ;;;    Takes the source file from Garnet-Gadgets-Src, compiles it, and
 ;;;    saves the binary file in Garnet-Gadgets-Pathname (the binary
 ;;;    gadgets directory).
@@ -1013,16 +1013,15 @@ to a 31 character filename with a .lisp suffix."
                      (subseq (concatenate 'string finalname
                                           *compiler-extension*) 0 31)
                      bin-prefix))))
-                
+
           (format T "Compiling ~s~%" src-finalname)
           (format T "for output to ~s~%" bin-finalname)
           (compile-file src-finalname :output-file bin-finalname))
         ;; else no colon, abort
         (error "NO COLON, aborting compile"))))
-
 ;;; RGA workaround for #\return vs #\linefeed issue in MCL.
 (defun do-load (file &rest args)
-  "This is a workaround for the #\return vs #\linefeed issue in 
+  "This is a workaround for the #\return vs #\linefeed issue in
    MCL.  Binding this variable seems mean that #\linefeed is treated
    as newlines.  As CVS is a Unix tool, it maps #\newlines to
    #\linefeed. As MCL is a Mac OS 9 program, it expects #\return.
@@ -1055,7 +1054,7 @@ to a 31 character filename with a .lisp suffix."
      #-(or lucid allegro lispworks) (merge-pathnames "clx" CLX-Pathname))
    (format T "~% %%%%%%% Loading ~A %%%%%%%%~%" #-apple "CLX"
 	                                        #+apple "MCL Libraries")
-   ;; RGA if we are running apply and CLX, then assume we 
+   ;; RGA if we are running apply and CLX, then assume we
    ;; are using X-windows toolkit rather than quickdraw.
    ;; RGA commenting this out for MCL 5.0 as it can't seem to find
    ;; traps, hope that these will all autoload.
@@ -1180,7 +1179,7 @@ to a 31 character filename with a .lisp suffix."
 		     (xlib:open-display d-name :display d-number))
 	#-(or cmu lucid allegro lispworks)
 	  (xlib:open-display d-name :display d-number) ; just try it
-	  
+
     (if errorp
 	(error "Could not open a display for ~S.
      You must already be running X to load or compile Garnet.  Your DISPLAY
@@ -1379,7 +1378,7 @@ running Garnet."
 ;;; RGA added two auxiliary functions for doing file manipulations.
 
 (defun garnet-shell-exec (command)
-  "This is a quick and dirty version of opal:shell-exec used just 
+  "This is a quick and dirty version of opal:shell-exec used just
    for the compiler.  This currently looses on Mac OS."
   #+apple (declare (ignore command))
   #+allegro
@@ -1399,12 +1398,11 @@ running Garnet."
   (error "Don't know how to execute shell functions in this lisp"))
 
 ;;; RGA  This will loose on Windows
-(defun garnet-mkdir-if-needed (dirname) 
+(defun garnet-mkdir-if-needed (dirname)
   "Creates the directory if it does not exist."
   (unless (probe-file dirname)
     #+apple(create-file dirname)
     #-apple(garnet-shell-exec (format nil "mkdir ~A~%" dirname))))
-
 (defun garnet-copy-files (src-dir bin-dir file-list)
   "Copies a list of files (usually loader files) from source directory
   to binary directory."

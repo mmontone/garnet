@@ -252,7 +252,7 @@
 		 ;; I don't know why some xpms have a "None" entry in their
 		 ;; colormap, but some I got from DOI topographic
 		 ;; pictures do.... [2003/09/15:rpg]
-		 (unless (eq (symbol-name line) "NONE")
+		 (unless (string-equal (symbol-name line) "NONE")
 		   (setf (aref color-sequence cind)
 			 (gem:colormap-property
 			  root-window

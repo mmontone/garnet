@@ -965,9 +965,8 @@ to a 31 character filename with a .lisp suffix."
   ;; RGA this is a nifty hack to find the right extension type.
   ;; They should promote it.
   #+ccl-5.0               (namestring ccl::*.fasl-pathname*)
-  #+clisp                (if (boundp 'system::*compiled-file-types*)
-                             (concatenate 'string "." (namestring (first system::*compiled-file-types*)))
-			     ".fas"))
+  ;; sds: the following should work on any ANSI CL implementation
+  #+clisp (concatenate 'string "." (pathname-type (compile-file-pathname "foo.lisp"))))
 
 
 (defun Garnet-Compile (filename)

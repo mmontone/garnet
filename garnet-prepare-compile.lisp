@@ -1,4 +1,4 @@
-;;; -*- Mode: Lisp, Fill, Save; Package: COMMON-LISP-USER -*-
+;;; -*- Mode: Lisp, Fill, Save; Package: COMMON-LISP-USER; -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1400,6 +1400,9 @@ running Garnet."
 ;;; RGA  This will loose on Windows
 (defun garnet-mkdir-if-needed (dirname)
   "Creates the directory if it does not exist."
+  #+ansi-cl (ensure-directories-exist dirname :verbose t)
+  #-ansi-cl
+  ;; sds: ANSI CL spec does not require PROBE-FILE to work on directories
   (unless (probe-file dirname)
     #+apple(create-file dirname)
     #-apple(garnet-shell-exec (format nil "mkdir ~A~%" dirname))))

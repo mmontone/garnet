@@ -13,6 +13,11 @@
 
 ;;; CHANGE LOG:
 #|
+[2003/11/20:rpg]        - Fred Gilham's fix does not seem to me to work.
+                          When one specifies depth as a parameter to
+                          gem:create-image, one can get it wrong, whereas
+                          gem:create-image will ask the display and get
+                          a correct number of bits per pixel from the depth.
 17-DEC-1999 Fred Gilham - Fix problem where pixmap format doesn't match valid
                           pixmap formats in displays with different `depth' and
                           `bits-per-pixel' values.
@@ -48,7 +53,8 @@
   (export '(pixmap write-xpm-file read-xpm-file
 	    create-pixmap-image window-to-pixmap-image)))
 
-;    This function was originally written to handle two types of pixmaps --
+;    This function was originally written to handle two types of
+;    pixmaps --
 ; those of the meltsner-format (XPM2) and those not of the meltsner-format
 ; (XPM1).  I added the pedro-format, which is a subset of the meltsner-format
 ; (an XPM2 format from the Sun Icon Editor).
@@ -448,7 +454,12 @@
     ;; of the pixmap formats is different from the bits-per-pixel of
     ;; the pixmap formats, i.e. 24-bit depth but 32-bit
     ;; bits-per-pixel.
-    (gem:create-image window width height depth NIL color NIL depth)))
+
+    ;; Actually, no, for me at least this CREATES problems.  E.g.,
+    ;; this overrides gem:create-image being smart about the number of
+    ;; bits per pixel diverging from the number of depth
+    ;; planes. [2003/11/20:rpg]
+    (gem:create-image window width height depth NIL color NIL)))
 
 
 ;;; Creates a pixmap image containing whatever is in the window.

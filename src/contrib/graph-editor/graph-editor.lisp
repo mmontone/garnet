@@ -123,15 +123,18 @@
   (s-value (g-value self :window) :cursor (cons cursor mask))
   (opal:update (g-value self :window)))
 
+;;; Modified to make the system load 
 ; convenient way to define a cursor with a mask
 (defun define-cursor (name path mask-path)
   (create-instance name opal:bitmap
     (:image (opal:read-image 
-	     (merge-pathnames path)))
+	     (merge-pathnames path (parse-namestring *load-truename*))))
     (:mask (create-instance nil opal:bitmap
 	     (:image (opal:read-image
 		      (merge-pathnames
-		       mask-path)))))))
+		       mask-path
+		       (parse-namestring *load-truename*)
+		       )))))))
 
 
 ;; define some cursors for this window
@@ -561,47 +564,56 @@
   (:set-message #'(lambda (agg string)
 		    (kr-send (g-value agg :parent)
 			     :set-message (g-value agg :parent) string)))
-  (:source-roots #f (gvl :parent :roots))
-  (:top #f (gvl :parent :graph-top))
-  (:height #f(gvl :parent :graph-height))
-  (:width #f (gvl :parent :width))
-  (:bottom #f(+ (gvl :top) (gvl :height))))
+  (:source-roots (o-formula (gvl :parent :roots)))
+  (:children-function (o-formula (gvl :parent :children-function)))
+  (:info-function (o-formula (gvl :parent :info-function)))
+  ;; later we should put the node prototype up here, the link
+  ;; prototype, and also the prototype selectors.  [2004/06/17:rpg]
+  (:top (o-formula (gvl :parent :graph-top)))
+  (:height (o-formula (gvl :parent :graph-height)))
+  (:width (o-formula (gvl :parent :width)))
+  (:bottom (o-formula (+ (gvl :top) (gvl :height)))))
 
 
 
 
 ; Editor for DAGS, with menubar, a pane for the dag, and a message pane
 (create-instance 'graph-editor opal:aggregadget
-  (:roots nil)
-  (:width 600)
-  (:menu-extra-space 50)
-  (:graph-top #f (+ (gvl :menubar :bottom) (gvl :menu-extra-space)))
-  (:graph-height 200)
-  (:message-top #f (gvl :graph :bottom))
-  (:message-height 50)
-  (:parts
-   `((:menubar ,graph-editor-menubar
-	       (:top 0)
-	       (:bottom ,#f(+ (gvl :top) (gvl :height))))
-     (:divider1 ,opal:line		;separate menubar from graph
-	       (:x1 0)
-	       (:y1 ,#f (gvl :parent :menubar :bottom))
-	       (:x2 ,#f (gvl :parent :width))
-	       (:y2 ,#f (gvl :y1)))
-     (:graph ,graph-editor-graph-agg)
-     (:divider2 ,opal:line		;separate graph from message
-	       (:x1 0)
-	       (:y1 ,#f (gvl :parent :message-top))
-	       (:x2 ,#f (gvl :parent :width))
-	       (:y2 ,#f (gvl :y1)))
-     (:message ,message-pane		;to display messages.
-	       (:top ,#f (gvl :parent :message-top))
-	       (:bottom ,#f (+ (gvl :top) (gvl :height)))
-	       (:height ,#f (gvl :parent :message-height))
-	       (:width ,#f (gvl :parent :width)))
+   ;; the following might oughta be changed to :source-roots
+   (:roots nil)
+   ;; added these to make the interface more like the one in the
+   ;; original opal:aggregraph [2004/06/17:rpg]
+   (:children-function NIL)
+   (:info-function NIL)
+   (:width 600)
+   (:menu-extra-space 50)
+   (:graph-top (o-formula (+ (gvl :menubar :bottom) (gvl :menu-extra-space))))
+   (:graph-height 200)
+   (:message-top (o-formula (gvl :graph :bottom)))
+   (:message-height 50)
+   (:parts
+    `((:menubar ,graph-editor-menubar
+		(:top 0)
+		(:bottom ,(o-formula (+ (gvl :top) (gvl :height)))))
+      (:divider1 ,opal:line		;separate menubar from graph
+		 (:x1 0)
+		 (:y1 ,(o-formula (gvl :parent :menubar :bottom)))
+		 (:x2 ,(o-formula (gvl :parent :width)))
+		 (:y2 ,(o-formula (gvl :y1))))
+      (:graph ,graph-editor-graph-agg)
+      (:divider2 ,opal:line		;separate graph from message
+		 (:x1 0)
+		 (:y1 ,(o-formula (gvl :parent :message-top)))
+		 (:x2 ,(o-formula (gvl :parent :width)))
+		 (:y2 ,(o-formula (gvl :y1))))
+      (:message ,message-pane		;to display messages.
+		(:top ,(o-formula (gvl :parent :message-top)))
+		(:bottom ,(o-formula (+ (gvl :top) (gvl :height))))
+		(:height ,(o-formula (gvl :parent :message-height)))
+		(:width ,(o-formula (gvl :parent :width))))
 
-     ))
-  )
+      ))
+   )
 
 (define-method :set-mode graph-editor (self mode)
   (kr-send (g-value self :graph) :set-mode (g-value self :graph) mode))

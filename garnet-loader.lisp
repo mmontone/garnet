@@ -345,6 +345,7 @@ which may make it easier to run cross platform.
 ;; Note: Mac Lisp requires that you repeat the full package definition
 (defpackage :COMMON-LISP-USER (:use :KR :KR-DEBUG :GARNET-DEBUG
 				    :COMMON-LISP #+apple :CCL
+                                    #+clisp :EXT
 				    #+cmu :EXTENSIONS)
   #-(or lucid cmu)
   (:nicknames :CL-USER :USER))
@@ -1415,11 +1416,4 @@ running Garnet."
       #+apple(copy-file src dest :if-exists :overwrite)
       #-apple(garnet-shell-exec (format nil "cp ~A ~A~%" src dest)))))
 
-;; Clisp doesn't seem to preserve the normal quit syntax after the Garnet
-;; load - these definitions fix that.  Probably not the best way but it works.
-#+clisp (defun quit () (ext:quit))
-#+clisp (defun exit () (ext:quit))
-#+clisp (defun bye () (ext:quit))
-
 (format t "~%... Garnet Load Complete ...~%")
-

@@ -37,6 +37,8 @@
                           xlib:get-image call in Window-To-Pximap-Image;
                           reimplemented Write-xpm-File with write-char instead of format
 08/11/92 Andrew Mickish - Added pedro-format to read-xpm-file
+09/16/03 Robert Goldman - XPM files seem to sometime have a colormap entry of "None," causing crash in
+                          read-xpm-file.  Modified read-xpm-file to ignore these entries.
 |#
 
 
@@ -246,12 +248,17 @@
 		(t
 		 (if meltsner-format
 		   (setq line (read-from-string line)))
-		 (setf (aref color-sequence cind)
-		       (gem:colormap-property
-			root-window
-			:ALLOC-COLOR
-			(gem:colormap-property root-window
-					       :LOOKUP-COLOR line))))))
+		 ;;		 (break)
+		 ;; I don't know why some xpms have a "None" entry in their
+		 ;; colormap, but some I got from DOI topographic
+		 ;; pictures do.... [2003/09/15:rpg]
+		 (unless (eq (symbol-name line) "NONE")
+		   (setf (aref color-sequence cind)
+			 (gem:colormap-property
+			  root-window
+			  :ALLOC-COLOR
+			  (gem:colormap-property root-window
+						 :LOOKUP-COLOR line)))))))
 
 	    ;; Eat garbage between color information and pixels.
 	    ;; Some pixmap files have no garbage, some have a single line

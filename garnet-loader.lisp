@@ -290,7 +290,7 @@ Change log:
 				    #+cmu :EXTENSIONS)
   #-(or lucid cmu)
   (:nicknames :CL-USER :USER))
-#-(or lucid cmu)
+#-(or lucid cmu clisp)
 (defpackage :COMMON-LISP (:nicknames :CL :LISP))
 
 ;;; *dont-load-modules-twice* tells whether to re-load modules

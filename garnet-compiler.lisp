@@ -20,6 +20,11 @@
 #|
 ============================================================
 Change log:
+         10/05/03 Russell Almond - Changed to use
+                  garnet-compile/garnet-load so we can apply MCL
+                  #\linefeed bug workaround.
+         10/02/03 Russell Almond - Added Kr-Doc
+         10/02/03 Russell Almond - Added Protected Eval
          03/16/94 Andrew Mickish - Added Gworld module for Mac
          11/01/93 Andrew Mickish - Added GEM
          10/14/93 Andrew Mickish - Removed Lucid compiler proclamation
@@ -56,141 +61,141 @@ Change log:
 	     (boundp 'load-aggregraphs-p-copy)  
 	     (boundp 'load-debug-p-copy)        (boundp 'Garnet-Debug-Src)
 	     (boundp 'load-gadgets-p-copy)      (boundp 'Garnet-Gadgets-Src)
-	     #+garnet-protected-eval
-	     (boundp 'load-protected-eval-p-copy)
-	     #+garnet-protected-eval	     
-	     (boundp 'Garnet-Protected-Eval-Src)
 	     (boundp 'load-gesture-p-copy)      (boundp 'Garnet-Gesture-Src)
 	     (boundp 'load-demos-p-copy)        (boundp 'Garnet-Demos-Src)
 	     (boundp 'load-C32-p-copy)          (boundp 'Garnet-C32-Src)
 	     (boundp 'load-lapidary-p-copy)     (boundp 'Garnet-Lapidary-Src)
 	     (boundp 'load-gilt-p-copy)         (boundp 'Garnet-Gilt-Src)
+	     (boundp 'load-protected-eval-p-copy)    (boundp 'Garnet-protected-eval-Src)
 	     )
   (error "** Must load Garnet-Prepare-Compile and Garnet-Loader before
   loading this file"))
 
 (when compile-utils-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Utils %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "utils-compiler" Garnet-Utils-Src)))
+  (garnet-load "utils-src:utils-compiler"))
 (unless compile-utils-p
-  (load Garnet-Utils-Loader))
+  (do-load Garnet-Utils-Loader))
 
 
 (when compile-kr-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling KR %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "kr-compiler" Garnet-KR-Src)))
+  (garnet-load "kr-src:kr-compiler"))
 (unless compile-kr-p
-  (load Garnet-KR-Loader))
+  (do-load Garnet-KR-Loader))
+
+(when compile-kr-doc-p
+  (garnet-compile "kr:kr-doc")
+  (garnet-load "kr:kr-doc"))
 
 
-#+apple
+#+(and apple (not clx))
 (when compile-gworld-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gworld %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "gworld-compiler" Garnet-Gworld-Src)))
-#+apple
+  (garnet-load "gworld-src:gworld-compiler"))
+#+(and apple (not clx))
 (unless compile-gworld-p
-  (load Garnet-Gworld-Loader))
+  (do-load Garnet-Gworld-Loader))
 
 
 (when compile-gem-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gem %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "gem-compiler" Garnet-Gem-Src)))
+  (garnet-load "gem-src:gem-compiler"))
 (unless compile-gem-p
-  (load Garnet-Gem-Loader))
+  (do-load Garnet-Gem-Loader))
 
 
 (when compile-opal-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Opal %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "opal-compiler" Garnet-Opal-Src)))
+  (garnet-load "opal-src:opal-compiler"))
 (unless compile-opal-p
-  (load Garnet-Opal-Loader))
+  (do-load Garnet-Opal-Loader))
 
 
 (when compile-inter-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Inter %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "inter-compiler" Garnet-Inter-Src)))
+  (garnet-load "inter-src:inter-compiler"))
 (unless compile-inter-p
-  (load Garnet-Inter-Loader))  ; have to load this to go on
+  (do-load Garnet-Inter-Loader))  ; have to load this to go on
 
 
 (when compile-PS-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling PS %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "ps-compiler" Garnet-PS-Src)))
+  (garnet-load "ps-src:ps-compiler"))
 (unless compile-PS-p
-  (load Garnet-PS-Loader))  ; have to load this to go on
+  (do-load Garnet-PS-Loader))  ; have to load this to go on
 
 
 (when compile-aggregadgets-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Aggregadgets %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "aggregadgets-compiler" Garnet-Aggregadgets-Src)))
+  (garnet-load "aggregadgets-src:aggregadgets-compiler"))
 (when (or load-aggregadgets-p-copy compile-demos-p
 	     compile-lapidary-p compile-gadgets-p)
   (unless compile-aggregadgets-p
-    (load Garnet-Aggregadgets-Loader)))  ; need this if compile demos, gadgets,
+    (do-load Garnet-Aggregadgets-Loader)))  ; need this if compile demos, gadgets,
 				         ; or lapidary
 
 
 (when compile-gadgets-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gadgets %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "gadgets-compiler" Garnet-Gadgets-Src)))
-(when (or load-gadgets-p-copy #+garnet-protected-eval compile-protected-eval-p compile-demos-p compile-lapidary-p)
+  (garnet-load "gadgets-src:gadgets-compiler"))
+(when (or load-gadgets-p-copy compile-demos-p compile-lapidary-p)
   (unless compile-gadgets-p
-    (load Garnet-Gadgets-Loader)))
-
-#+garnet-protected-eval
-(when compile-protected-eval-p
-  (format T "~%  %%%%%%%%%%%%%%  Compiling Protected-eval %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "protected-eval-compiler" Garnet-Protected-Eval-Src)))
-#+garnet-protected-eval
-(unless compile-protected-eval-p
-  (load Garnet-Protected-Eval-Loader)) ; have to load this to go on
+    (do-load Garnet-Gadgets-Loader)))
 
 
 (when compile-debug-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Debugging Routines %%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "debug-compiler" Garnet-Debug-Src)))
+  (garnet-load "debug-src:debug-compiler"))
 (when load-debug-p-copy
   (unless compile-debug-p
-    (load Garnet-Debug-Loader)))
+    (do-load Garnet-Debug-Loader)))
 
 
 (when compile-gesture-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gestures %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "gesture-compiler" Garnet-Gesture-Src)))
+  (garnet-load "gesture-src:gesture-compiler"))
 (unless compile-gesture-p
-  (load Garnet-Gesture-Loader))  ; have to load this to go on
+  (do-load Garnet-Gesture-Loader))  ; have to load this to go on
 
 
 (when compile-demos-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Demos %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "demos-compiler" Garnet-Demos-Src)))
+  (garnet-load "demos-src:demos-compiler"))
 (when load-demos-p-copy
   (unless compile-demos-p
-    (load Garnet-Demos-Loader)))
+    (do-load Garnet-Demos-Loader)))
 
 
 (when compile-gilt-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Gilt %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "gilt-compiler" Garnet-Gilt-Src)))
+  (garnet-load "gilt-src:gilt-compiler"))
 (when load-gilt-p-copy
   (unless compile-gilt-p
-    (load Garnet-Gilt-Loader)))
+    (do-load Garnet-Gilt-Loader)))
 
 
 (when compile-C32-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling C32 %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "c32-compiler" Garnet-C32-Src)))
+  (garnet-load "c32-src:c32-compiler"))
 (when load-C32-p-copy
   (unless compile-C32-p
-    (load Garnet-C32-Loader)))
+    (do-load Garnet-C32-Loader)))
 
 
 (when compile-lapidary-p
   (format T "~%  %%%%%%%%%%%%%%  Compiling Lapidary %%%%%%%%%%%%%%% ~%")
-  (load (merge-pathnames "lapidary-compiler" Garnet-Lapidary-Src)))
+  (garnet-load "lapidary-src:lapidary-compiler"))
 (when load-lapidary-p-copy
   (unless compile-lapidary-p
-    (load Garnet-Lapidary-Loader)))
+    (do-load Garnet-Lapidary-Loader)))
+
+(when compile-protected-eval-p
+  (format T "~%  %%%%%%%%%%%%%%  Compiling Protected-Eval %%%%%%%%%%%%%%% ~%")
+  (garnet-load "protected-eval-src:protected-eval-compiler"))
+(when load-protected-eval-p-copy
+  (unless compile-protected-eval-p
+    (do-load Garnet-protected-eval-Loader)))
 
 
 (setf *Garnet-Going-To-Compile* NIL)  ; no longer in compile mode

@@ -1,4 +1,4 @@
-;;; -*- Mode: Lisp, Fill, Save; Package: COMMON-LISP-USER; -*-
+;;; -*- Mode: Lisp, Fill, Save; Package: COMMON-LISP-USER -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,6 +34,7 @@
 ;;; 
 ;;;  compile-utils-p        (Default: T   => utils compiled and loaded)
 ;;;  compile-kr-p           (Default: T   => kr compiled and loaded)
+;;;  compile-kr-doc-p       (Default: NIL => kr-doc compiled and loaded)
 ;;;  compile-gem-p          (Default: T   => gem compiled and loaded)
 ;;;  compile-opal-p         (Default: T   => opal compiled and loaded)
 ;;;  compile-inter-p        (Default: T   => interactors compiled and loaded)
@@ -41,12 +42,13 @@
 ;;;  compile-ps-p           (Default: T   => PS module compiled and loaded)
 ;;;  compile-aggregadgets-p (Default: T   => aggregadgets compiled & loaded)
 ;;;  compile-gadgets-p      (Default: T   => gadgets compiled and loaded)
-;;;  compile-protected-eval-p (Default: T   => protected-eval compiled and loaded)
 ;;;  compile-debug-p        (Default: T   => debug compiled and loaded)
 ;;;  compile-demos-p        (Default: T   => demos compiled but *not* loaded)
 ;;;  compile-lapidary-p     (Default: T   => lapidary compiled and loaded)
 ;;;  compile-gilt-p         (Default: T   => gilt compiled and loaded)
 ;;;  compile-c32-p          (Default: T   => C32 compiled and loaded)
+;;;  compile-protected-eval-p (Default: T => protected-eval compiled
+;;;                                          and loaded)
 ;;;
 ;;; To override any particular file name place, it is only necessary to
 ;;; assign the variable name Garnet-XX-Pathname before this file is loaded
@@ -56,6 +58,8 @@
 #|
 ============================================================
 Change log:
+        10/02/03 Russell Almond - Added compile-kr-doc-p
+        10/02/03 Russell Almond - Added Protected Eval.
         11/10/93 Andrew Mickish - Added Gem
          4/ 5/93 Dave Kosbie    - Added Garnet-Utils
          6/24/92 Andrew Mickish - Added C32
@@ -84,6 +88,7 @@ Change log:
 
 (defvar compile-utils-p T)
 (defvar compile-kr-p T)
+(defvar compile-kr-doc-p NIL)
 (defvar compile-gworld-p T)
 (defvar compile-gem-p T)
 (defvar compile-opal-p T)
@@ -92,17 +97,18 @@ Change log:
 (defvar compile-ps-p T)
 (defvar compile-aggregadgets-p T)
 (defvar compile-gadgets-p T)
-(defvar compile-protected-eval-p T)
 (defvar compile-debug-p T)
 (defvar compile-demos-p T)
 (defvar compile-lapidary-p T)
 (defvar compile-gilt-p T)
 (defvar compile-c32-p T)
+(defvar compile-protected-eval-p T)
 
 ; first, don't load anything, just load garnet-loader to set up file names
 
 (defvar load-utils-p NIL)
 (defvar load-kr-p NIL)
+(defvar load-kr-doc-p NIL)
 (defvar load-gworld-p NIL)
 (defvar load-gem-p NIL)
 (defvar load-opal-p NIL)
@@ -113,12 +119,12 @@ Change log:
 (defvar load-aggregadgets-p NIL)
 (defvar load-aggregraphs-p NIL)
 (defvar load-gadgets-p NIL)
-(defvar load-protected-eval-p NIL)
 (defvar load-debug-p NIL)
 (defvar load-demos-p NIL)
 (defvar load-lapidary-p NIL)
 (defvar load-gilt-p NIL)
 (defvar load-c32-p NIL)
+(defvar load-protected-eval-p NIL)
 
 (defparameter load-utils-p-copy (if (boundp 'load-utils-p)
 				 load-utils-p T))
@@ -144,8 +150,6 @@ Change log:
 					   load-aggregraphs-p T)) 
 (defparameter load-gadgets-p-copy (if (boundp 'load-gadgets-p)
 				      load-gadgets-p T))
-(defparameter load-protected-eval-p-copy (if (boundp 'load-protected-eval-p)
-	      				      load-protected-eval-p T))
 (defparameter load-debug-p-copy (if (boundp 'load-debug-p)
 				    load-debug-p T))
 (defparameter load-demos-p-copy (if (boundp 'load-demos-p)
@@ -154,8 +158,10 @@ Change log:
 				       load-lapidary-p NIL))
 (defparameter load-gilt-p-copy (if (boundp 'load-gilt-p)
 				    load-gilt-p NIL))
-(defparameter load-c32-p-copy (if (boundp 'load-gilt-p)
-				  load-gilt-p NIL))
+(defparameter load-c32-p-copy (if (boundp 'load-c32-p)
+				  load-c32-p NIL))
+(defparameter load-protected-eval-p-copy (if (boundp 'load-protected-eval-p)
+				  load-protected-eval-p NIL))
 
 
 ;; tell garnet-loader to not launch the main event loop process.

@@ -1,4 +1,3 @@
-#!/bin/csh -f
 # garnet-after-compile
 # by David S. Kosbie, Garnet Project, CMU
 
@@ -8,13 +7,18 @@
 # and remove all ".err" files if you prefer.  The following variables should
 # be set by the user, unless default actions are preferred...
 
+# RGA this has some trivial changes that allow machine specific bin
+# directories. It also adds contrib to the list of copied over
+# directories.
+
+
 #########################  User-Settable Variables  ########################
-#set GarnetDir                             # Home directory for Garnet (only
+set GarnetDir  = "."                       # Home directory for Garnet (only
                                            # needed if this is not run from
                                            # your top-level garnet directory)
 #set GarnetSrcDir                          # Set this only if it is different
                                            # from $GarnetDir/src
-#set GarnetBinDir                          # Set this only if it is different
+set GarnetBinDir = $GarnetDir/bin6.1       # Set this only if it is different
                                            # from $GarnetDir/bin
 #set CompilerExtension                     # The script will try to figure this
                                            # out, but if it's not ".fasl" nor
@@ -24,10 +28,6 @@ set RemoveErrFiles                         # "unset" this here if you do not
 set Verbose                                # "set" this here if you want (very)
                                            # verbose output from this script
 ####################### End User-Settable Variables  #######################
-
-# set GarnetDir = "/homes/gilham/garnet"
-# set CompilerExtension = ".x86f"
-# set CompilerExtension = ".sparcf"
 
 # CHANGE LOG
 #
@@ -48,7 +48,7 @@ endif
 if (! $?GarnetSrcDir) set GarnetSrcDir = "$GarnetDir/src"
 if (! $?GarnetBinDir) set GarnetBinDir = "$GarnetDir/bin"
 
-set SrcDirs = (utils kr gworld gem opal inter gesture ps aggregadgets gadgets protected-eval debug lapidary demos gilt c32)
+set SrcDirs = (utils kr gworld gem opal inter gesture ps aggregadgets gadgets debug lapidary demos gilt c32 contrib contrib/prompter)
 set DirCnt  = $#SrcDirs
 set ThisDir = 0
 
@@ -63,8 +63,6 @@ if !($?CompilerExtension) then
 	set CompilerExtension = ".hbin"
   else if (-e $GarnetSrcDir/kr/kr.sparcf) then
 	set CompilerExtension = ".sparcf"
-  else if (-e $GarnetSrcDir/kr/kr.x86f) then
-	set CompilerExtension = ".x86f"
   else if (-e $GarnetSrcDir/kr/kr.afasl) then
         set CompilerExtension = ".afasl"
   else if (-e $GarnetSrcDir/kr/kr.fas) then

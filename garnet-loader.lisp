@@ -22,25 +22,28 @@
 ;;;
 ;;; The controlling variables are:
 ;;; 
-;;;      load-clx-p             (Default: NIL => clx not loaded)
-;;;      load-utils-p           (Default: T   => utilities loaded)
-;;;      load-kr-p              (Default: T   => kr loaded)
-;;;      load-gworld-p          (Default: T   => gworld loaded for Mac)
-;;;      load-gem-p             (Default: T   => gem loaded)
-;;;      load-opal-p            (Default: T   => opal loaded)
-;;;      load-inter-p           (Default: T   => interactors loaded)
-;;;      load-multifont-p       (Default: NIL => multifont *NOT* loaded)
-;;;      load-gesture-p         (Default: NIL => gestures *NOT* loaded)
-;;;      load-ps-p              (Default: T   => ps loaded)
-;;;      load-aggregadgets-p    (Default: T   => aggregadgets loaded)
-;;;      load-aggregraphs-p     (Default: NIL => aggregraphs *NOT* loaded)
-;;;      load-gadgets-p         (Default: NIL => gadgets *NOT* loaded)
-;;;      load-protected-eval-p  (Default: NIL => protected-eval *NOT* loaded)
-;;;      load-debug-p           (Default: T   => debugging tools loaded)
-;;;      load-demos-p           (Default: NIL => demos *NOT* loaded)
-;;;      load-c32-p             (Default: NIL => C32 *NOT* loaded)
-;;;      load-gilt-p            (Default: NIL => gilt *NOT* loaded)
-;;;      load-lapidary-p        (Default: NIL => lapidary *NOT* loaded)
+;;;      load-clx-p          (Default: NIL => clx not loaded)
+;;;      load-utils-p        (Default: T   => utilities loaded)
+;;;      load-kr-p           (Default: T   => kr loaded)
+;;;      load-kr-doc-p       (Default: NIL => kr-doc *NOT* loaded)
+;;;      load-gworld-p       (Default: T   => gworld loaded for Mac)
+;;;      load-gem-p          (Default: T   => gem loaded)
+;;;      load-opal-p         (Default: T   => opal loaded)
+;;;      load-inter-p        (Default: T   => interactors loaded)
+;;;      load-multifont-p    (Default: NIL => multifont *NOT* loaded)
+;;;      load-gesture-p      (Default: NIL => gestures *NOT* loaded)
+;;;      load-ps-p           (Default: T   => ps loaded)
+;;;      load-aggregadgets-p (Default: T   => aggregadgets loaded)
+;;;      load-aggregraphs-p  (Default: NIL => aggregraphs *NOT* loaded)
+;;;      load-gadgets-p      (Default: NIL => gadgets *NOT* loaded)
+;;;      load-debug-p        (Default: T   => debugging tools loaded)
+;;;      load-demos-p        (Default: NIL => demos *NOT* loaded)
+;;;      load-c32-p          (Default: NIL => C32 *NOT* loaded)
+;;;      load-gilt-p         (Default: NIL => gilt *NOT* loaded)
+;;;      load-lapidary-p     (Default: NIL => lapidary *NOT* loaded)
+;;;      load-protected-eval-p (Default: <lisp dependent> =>
+;;;                            protected-eval loaded for lisps with
+;;;                            multi-processor support.
 ;;;
 ;;; The first part of this file lists the file names where the various
 ;;; parts of Garnet come from.  This will need to be modified for each new
@@ -57,6 +60,14 @@
 #|
 ============================================================
 Change log:
+10/04/03 Russell Almond - Changed #+garnet-protected-eval to
+                          (load-protected-eval-p) (Protected-eval 
+			  basically replaces code in processes.lisp
+10/04/03 Russell Almond - Added fix for MCL #\return vs #\linefeed
+                          issue. (do-load function).
+10/04/03 Russell Almond - Added new extensions for MCL-5.0
+10/02/03 Russell Almond - Added KR-doc flags.
+10/02/03 Russell Almond - Added support for Protected-Eval
 29-sep-2003 Robert Goldman - Add trial version of Allegro-specific code to open
                           display using Xauthorization information.
 15-Nov-2002 Fred Gilham - Add protected-eval module (from contrib/prompter code).
@@ -64,6 +75,10 @@ Change log:
                           code to be compiled appropriately.
 08/20/98 Fred Gilham    - Auto-detect CMUCL binary name.  Make
                           :external the default for garnet-version.
+???????? Russell Almond - Changed to use (require :clx) instead of 
+                          loading CLX explicitly.
+???????? Russell Almond - Better support for multiple external
+                          versions of Garnet.
 01/30/95 Andrew Mickish - New redefinitions of :CL and :CL-USER for CMUCL
 01/05/95 Andrew Mickish - Added :CL-USER nickname in defpackage
                           redefinition of :COMMON-LISP-USER package
@@ -76,11 +91,11 @@ Change log:
  8/12/93 Andrew Mickish - Closed display in Verify-Display-Can-Be-Opened;
                           added #+garnet-processes to *features* list
  5/17/93 Andrew Mickish - Added compiler optimization proclamation
- 5/13/93 Andrew Mickish - Removed commas from Garnet-Load-Alist so it
-                          notices changes in the values of the pathname variables
+ 5/13/93 Andrew Mickish - Removed commas from Garnet-Load-Alist so it notices
+                          changes in the values of the pathname variables
  4/15/93 Andrew Mickish - Added lucid memory-management instruction
- 4/ 5/93 Dave Kosbie    - Added Garnet-Utils package (where
-                          Garnet-independent Lisp utilities will now reside)
+ 4/ 5/93 Dave Kosbie    - Added Garnet-Utils package (where Garnet-independent
+                          Lisp utilities will now reside)
  3/25/93 Andrew Mickish - Made Garnet-Load use an association list
  3/17/93 Andrew Mickish - Removed Motif-Gilt-Loader
 10/23/92 Dave Kosbie    - Added KATIE package
@@ -142,6 +157,54 @@ Change log:
 ============================================================
 |#
 
+#|
+This is a table of various lisp flavors which Garnet has at one time
+or another been compiled on:
+
+allegro (Allegro Common Lisp, Commercial).  Starting with version 3.0 (currently
+        at 6.2).  Note that allegro has a special switch (allegro>= x
+        y) which allows one to test for a specific version or later.
+lucid (Lucid Common Lisp, Commerical).  Now out of business, bought by
+      Allegro.
+lispworks
+cmu (Carnegie Mellon Lisp, Free).  Open source lisp.  Later versions
+    support multiple processes (and cmu mp).
+clisp (C-Lisp, Free) Lisp to C compiler.
+kcl (Kyoto Common Lisp, Free).  Open source lisp.
+
+
+mcl (Macintosh Common Lisp, Commercial).  Common Lisp for Macintosh.
+    Version 3 and later has multiprocess support.  Note was previously
+    called "Coral Common Lisp" so uses abbreviations ccl, ccl-3 &c.
+
+apple This nominally refers to lisps running on Apple Macintosh
+      computers.  Apple paid for/assisted in support for porting
+      Garnet to Mac OS in early 90s.  With Mac OS X, Apple provides X 
+      windows support, so nominally we could run under CLX too.  
+      Probably many of these switches need to be changed to
+      (and apple (not clx)).  I'm still experimenting with Mac OS X
+      version of garnet.
+
+Note that nobody ever paid the CMU development team for Windows port.
+Contributions are welcome here.  I am also working on an OpenGL port
+which may make it easier to run cross platform.
+
+     --Russell Almond 10/02/03
+
+|#
+
+;; Lucid is behind the times in naming their "LISP" and "USER" packages.
+;; All other lisps have the packages :COMMON-LISP and :COMMON-LISP-USER,
+;; and Garnet just gives these the nicknames :LISP and :USER, respectively.
+;; For Lucid, though, we have to do things backwards.  This difference comes
+;; up again below during the DEFPACKAGE of :COMMON-LISP and :COMMON-LISP-USER.
+;;
+#+lucid (in-package :USER)
+#+lucid (rename-package (find-package :LISP) :LISP (list :COMMON-LISP))
+#+lucid (rename-package (find-package :USER) :USER (list :COMMON-LISP-USER
+							 :CL-USER))
+
+#-lucid
 (in-package :COMMON-LISP-USER)
 
 (defparameter Garnet-Version-Number "3.0")
@@ -165,7 +228,8 @@ Change log:
 ;;; of lisp supports multiple processes.  Then things like the animation
 ;;; interactor can use the #+garnet-processes switch, instead of referring
 ;;; explicitly to different versions of lisp.
-#+(or allegro lispworks (and cmu mp))
+;;; RGA -- Added cmu and MCL (version 3 plus) to this list.
+#+(or allegro lucid lispworks (and cmu mp) ccl-3)
 (pushnew :GARNET-PROCESSES *features*)
 
 ;;; The :GARNET-BINS option controls whether Garnet uses its own constructed
@@ -177,12 +241,6 @@ Change log:
 (pushnew :GARNET-BINS *features*)
 
 
-;;; The garnet-protected-eval feature is used to conditionalize the
-;;; usage of the protected-eval module for Garnet error handling.  It
-;;; also allows the process code to be set up right.
-#+(or allegro (and cmu mp))
-(pushnew :GARNET-PROTECTED-EVAL *features*)
-
 ;; This variable is used by Allegro to restore the old value of the *readtable*
 ;; when a saved image is restarted (see opal:make-image in opal/utils.lisp).
 (defvar Garnet-Readtable *readtable*)
@@ -193,8 +251,11 @@ Change log:
 (defvar *default-garnet-proclaim*
   #+(or allegro lispworks apple) '(optimize (speed 3) (safety 1) (space 0)
                                    (debug #+garnet-debug 3 #-garnet-debug 0))
+  ;; Lucid needs a safety of 1 and compilation-speed of 0 to avoid problems
+  ;; with CLX calls.
+  #+lucid '(optimize (compilation-speed 0) (safety 1) (speed 2))
   #+cmu '(optimize (speed 3) (safety 1) (space 0))
-  #-(or allegro cmu lispworks apple) NIL)
+  #-(or allegro lucid cmu lispworks apple) NIL)
 
 (when *default-garnet-proclaim*
   (proclaim *default-garnet-proclaim*))
@@ -203,9 +264,15 @@ Change log:
 ;; The function PROVIDE is no longer part of common lisp and so was
 ;; removed from the lisp package in the most recent release of
 ;; LispWorks (version 2.1 onwards). This will retrieve its definition.
+;; RGA --- It was then restored to CL spec.  This is probably broken.
 #+lispworks (setf (symbol-function 'lisp::provide)
 		  (symbol-function 'system::provide))
 #+lispworks (export 'provide 'lisp)
+
+#+lucid
+(change-memory-management :growth-limit (max 655
+					     lucid::*external-growth-limit*)
+			  :expand 400)
 
 (progn
   (defpackage :GARNET-UTILS (:use :COMMON-LISP) (:nicknames :GU))
@@ -279,8 +346,9 @@ Change log:
 (defpackage :COMMON-LISP-USER (:use :KR :KR-DEBUG :GARNET-DEBUG
 				    :COMMON-LISP #+apple :CCL
 				    #+cmu :EXTENSIONS)
+  #-(or lucid cmu)
   (:nicknames :CL-USER :USER))
-#-(or cmu clisp)
+#-(or lucid cmu)
 (defpackage :COMMON-LISP (:nicknames :CL :LISP))
 
 ;;; *dont-load-modules-twice* tells whether to re-load modules
@@ -290,6 +358,7 @@ Change log:
 (unless (boundp '*Garnet-Going-To-Compile*)
   (defvar load-utils-p T)
   (defvar load-kr-p T)
+  (defvar load-kr-doc-p NIL)
   (defvar load-gworld-p T)
   (defvar load-gem-p T)
   (defvar load-opal-p T)
@@ -301,9 +370,8 @@ Change log:
   (defvar load-aggregraphs-p NIL)
   (defvar load-debug-p #+garnet-debug T #-garnet-debug NIL)
   (defvar load-gadgets-p NIL)
-  #+garnet-protected-eval
-  (defvar load-protected-eval-p T)
   (defvar load-demos-p NIL)
+  (defvar load-protected-eval-p T)
   (defvar load-lapidary-p NIL)
   (defvar load-gilt-p NIL)
   (defvar load-c32-p NIL))
@@ -312,7 +380,10 @@ Change log:
 ;;; Because these use defvar, if they are set before this file is
 ;;; loaded, their original value will be used.
 
-(defparameter load-clx-p #+clx NIL #-clx T)
+;;; RGA --- This means that the local lisp installation takes care of
+;;; finding CLX and we don't have to (require :clx)
+
+(defvar load-clx-p #+clx NIL #-clx T)
 
 ;;; launch-process-p controls whether Garnet will launch
 ;;; a separate process to detect keyboard and mouse events.
@@ -330,22 +401,36 @@ Change log:
 load into your lisp.  Please set common-lisp-user::Garnet-Version before loading
 Garnet-Loader again."))
 
-;(defun Get-Garnet-Version ()
-;  #+sparc    (or #+allegro-v4.0 :sparc-allegro
-;                 #+allegro-v4.1 :sparc-allegro4.1
-;                 #+allegro-v4.2 :sparc-allegro4.2
-;                 #+cmu          :sparc-cmucl
-;                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2 cmu)
-;		   (version-error))
-;  #+dec3100  (or #+allegro-v3.1 :pmax-allegro
-;                 #+allegro-v4.1 :pmax-allegro4.1
-;                 #-(and allegro-v3.1 allegro-v4.1) (version-error))
-;  #+(or pa hpux) #+allegro-v4.2 :hp-allegro4.2
-;                 #-allegro-v4.2 (version-error)
-;  #+clisp     :clisp
-;  #+lispworks :alpha-lw
-;  #+apple     :mac
-;  #-(or sparc dec3100 pa hpux clisp lispworks apple) (version-error))
+(defvar Multiple-Garnet-Bin-Dirs nil
+  "Set this to T if you want the name of the bin directory to
+   vary with the version of garnet, handy if you are debugging
+   with multiple Lisp versions.")
+
+(defun Get-Garnet-Version ()
+  #+sparc    (or #+allegro-v4.0 :sparc-allegro
+                 #+allegro-v4.1 :sparc-allegro4.1
+                 #+allegro-v4.2 :sparc-allegro4.2
+                 #+cmu     :sparc-cmucl
+                 #+lucid   :sparc-lucid
+                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2 
+			cmu lucid)
+		   (version-error))
+  #+dec3100  (or #+allegro-v3.1 :pmax-allegro
+                 #+allegro-v4.1 :pmax-allegro4.1
+                 #-(and allegro-v3.1 allegro-v4.1) (version-error))
+  #+(or pa hpux) (or #+lcl4.0.3      :hp-lucid4.0.3
+                     #+lucid         :hp-lucid
+                     #+allegro-v4.2  :hp-allegro4.2
+                     #-(or lucid allegro-v4.2)  (version-error))
+  #+clisp     :clisp
+  #+lispworks :alpha-lw
+  #+apple     (or #+clx :mac-clx
+		  #+ccl-5.0 (if (osx-p) :mac-osx :mac)
+		  #-(and ccl (not ccl-5.0)) :mac
+		  #-ccl (version-error))
+  #+macosx    (or #+allegro-v6.1 :macosx-acl-clx
+		  (version-error))
+  #-(or sparc dec3100 pa hpux clisp lispworks apple macosx) (version-error))
 
 ;;; Garnet-Version controls where the files are loaded from.
 ;;; Because this is a defvar, if Garnet-Version is set before this file is
@@ -354,7 +439,16 @@ Garnet-Loader again."))
 ;;; Garnet-Version should be set to :external for non-CMU users, and
 ;;; Your-Garnet-Pathname should be set appropriately.
 ;;;
-(defvar garnet-version :external)  ; was (Get-Garnet-Version)
+
+#+(or allegro-v6.2)(defparameter Garnet-Version :external-6.2-solaris)
+#+(or allegro-v6.1)(defparameter Garnet-Version :external-6.1-solaris)
+#+(or allegro-v5.0 allegro-v5.0.1)(defparameter Garnet-Version #+SUNOS4 :external-5.0-sunos
+		                     #-SUNOS4 :external-5.0-solaris)
+#+(or allegro-v4.2 allegro-v4.3)(defparameter Garnet-Version #+SUNOS4 :external-4.2-sunos
+		                     #-SUNOS4 :external-4.2-solaris)
+#+allegro-v4.1(defparameter Garnet-Version :external-4.1)
+#+cmu(defparameter Garnet-Version :external-cmu)
+#-(or cmu allegro)(defvar garnet-version(Get-Garnet-Version))
 
 (format T "~&** Loading Garnet Version ~a from ~s~%" Garnet-Version-Number Garnet-Version)
 
@@ -367,27 +461,42 @@ Garnet-Loader again."))
 ;;; (setf Your-CLX-Pathname "/usr/local/lib/cl/lib/code/")
 ;;; before loading garnet-loader.lisp.
 
-(defvar Your-CLX-Pathname
-      #+cmu
-      "/usr/local/lib/cmucl/lib/subsystems/"                ;; SET THIS
-      #+allegro
-     "/usr/local/acl/acl62/code/")
-    
-;      ;; Values useful at CMU:
-;      #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp701_ux90/omega/usr/local/depot/lucid/non-kanji/"
-;			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
-;      #+dec3100 "/usr/local/lib/cl/lib/code/"
-;      #+sunos4  "/usr/local/lib/cl/code/"
-;      #-(or pa hpux dec3100 sunos4) "/usr/misc/.allegro/lib/code/"
+;;; RGA --- This can be made mostly obsolete by simply doing (require
+;;; :clx) before loading garnet.  
+					;(require :clx)
+;;; RGA I moved this line up earlier to make register in the defvar.
 
+(defvar Your-CLX-Pathname
+  (if (eq garnet-version :external)
+      "**FILL THIS IN**"                ;; SET THIS
+    
+      ;; Values useful at CMU:
+      #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp700_ux90/omega/usr/local/depot/lucid/non-kanji/"
+			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
+      #+dec3100 "/usr/local/lib/cl/lib/code/"
+      #+sunos4  "/usr/local/lib/cl/code/"
+      #-(or pa hpux dec3100 sunos4) "/usr/misc/.allegro/lib/code/"))
 
 (defvar Your-Garnet-Pathname
-  (if (eq garnet-version :external)
-      "/home/rpg/lisp/garnet/"                ;; SET THIS
+  (if (member garnet-version '(:external :external-cmu
+			       :external-4.2
+			       :external-4.2-sunos
+			       :external-4.2-solaris
+			       :external-5.0-solaris
+			       :external-5.0-sunos
+			       :external-6.1-solaris
+			       :external-6.2-solaris
+                               :mac :mac-osx :mac-clx
+			       :macosx-acl-clx))
+      ;; This should work on Ansi compliant lisps.  Try it, if not
+      ;; hardcode the pathname.
+      (namestring (make-pathname :directory
+				  (pathname-directory *load-truename*)))
+      #+comment"**FILL THIS IN**"                ;; SET THIS
 
-;      ;; Values useful at CMU:
-;      #-apple "/afs/cs.cmu.edu/project/garnet/"
-;      #+apple "Macintosh HD:Garnet:"
+      ;; Values useful at CMU:
+      ;;#-apple "/afs/cs.cmu.edu/project/garnet/"
+      ;;#+apple "Macintosh HD:Garnet:"
       ))
 
 
@@ -395,136 +504,148 @@ Garnet-Loader again."))
 ;; concatenate directory pathnames
 ;;
 (defun Garnet-Pathnames (subdir dir)
-  #+(or KCL APPLE)
+  "This is basically a synonym for merge-pathnames, for Lisps which do
+not support it."
+  #+(or KCL (and APPLE (not ccl-3)))
   (pathname (concatenate 'string (namestring dir) (namestring subdir)))
-  #-(or KCL APPLE)
+  #-(or KCL (and APPLE (not ccl-3)))
   (merge-pathnames subdir dir)
   )
+
+;;; RGA added this function as a cleaner way of handling the differences
+;;; between Unix and Mac file naming conventions.  This will loose on pre-ansi 
+;;; lisps, but I can live with that (I think).
+(defun append-directory (pathnme dirstring)
+  "This is a little utility for accessing the subdirectory of a
+directory."
+  (let ((pnd (pathname-directory pathnme))
+	(dlist (if (listp dirstring) dirstring
+		 (list dirstring))))
+    (merge-pathnames (make-pathname :directory (append pnd dlist))
+		     pathnme)))
+
+
 
 (defun Get-Garnet-Binary-Pathname (version)
   (let ((directory-name
 	 (case version
-	   (:external
-	    ;; The next line is the normal setup.
-	    #-apple "bin/"
-	    #+apple "src:")
-	   (:sparc-allegro "sparc-allegro-bin/")
-	   (:sparc-allegro4.1 "sparc-allegro4.1-bin/")
-	   (:sparc-allegro4.2 "sparc-allegro4.2-bin/")
-	   (:sparc-cmucl "sparc-cmucl-bin/")
-	   (:pmax-allegro "pmax-allegro-bin/")
-	   (:pmax-allegro4.1 "pmax-allegro4.1-bin/")
-	   (:hp-allegro4.2 "hp-allegro4.2-bin/")
+	   (:external-6.1-solaris "bin6.1")
+	   (:external-5.0-solaris "bin5.0")
+	   (:external-5.0-sunos "bin5.0.sunos")
+	   (:external-4.2-sunos "bin.sunos")
+	   (:external-4.2-solaris "bin.solaris")
+	   (:external-4.1 "bin4.1")
+	   (:external-cmu "cmu.bin")	;***
+	   (:external "bin")
+	   (:sparc-allegro "sparc-allegro-bin")
+	   (:sparc-allegro4.1 "sparc-allegro4.1-bin")
+	   (:sparc-allegro4.2 "sparc-allegro4.2-bin")
+	   (:sparc-cmucl "sparc-cmucl-bin")
+	   (:sparc-lucid "sparc-lucid-bin")
+	   (:pmax-allegro "pmax-allegro-bin")
+	   (:pmax-allegro4.1 "pmax-allegro4.1-bin")
+	   (:hp-allegro4.2 "hp-allegro4.2-bin")
+	   (:hp-lucid "hp-lucid-bin")
+	   (:hp-lucid4.0.3 "hp-lucid403-bin")
 	   (:clisp "clisp-bin")
-	   (:alpha-lw "alpha-lw-bin/")
-	   (:mac "src:")
+	   (:alpha-lw "alpha-lw-bin")
+	   (:mac "bin.mcl")
+	   (:mac-osx "bin.osx")
+	   (:mac-clx "bin.macclx")
+	   (:macosx-acl-clx "bin6.1clx")
 	   (t (error "~S is an invalid garnet-version" version)))))
-    (garnet-pathnames directory-name Your-Garnet-Pathname)))
+    (unless multiple-garnet-bin-dirs (setq directory-name "bin"))
+    (append-directory Your-Garnet-Pathname directory-name)))
 
 
-;;This is the proper definition for the old setup.  CVS is not currently set
-;;up this way - for now, switching the definition to make it work. 
-;;(defvar Garnet-Src-Pathname
-;;  (garnet-pathnames #-apple "src/" #+apple "src:" Your-Garnet-Pathname))
-(defvar Garnet-Src-Pathname Your-Garnet-Pathname) 
-  
-;;This is the proper definition for the old setup.  CVS is not currently set
-;;up this way - for now, switching the definition to make it work. 
-;;(defvar Garnet-Binary-Pathname (Get-Garnet-Binary-Pathname garnet-version))
-(defvar Garnet-Binary-Pathname Your-Garnet-Pathname)
-
-;;This is the proper definition for the old setup.  CVS is not currently set
-;;up this way - for now, switching the definition to make it work. 
-;;(defvar Garnet-Lib-Pathname
-;;  (garnet-pathnames #-apple "lib/" #+apple "lib:" Your-Garnet-Pathname))
-(defvar Garnet-Lib-Pathname Your-Garnet-Pathname)
-
-
+(defvar Garnet-Src-Pathname
+  (append-directory  Your-Garnet-Pathname "src"))
+(defvar Garnet-Binary-Pathname (Get-Garnet-Binary-Pathname garnet-version))
+(defvar Garnet-Lib-Pathname
+  (append-directory Your-Garnet-Pathname "lib"))
 (defvar CLX-Pathname Your-CLX-Pathname)
 
 (defvar Garnet-Utils-Src
-  (garnet-pathnames #-apple "utils/" #+apple "utils:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "utils"))
 (defvar Garnet-Utils-Pathname
-  (garnet-pathnames #-apple "utils/" #+apple "utils:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "utils"))
 (defvar Garnet-KR-Src
-  (garnet-pathnames #-apple "kr/" #+apple "kr:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "kr"))
 (defvar Garnet-KR-Pathname
-  (garnet-pathnames #-apple "kr/" #+apple "kr:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "kr"))
 (defvar Garnet-Gworld-Src
-  (garnet-pathnames #-apple "gworld/" #+apple "gworld:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "gworld"))
 (defvar Garnet-Gworld-Pathname
-  (garnet-pathnames #-apple "gworld/" #+apple "gworld:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "gworld"))
 (defvar Garnet-Gem-Src
-  (garnet-pathnames #-apple "gem/" #+apple "gem:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "gem"))
 (defvar Garnet-Gem-Pathname
-  (garnet-pathnames #-apple "gem/" #+apple "gem:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "gem"))
 (defvar Garnet-Opal-Src
-  (garnet-pathnames #-apple "opal/" #+apple "opal:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "opal"))
 (defvar Garnet-Opal-Pathname
-  (garnet-pathnames #-apple "opal/" #+apple "opal:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "opal"))
 (defvar Garnet-Inter-Src
-  (garnet-pathnames #-apple "inter/" #+apple "inter:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "inter"))
 (defvar Garnet-Inter-Pathname
-  (garnet-pathnames #-apple "inter/" #+apple "inter:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "inter"))
 (defvar Garnet-Gesture-Src
-  (garnet-pathnames #-apple "gesture/" #+apple "gesture:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "gesture"))
 (defvar Garnet-Gesture-Pathname
-  (garnet-pathnames #-apple "gesture/" #+apple "gesture:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "gesture"))
 (defvar Garnet-Aggregadgets-Src
-  (garnet-pathnames #-apple "aggregadgets/" #+apple "aggregadgets:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "aggregadgets"))
 (defvar Garnet-Aggregadgets-Pathname
-  (garnet-pathnames #-apple "aggregadgets/" #+apple "aggregadgets:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "aggregadgets"))
 (defvar Garnet-PS-Src
-  (garnet-pathnames #-apple "ps/" #+apple "ps:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "ps"))
 (defvar Garnet-PS-Pathname
-  (garnet-pathnames #-apple "ps/" #+apple "ps:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "ps"))
 (defvar Garnet-Gadgets-Src
-  (garnet-pathnames #-apple "gadgets/" #+apple "gadgets:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "gadgets"))
 (defvar Garnet-Gadgets-Pathname
-  (garnet-pathnames #-apple "gadgets/" #+apple "gadgets:" Garnet-Binary-Pathname))
-#+garnet-protected-eval
-(defvar Garnet-Protected-Eval-Src
-  (garnet-pathnames #-apple "protected-eval/" #+apple "protected-eval:" Garnet-Src-Pathname))
-#+garnet-protected-eval
-(defvar Garnet-Protected-Eval-Pathname
-  (garnet-pathnames #-apple "protected-eval/" #+apple "protected-eval:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "gadgets"))
 (defvar Garnet-Debug-Src
-  (garnet-pathnames #-apple "debug/" #+apple "debug:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "debug"))
 (defvar Garnet-Debug-Pathname
-  (garnet-pathnames #-apple "debug/" #+apple "debug:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "debug"))
 (defvar Garnet-Demos-Src
-  (garnet-pathnames #-apple "demos/" #+apple "demos:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "demos"))
 (defvar Garnet-Demos-Pathname
-  (garnet-pathnames #-apple "demos/" #+apple "demos:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "demos"))
 (defvar Garnet-Gilt-Src
-  (garnet-pathnames #-apple "gilt/" #+apple "gilt:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "gilt"))
 (defvar Garnet-Gilt-Pathname
-  (garnet-pathnames #-apple "gilt/" #+apple "gilt:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "gilt"))
 (defvar Garnet-C32-Src
-  (garnet-pathnames #-apple "c32/" #+apple "c32:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "c32"))
 (defvar Garnet-C32-Pathname
-  (garnet-pathnames #-apple "c32/" #+apple "c32:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "c32"))
 (defvar Garnet-Lapidary-Src
-  (garnet-pathnames #-apple "lapidary/" #+apple "lapidary:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "lapidary"))
 (defvar Garnet-Lapidary-Pathname
-  (garnet-pathnames #-apple "lapidary/" #+apple "lapidary:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "lapidary"))
 (defvar Garnet-Contrib-Src
-  (garnet-pathnames #-apple "contrib/" #+apple "contrib:" Garnet-Src-Pathname))
+  (append-directory Garnet-Src-Pathname "contrib"))
 (defvar Garnet-Contrib-Pathname
-  (garnet-pathnames #-apple "contrib/" #+apple "contrib:" Garnet-Binary-Pathname))
+  (append-directory Garnet-Binary-Pathname "contrib"))
+(defvar Garnet-Protected-Eval-Src
+  (append-directory Garnet-Src-Pathname "protected-eval"))
+(defvar Garnet-Protected-Eval-Pathname
+  (append-directory Garnet-Binary-Pathname "protected-eval"))
 
 (defvar Garnet-Bitmap-Pathname
-  (garnet-pathnames #-apple "bitmaps/" #+apple "bitmaps:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "bitmaps"))
 (defvar Garnet-Pixmap-Pathname
-  (garnet-pathnames #-apple "pixmaps/" #+apple "pixmaps:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "pixmaps"))
 (defvar Garnet-Gilt-Bitmap-Pathname
-  (garnet-pathnames #-apple "gilt/" #+apple "gilt:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "gilt"))
 (defvar Garnet-C32-Bitmap-Pathname
-  (garnet-pathnames #-apple "c32/" #+apple "c32:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "c32"))
 (defvar Garnet-DataFile-Pathname
-  (garnet-pathnames #-apple "data/" #+apple "data:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "data"))
 (defvar Garnet-Gesture-Data-Pathname
-  (garnet-pathnames #-apple "gesture/" #+apple "gesture:" Garnet-Lib-Pathname))
+  (append-directory Garnet-Lib-Pathname "gesture"))
 
 
 ;;;----------------------------------------------------------
@@ -534,8 +655,12 @@ Garnet-Loader again."))
 ;;;
 ;;; After compilation is finished, the user should move all the binaries
 ;;; into their own directories, as specified by the pathnames above.
-(defvar *Garnet-Going-To-Compile*)
+(defvar *Garnet-Going-To-Compile* nil)
 
+#|
+;;; RGA commented this out.  We can just use the garnet-compile
+;;; function to compile directly into the source directory, no muss, no fuss.  
+;;; This way compilation does not depend on a unix utility.
 (when (and (boundp '*Garnet-Going-To-Compile*)
 	   *Garnet-Going-To-Compile*)
   (setf Garnet-Utils-Pathname Garnet-Utils-Src)
@@ -548,8 +673,6 @@ Garnet-Loader again."))
   (setf Garnet-PS-Pathname Garnet-PS-Src)
   (setf Garnet-Aggregadgets-Pathname Garnet-Aggregadgets-Src)
   (setf Garnet-Gadgets-Pathname Garnet-Gadgets-Src)
-  #+garnet-protected-eval
-  (setf Garnet-Protected-Eval-Pathname Garnet-Protected-Eval-Src)
   (setf Garnet-Debug-Pathname Garnet-Debug-Src)
   (setf Garnet-Demos-Pathname Garnet-Demos-Src)
   (setf Garnet-Gilt-Pathname Garnet-Gilt-Src)
@@ -558,6 +681,7 @@ Garnet-Loader again."))
   (setf Garnet-Contrib-Pathname Garnet-Contrib-Src)
   )
 
+|#
 ;;;----------------------------------------------------------
 
 ;;; If at cmu, then set up the search lists
@@ -609,13 +733,6 @@ Garnet-Loader again."))
 	(list (namestring Garnet-Gadgets-PathName)))
   (setf (ext:search-list "gadgets-src:")
 	(list (namestring Garnet-Gadgets-Src)))
-
-  #+garnet-protected-eval
-  (setf (ext:search-list "protected-eval:")
-	(list (namestring Garnet-Protected-Eval-PathName)))
-  #+garnet-protected-eval
-  (setf (ext:search-list "protected-eval-src:")
-	(list (namestring Garnet-Protected-Eval-Src)))
 
   (setf (ext:search-list "debug:")
 	(list (namestring Garnet-Debug-PathName)))
@@ -685,10 +802,6 @@ Garnet-Loader again."))
 (defparameter Garnet-Gadgets-Loader
   (merge-pathnames "gadgets-loader" Garnet-Gadgets-PathName))
 
-#+garnet-protected-eval
-(defparameter Garnet-Protected-Eval-Loader
-  (merge-pathnames "protected-eval-loader" Garnet-Protected-Eval-PathName))
-
 (defparameter Garnet-Debug-Loader
   (merge-pathnames "debug-loader" Garnet-Debug-PathName))
 
@@ -704,12 +817,14 @@ Garnet-Loader again."))
 (defparameter Garnet-Lapidary-Loader
   (merge-pathnames "lapidary-loader" Garnet-Lapidary-PathName))
 
+(defparameter garnet-protected-eval-Loader
+  (merge-pathnames "protected-eval-loader" Garnet-Protected-Eval-PathName))
+
 
 ;--------------------------------------------------------------------
 
 (defparameter Garnet-Load-Alist
-  `(#+garnet-protected-eval ("protected-eval" . Garnet-Protected-Eval-PathName)
-    ("gg" . Garnet-Gadgets-PathName)
+  `(("gg" . Garnet-Gadgets-PathName)
     ("gadgets" . Garnet-Gadgets-PathName)
     ("utils" . Garnet-Utils-PathName)
     ("kr" . Garnet-KR-PathName)
@@ -728,6 +843,7 @@ Garnet-Loader again."))
     ("c32" . Garnet-C32-PathName)
     ("lapidary" . Garnet-Lapidary-PathName)
     ("contrib" . Garnet-Contrib-PathName)
+    ("protected-eval" . Garnet-Protected-Eval-PathName)
     ("utils-src" . Garnet-Utils-Src)
     ("kr-src" . Garnet-KR-Src)
     ("gworld-src" . Garnet-Gworld-Src)
@@ -747,6 +863,7 @@ Garnet-Loader again."))
     ("c32-src" . Garnet-C32-Src)
     ("lapidary-src" . Garnet-Lapidary-Src)
     ("contrib-src" . Garnet-Contrib-Src)
+    ("protected-eval-src" . Garnet-Protected-eval-Src)
     ("clx" . CLX-PathName)
     ))
 
@@ -771,9 +888,13 @@ Garnet-Loader again."))
              ((string= name "motif-scrolling-labeled-box-loader")
               "motif-scrolling-labeled-box-loa")
              ((string= name "motif-scrolling-labeled-box")
-              "motif-scrolling-labeled-box.fas")
+              #+carbon-compat"motif-scrolling-labeled-box.cfs"
+              #+(and powerpc (not carbon-compat))"motif-scrolling-labeled-box.pfs"
+              #-powerpc"motif-scrolling-labeled-box.cfs")
              ((string= name "scrolling-labeled-box-loader")
               "scrolling-labeled-box-loader.li")
+             ((string= name "scrolling-unlabeled-box-loader")
+              "scrolling-unlabeled-box-loader")
              ((string= name "scrolling-input-string-loader")
               "scrolling-input-string-loader.l")
              (t (error "Truncate-Filename can't map ~S
@@ -791,16 +912,28 @@ to a 31 character filename with a .lisp suffix."
 #+clisp (setq CUSTOM:*WARN-ON-FLOATING-POINT-CONTAGION* nil)
 
 (defun Garnet-Load (filename)
-  (let ((pos (position #\: filename)))
+  (let ((pos (position #\: filename))
+	;; RGA This allows MCL to come up to speed with the modern
+	;; world.  CVS in the Apple Developers Toolkit is a unix app
+	;; and hence treats #\newline as #\linefeed.  MCL is a ported
+	;; Mac OS 9 app and hence, by default expects #\newline to be
+	;; #\return.  This looses when reading coments.  This
+	;; undocumented hack seems to fix that, so we will wrap it
+	;; around the compile and load functions.
+	#+ccl-5.0(ccl::*linefeed-equals-newline* t)
+	)
     (if pos
 	(let* ((head (subseq filename 0 pos))
 	       (tail (subseq filename (1+ pos)))
 	       (prefix (or (eval (cdr (assoc head Garnet-Load-Alist
 					     :test #'string=)))
 			   (error "Bad prefix ~S~%" head)))
-	       (finalname #+apple (garnet-pathnames
-                                   (truncate-filename tail) prefix)
-                          #-apple (garnet-pathnames tail prefix)))
+	       ;;; RGA eliminated for MCL-5.0 (presumably running on
+	       ;;; Mac OS X)
+	       ;;; RGA put back for MCL-5.0, still a problem.
+	       (finalname #+apple(garnet-pathnames
+				  (truncate-filename tail) prefix)
+                          #-apple(garnet-pathnames tail prefix)))
 	  (format T "Loading ~s~%" finalname)
 	  (load finalname))
 	;; else no colon, load regular
@@ -822,19 +955,25 @@ to a 31 character filename with a .lisp suffix."
 ;;;    gadgets directory).
 ;;;
 (defvar *compiler-extension*
-  #+allegro     ".fasl"
-  #+sparc       ".sbin"
-  #+pa          ".hbin"
+  #+allegro ".fasl"
+  #+(and lucid sparc)     ".sbin"
+  #+(and lucid pa)        ".hbin"
   #+cmu         (concatenate 'string "." (c:backend-fasl-file-type c:*backend*))
-  #+lispworks   ".afasl"
-  #+apple       ".fasl"
-  #+clisp       (if (boundp 'system::*compiled-file-types*)
-		  (namestring (first system::*compiled-file-types*))
-		  ".fas"))
+  #+lispworks             ".afasl"
+  #+(and apple (not ccl-5.0)) ".fasl"
+  ;; RGA this is a nifty hack to find the right extension type.
+  ;; They should promote it.
+  #+ccl-5.0               (namestring ccl::*.fasl-pathname*)
+  #+clisp                (if (boundp 'system::*compiled-file-types*)
+			     (namestring (first system::*compiled-file-types*))
+			     ".fas"))
 
 
 (defun Garnet-Compile (filename)
-  (let ((pos (position #\: filename)))
+  (let ((pos (position #\: filename))
+	;; RGA hack to allow reading of unix formatted files.
+	#+ccl-5.0(ccl::*linefeed-equals-newline* t)
+	)
     (if pos
 	(let* ((head (subseq filename 0 pos))
 	       (tail (subseq filename (1+ pos)))
@@ -856,7 +995,8 @@ to a 31 character filename with a .lisp suffix."
                (bin-finalname (garnet-pathnames
                                (concatenate 'string tail *compiler-extension*)
                                bin-prefix)))
-               
+          ;; RGA still need this under MCL 5.0, still uses
+          ;; old Mac APIs and truncates filenames.
           #+apple
           ;; Oops, might need to recalculate src-filename and bin-filename
           ;; if filenames are longer than 31 characters
@@ -880,6 +1020,18 @@ to a 31 character filename with a .lisp suffix."
         ;; else no colon, abort
         (error "NO COLON, aborting compile"))))
 
+;;; RGA workaround for #\return vs #\linefeed issue in MCL.
+(defun do-load (file &rest args)
+  "This is a workaround for the #\return vs #\linefeed issue in 
+   MCL.  Binding this variable seems mean that #\linefeed is treated
+   as newlines.  As CVS is a Unix tool, it maps #\newlines to
+   #\linefeed. As MCL is a Mac OS 9 program, it expects #\return.
+   This should allow us to work with whatever we get."
+  (let (
+	#+ccl-5.0(ccl::*linefeed-equals-newline* t)
+		 )
+    (apply #'load file args)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -897,12 +1049,17 @@ to a 31 character filename with a .lisp suffix."
 (cond
   (load-clx-p
    (defparameter CLX-Loader
+     #+lucid (merge-pathnames "windows" CLX-Pathname)
      #+lispworks (merge-pathnames "defsys" CLX-Pathname)
      #+allegro nil			;;uses require form...
-     #-(or lispworks allegro) (merge-pathnames "clx-library" CLX-Pathname))
+     #-(or lucid allegro lispworks) (merge-pathnames "clx" CLX-Pathname))
    (format T "~% %%%%%%% Loading ~A %%%%%%%%~%" #-apple "CLX"
 	                                        #+apple "MCL Libraries")
-   #+apple
+   ;; RGA if we are running apply and CLX, then assume we 
+   ;; are using X-windows toolkit rather than quickdraw.
+   ;; RGA commenting this out for MCL 5.0 as it can't seem to find
+   ;; traps, hope that these will all autoload.
+   #+(and apple (not clx) (not carbon-compat))
    (progn (require 'traps)
           (require 'interfaces)
           (require 'quickdraw)
@@ -923,23 +1080,61 @@ to a 31 character filename with a .lisp suffix."
           (ccl::require-interface 'windows)
           (ccl::require-interface 'picker)
           (terpri))
+   #+(and apple (not clx) carbon-compat)
+   (progn ;(require 'traps)
+          ;(require 'interfaces)
+          (require 'quickdraw)
+          ;; For event-handling
+          (ccl::require-interface 'types)
+          (ccl::require-interface 'quickdraw)
+          (ccl::require-interface 'events)
+          (ccl::require-interface 'OSutils)
+          ;; Next doesn't seem to be around anymore.
+          ;;(ccl::require-interface 'OSevents)
+          ;; For creating Pen State records (as in gestureinter.lisp)
+          (ccl::require-interface 'memory)
+          (ccl::require-interface 'QDOffscreen)
+          (ccl::require-interface 'controls)
+          (ccl::require-interface 'windows)
+          (ccl::require-interface 'ColorPicker)
+          (terpri))
    #+allegro (require :clx)
    #-(or apple allegro) (load CLX-Loader)
    )
   (t
    (format T "~%****** NOT Loading CLX *******~%")))
 
+
+;; The macro DECLAIM is part of the new CLTL2 standard, and some lisps
+;; (like Lucid) may not have defined it yet
+;; NOTE: Have to do this after making sure CLX is loaded, since declaim needs
+;; to be shadowed in the :XLIB package.
+#+lucid
+(unless (fboundp 'lisp::declaim)
+  (defmacro lisp::declaim (lisp::arg)
+    `(eval-when (eval load compile)
+       (proclaim ',lisp::arg)))
+  (if (and (find-package :XLIB)
+           (fboundp 'xlib::declaim))
+      (shadow 'lisp::declaim :XLIB))
+  (export 'lisp::declaim :LISP))
+
+
+
 ;;;
 ;;;  Functions that will determine whether the display can be opened
 ;;;
 
-#-apple
 (defun get-full-display-name ()
    #+cmu (cdr (assoc :DISPLAY lisp::*environment-list*))
    #+(or allegro lispworks kcl clisp) (sys::getenv "DISPLAY")
+   #+(and lucid lcl3.0) (lucid-common-lisp:environment-variable "DISPLAY")
+   #+(and lucid (not lcl3.0)) (system:environment-variable "DISPLAY")
+   ;; RGA hope this works as a sensible default.  Need a new function to
+   ;; support other Lisp.
+   ":0"
    )
 
-#-apple
 (defun get-display-name (display)
   (do* ((dlist (coerce display 'list) (cdr dlist))
         (c (car dlist) (car dlist))
@@ -947,7 +1142,6 @@ to a 31 character filename with a .lisp suffix."
        ((or (eq c nil) (eq c '#\:)) (coerce (reverse namelist) 'string))
     (push c namelist)))
 
-#-apple
 (defun get-display-number (display)
   (let* ((dlist (coerce display 'list))
          (numstr (progn
@@ -965,11 +1159,10 @@ to a 31 character filename with a .lisp suffix."
          )
     num))
 
-
 #+allegro
 (require :xcw)
 
-#-apple
+#-(and apple (not clx))
 (defun verify-display-can-be-opened ()
   (let* ((full-display-name (get-full-display-name))
 	 (d-name (if full-display-name
@@ -985,7 +1178,7 @@ to a 31 character filename with a .lisp suffix."
 	 (common-windows::open-display-with-auth d-name d-number))
 	#+lispworks (common-lisp:ignore-errors
 		     (xlib:open-display d-name :display d-number))
-	#-(or cmu allegro lispworks)
+	#-(or cmu lucid allegro lispworks)
 	  (xlib:open-display d-name :display d-number) ; just try it
 	  
     (if errorp
@@ -1006,8 +1199,15 @@ running Garnet."
     (xlib:close-display val)
     T)))
 
-#-apple
-(verify-display-can-be-opened)
+;;; RGA --- sometimes I only want to load KR.  Don't need a display we
+;;; aren't doing graphics.
+
+(defvar *kr-only* nil
+  "Only loading KR so don't need to open displays.")
+
+#-(and apple (not clx))
+(unless *kr-only*
+  (verify-display-can-be-opened))
 
 ;;;
 ;;; Now back to loading Garnet
@@ -1018,7 +1218,7 @@ running Garnet."
 	(format T "~%****** Utils already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Utils %%%%%%%%~%")
-          (load Garnet-Utils-Loader)))
+          (do-load Garnet-Utils-Loader)))
     (format T "~%****** NOT Loading Utils *******~%"))
 
 (if load-kr-p
@@ -1026,8 +1226,11 @@ running Garnet."
 	(format T "~%****** KR already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading KR %%%%%%%%~%")
-          (load Garnet-KR-Loader)))
+          (do-load Garnet-KR-Loader)))
     (format T "~%****** NOT Loading KR *******~%"))
+
+(if load-kr-doc-p (garnet-load "kr:kr-doc"))
+
 
 #+apple
 (if load-gworld-p
@@ -1035,7 +1238,7 @@ running Garnet."
 	(format T "~%****** Gworld already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Gworld %%%%%%%%~%")
-          (load Garnet-Gworld-loader)))
+          (do-load Garnet-Gworld-loader)))
     (format T "~%****** NOT Loading Gworld *******~%"))
 
 (if load-gem-p
@@ -1043,7 +1246,7 @@ running Garnet."
 	(format T "~%****** Gem already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Gem %%%%%%%%~%")
-          (load Garnet-Gem-Loader)))
+          (do-load Garnet-Gem-Loader)))
     (format T "~%****** NOT Loading Gem *******~%"))
 
 (if load-opal-p
@@ -1051,7 +1254,7 @@ running Garnet."
 	(format T "~%****** Opal already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Opal %%%%%%%%~%")
-          (load Garnet-Opal-Loader)))
+          (do-load Garnet-Opal-Loader)))
     (format T "~%****** NOT Loading Opal *******~%"))
 
 (if load-inter-p
@@ -1059,7 +1262,7 @@ running Garnet."
 	(format T "~%****** Interactors already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Interactors %%%%%%%%~%")
-          (load Garnet-Inter-Loader)))
+          (do-load Garnet-Inter-Loader)))
     (format T "~%****** NOT Loading Interactors *******~%"))
 
 (if load-multifont-p
@@ -1067,7 +1270,7 @@ running Garnet."
 	(format T "~%****** Multifont already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Multifont %%%%%%%%~%")
-          (load Garnet-Multifont-Loader)))
+          (do-load Garnet-Multifont-Loader)))
     (format T "~%****** NOT Loading Multifont *******~%"))
 
 (if load-gesture-p
@@ -1075,7 +1278,7 @@ running Garnet."
 	(format T "~%****** Gestures already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Gestures %%%%%%%%~%")
-          (load Garnet-Gesture-Loader)))
+          (do-load Garnet-Gesture-Loader)))
     (format T "~%****** NOT Loading Gestures *******~%"))
 
 (if load-ps-p
@@ -1083,7 +1286,7 @@ running Garnet."
 	(format T "~%****** PS already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading PS %%%%%%%%~%")
-          (load Garnet-PS-Loader)))
+          (do-load Garnet-PS-Loader)))
     (format T "~%****** NOT Loading PS *******~%"))
 
 (if load-aggregadgets-p
@@ -1091,7 +1294,7 @@ running Garnet."
 	(format T "~%****** Aggregadgets already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Aggregadgets %%%%%%%%~%")
-          (load Garnet-Aggregadgets-Loader)))
+          (do-load Garnet-Aggregadgets-Loader)))
     (format T "~%****** NOT Loading Aggregadgets *******~%"))
 
 (if load-aggregraphs-p
@@ -1099,9 +1302,9 @@ running Garnet."
 	(format T "~%****** Aggregraphs already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Aggregraphs %%%%%%%%~%")
-          (load Garnet-Aggregraphs-Loader)))
+          (do-load Garnet-Aggregraphs-Loader)))
     (format T "~%****** NOT Loading Aggregraphs *******
-** To load aggregraph programs, execute (load Garnet-Aggregraphs-Loader)~%"))
+** To load aggregraph programs, execute (do-load Garnet-Aggregraphs-Loader)~%"))
 
 
 (if load-gadgets-p
@@ -1109,62 +1312,62 @@ running Garnet."
 	(format T "~%****** Gadgets already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Gadgets %%%%%%%%~%")
-          (load Garnet-Gadgets-Loader)))
+          (do-load Garnet-Gadgets-Loader)))
     (format T "~%****** NOT Loading Gadgets *******~%"))
-
-#+garnet-protected-eval
-(if load-protected-eval-p
-    (if (and *dont-load-modules-twice* (get :garnet-modules :protected-eval))
-	(format T "~%****** Protected-eval already loaded *******~%")
-        (progn
-          (format T "~% %%%%%%%% Loading Protected-eval %%%%%%%%~%")
-          (load Garnet-Protected-Eval-Loader)))
-    (format T "~%****** NOT Loading Protected-eval *******~%"))
 
 (if load-debug-p
     (if (and *dont-load-modules-twice* (get :garnet-modules :debug))
 	(format T "~%****** Debugging programs already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Debugging programs %%%%%%%%~%")
-          (load Garnet-Debug-Loader)))
+          (do-load Garnet-Debug-Loader)))
     (format T "~%****** NOT Loading Debug Files *******
-** To load debug programs, execute (load Garnet-Debug-Loader)~%"))
+** To load debug programs, execute (do-load Garnet-Debug-Loader)~%"))
 
 (if load-demos-p
     (if (and *dont-load-modules-twice* (get :garnet-modules :demos))
 	(format T "~%****** Demos already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Demos %%%%%%%%~%")
-          (load Garnet-Demos-Loader)))
+          (do-load Garnet-Demos-Loader)))
     (format T "~%****** NOT Loading Demos *******
-** To load Demos, execute (load Garnet-Demos-Loader)~%"))
+** To load Demos, execute (do-load Garnet-Demos-Loader)~%"))
 
 (if load-gilt-p
     (if (and *dont-load-modules-twice* (get :garnet-modules :gilt))
 	(format T "~%****** Gilt already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Gilt %%%%%%%%~%")
-          (load Garnet-Gilt-Loader)))
+          (do-load Garnet-Gilt-Loader)))
     (format T "~%****** NOT Loading Gilt *******
-** To load Gilt, execute (load Garnet-Gilt-Loader)~%"))
+** To load Gilt, execute (do-load Garnet-Gilt-Loader)~%"))
 
 (if load-c32-p
     (if (and *dont-load-modules-twice* (get :garnet-modules :c32))
 	(format T "~%****** C32 already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading C32 %%%%%%%%~%")
-          (load Garnet-C32-Loader)))
+          (do-load Garnet-C32-Loader)))
     (format T "~%****** NOT Loading C32 *******
-** To load C32, execute (load Garnet-C32-Loader)~%"))
+** To load C32, execute (do-load Garnet-C32-Loader)~%"))
 
 (if load-lapidary-p
     (if (and *dont-load-modules-twice* (get :garnet-modules :lapidary))
 	(format T "~%****** Lapidary already loaded *******~%")
         (progn
           (format T "~% %%%%%%%% Loading Lapidary %%%%%%%%~%")
-          (load Garnet-Lapidary-Loader)))
+          (do-load Garnet-Lapidary-Loader)))
     (format T "~%****** NOT Loading Lapidary *******
-** To load Lapidary, execute (load Garnet-Lapidary-Loader)~%"))
+** To load Lapidary, execute (do-load Garnet-Lapidary-Loader)~%"))
+
+(if load-protected-eval-p
+    (if (and *dont-load-modules-twice* (get :garnet-modules :protected-eval))
+	(format T "~%****** Protected-eval already loaded *******~%")
+        (progn
+          (format T "~% %%%%%%%% Loading Protected-eval %%%%%%%%~%")
+          (do-load Garnet-Protected-Eval-Loader)))
+    (format T "~%****** NOT Loading Protected-Eval *******
+** To load Protected-Eval, execute (do-load Garnet-Protected-Eval-Loader)~%"))
 
 
 #|
@@ -1172,6 +1375,44 @@ running Garnet."
 (if (get :garnet-modules :kr)
   (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
 |#
+
+;;; RGA added two auxiliary functions for doing file manipulations.
+
+(defun garnet-shell-exec (command)
+  "This is a quick and dirty version of opal:shell-exec used just 
+   for the compiler.  This currently looses on Mac OS."
+  #+apple (declare (ignore command))
+  #+allegro
+  (excl:run-shell-command command :wait NIL :output :stream
+			  :error-output :stream)
+  #+lucid
+  (lcl:run-program "/bin/sh" :arguments (list "-c" command)
+		   :wait NIL :output :stream :error-output :stream)
+  #+cmu
+  (ext:process-output (ext:run-program "/bin/sh" (list "-c" command)
+				       :wait NIL :output :stream))
+  #+lispworks
+  (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
+  #+clisp
+  (system::make-pipe-input-stream (string command))
+  #-(or allegro lucid cmu lispworks clisp)
+  (error "Don't know how to execute shell functions in this lisp"))
+
+;;; RGA  This will loose on Windows
+(defun garnet-mkdir-if-needed (dirname) 
+  "Creates the directory if it does not exist."
+  (unless (probe-file dirname)
+    #+apple(create-file dirname)
+    #-apple(garnet-shell-exec (format nil "mkdir ~A~%" dirname))))
+
+(defun garnet-copy-files (src-dir bin-dir file-list)
+  "Copies a list of files (usually loader files) from source directory
+  to binary directory."
+  (dolist (file file-list)
+    (let ((src (merge-pathnames file src-dir))
+	  (dest (merge-pathnames file bin-dir)))
+      #+apple(copy-file src dest :if-exists :overwrite)
+      #-apple(garnet-shell-exec (format nil "cp ~A ~A~%" src dest)))))
 
 ;; Clisp doesn't seem to preserve the normal quit syntax after the Garnet
 ;; load - these definitions fix that.  Probably not the best way but it works.

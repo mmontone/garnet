@@ -9,6 +9,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; CHANGE LOG:
+;;; [2003/11/20:rpg]        - Fix remaining bugs in gem:create-image, where
+;;;                           depth and bits-per-pixel don't match.
 ;;; 17-DEC-1999 Fred Gilham - Fix problem where pixmap format doesn't match
 ;;;                           valid pixmap formats in displays where `depth'
 ;;;                           and `bits-per-pixel' values differ
@@ -489,45 +491,48 @@ pixmap format in the list of valid formats."
   (unless bits-per-pixel
     (setf bits-per-pixel (depth-to-bits-per-pixel depth)))
   (if from-data-p
-    (let* ((bits-per-line (xlib::index* width bits-per-pixel))
-	   (padded-bits-per-line
-	    (xlib::index* (xlib::index-ceiling bits-per-line 32) 32))
-	   (padded-bytes-per-line
-	    (xlib::index-ceiling padded-bits-per-line 8)))
-      (xlib:create-image
-       :width width :height height
-       :depth depth
-       :format :z-pixmap
-       :data color-or-data
-       :unit 32 :pad 32
-       :byte-lsb-first-p t :bit-lsb-first-p t
-       :bits-per-pixel bits-per-pixel
-       :plist properties
-       :bytes-per-line padded-bytes-per-line :left-pad left-pad))
-    (xlib:create-image
-     :depth depth
-     :width width
-     :height height
-     :format :z-pixmap
-     :data (make-array (list height width)
-		       :element-type
-		       (case depth
-			 (1  'xlib::pixarray-1-element-type)
-			 (4  'xlib::pixarray-4-element-type)
-			 (8  'xlib::pixarray-8-element-type)
-			 (16 'xlib::pixarray-16-element-type)
-			 (24 'xlib::pixarray-24-element-type)
-			 (32 'xlib::pixarray-32-element-type)
-			 (t
-			  (cerror
-			   "Ignore"
-			   "gem::x-create-image-array: depth ~S is not valid (1, 8, 16, 24 or 32)"
-			   depth)
-			  'xlib::pixarray-8-element-type))
-		       :initial-element
-		       (if color-or-data
-			 (g-value color-or-data :colormap-index)
-			 opal::*white*)))))
+      (let* ((bits-per-line (xlib::index* width bits-per-pixel))
+	     (padded-bits-per-line
+	      (xlib::index* (xlib::index-ceiling bits-per-line 32) 32))
+	     (padded-bytes-per-line
+	      (xlib::index-ceiling padded-bits-per-line 8)))
+	(xlib:create-image
+	 :width width :height height
+	 :depth depth
+	 :format :z-pixmap
+	 :data color-or-data
+	 :unit 32 :pad 32
+	 :byte-lsb-first-p t :bit-lsb-first-p t
+	 :bits-per-pixel bits-per-pixel
+	 :plist properties
+	 :bytes-per-line padded-bytes-per-line :left-pad left-pad))
+      (let* ((element-type
+	      (case bits-per-pixel
+		(1  'xlib::pixarray-1-element-type)
+		(4  'xlib::pixarray-4-element-type)
+		(8  'xlib::pixarray-8-element-type)
+		(16 'xlib::pixarray-16-element-type)
+		(24 'xlib::pixarray-24-element-type)
+		(32 'xlib::pixarray-32-element-type)
+		(t
+		 (cerror
+		  "Ignore"
+		  "gem::x-create-image-array: bits-per-pixel ~S is not valid (1, 8, 16, 24 or 32)"
+		  depth)
+		 'xlib::pixarray-8-element-type)))
+	     (data-array (make-array (list height width)
+					    :element-type element-type
+					    
+					    :initial-element
+					    (if color-or-data
+						(g-value color-or-data :colormap-index)
+						opal::*white*))))
+	(xlib:create-image
+	 :depth depth
+	 :width width
+	 :height height
+	 :format :z-pixmap
+	 :data data-array ))))
   
 
 

@@ -57,6 +57,8 @@
 #|
 ============================================================
 Change log:
+29-sep-2003 Robert Goldman - Add trial version of Allegro-specific code to open
+                          display using Xauthorization information.
 15-Nov-2002 Fred Gilham - Add protected-eval module (from contrib/prompter code).
                           Added #+garnet-protected-eval feature to allow process
                           code to be compiled appropriately.
@@ -328,22 +330,22 @@ Change log:
 load into your lisp.  Please set common-lisp-user::Garnet-Version before loading
 Garnet-Loader again."))
 
-(defun Get-Garnet-Version ()
-  #+sparc    (or #+allegro-v4.0 :sparc-allegro
-                 #+allegro-v4.1 :sparc-allegro4.1
-                 #+allegro-v4.2 :sparc-allegro4.2
-                 #+cmu          :sparc-cmucl
-                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2 cmu)
-		   (version-error))
-  #+dec3100  (or #+allegro-v3.1 :pmax-allegro
-                 #+allegro-v4.1 :pmax-allegro4.1
-                 #-(and allegro-v3.1 allegro-v4.1) (version-error))
-  #+(or pa hpux) #+allegro-v4.2 :hp-allegro4.2
-                 #-allegro-v4.2 (version-error)
-  #+clisp     :clisp
-  #+lispworks :alpha-lw
-  #+apple     :mac
-  #-(or sparc dec3100 pa hpux clisp lispworks apple) (version-error))
+;(defun Get-Garnet-Version ()
+;  #+sparc    (or #+allegro-v4.0 :sparc-allegro
+;                 #+allegro-v4.1 :sparc-allegro4.1
+;                 #+allegro-v4.2 :sparc-allegro4.2
+;                 #+cmu          :sparc-cmucl
+;                 #-(and allegro-v4.0 allegro-v4.1 allegro-v4.2 cmu)
+;		   (version-error))
+;  #+dec3100  (or #+allegro-v3.1 :pmax-allegro
+;                 #+allegro-v4.1 :pmax-allegro4.1
+;                 #-(and allegro-v3.1 allegro-v4.1) (version-error))
+;  #+(or pa hpux) #+allegro-v4.2 :hp-allegro4.2
+;                 #-allegro-v4.2 (version-error)
+;  #+clisp     :clisp
+;  #+lispworks :alpha-lw
+;  #+apple     :mac
+;  #-(or sparc dec3100 pa hpux clisp lispworks apple) (version-error))
 
 ;;; Garnet-Version controls where the files are loaded from.
 ;;; Because this is a defvar, if Garnet-Version is set before this file is
@@ -366,23 +368,27 @@ Garnet-Loader again."))
 ;;; before loading garnet-loader.lisp.
 
 (defvar Your-CLX-Pathname
-  (if (eq garnet-version :external)
-      #+cmu "/usr/local/lib/cmucl/lib/subsystems/"                ;; SET THIS
-      #+clisp "/usr/lib/clisp/"                                   ;; SET THIS
-      ;; Values useful at CMU:
-      #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp700_ux90/omega/usr/local/depot/lucid/non-kanji/"
-			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
-      #+dec3100 "/usr/local/lib/cl/lib/code/"
-      #+sunos4  "/usr/local/lib/cl/code/"
-      #-(or pa hpux dec3100 sunos4) "/usr/misc/.allegro/lib/code/"))
+      #+cmu
+      "/usr/local/lib/cmucl/lib/subsystems/"                ;; SET THIS
+      #+allegro
+     "/usr/local/acl/acl62/code/")
+    
+;      ;; Values useful at CMU:
+;      #+(or pa hpux) (or #+lucid "/afs/cs.cmu.edu/hp701_ux90/omega/usr/local/depot/lucid/non-kanji/"
+;			 #+allegro "/afs/cs/misc/allegro/hp700_ux80/beta/lib/code/")
+;      #+dec3100 "/usr/local/lib/cl/lib/code/"
+;      #+sunos4  "/usr/local/lib/cl/code/"
+;      #-(or pa hpux dec3100 sunos4) "/usr/misc/.allegro/lib/code/"
+
 
 (defvar Your-Garnet-Pathname
   (if (eq garnet-version :external)
-      "/home/user/garnet/"                ;; SET THIS
+      "/home/rpg/lisp/garnet/"                ;; SET THIS
 
-      ;; Values useful at CMU:
-      #-apple "/afs/cs.cmu.edu/project/garnet/"
-      #+apple "Macintosh HD:Garnet:"))
+;      ;; Values useful at CMU:
+;      #-apple "/afs/cs.cmu.edu/project/garnet/"
+;      #+apple "Macintosh HD:Garnet:"
+      ))
 
 
 ;; This function is required for KCL and MCL because they do not properly
@@ -886,11 +892,14 @@ to a 31 character filename with a .lisp suffix."
 (format t "...Loading Garnet ...~%")
 (setf *load-verbose* t)
 
+;; yuck --- Allegro uses a require form (normally much nicer) to load
+;; CLX, instead of giving a filename to load...
 (cond
   (load-clx-p
    (defparameter CLX-Loader
      #+lispworks (merge-pathnames "defsys" CLX-Pathname)
-     #-lispworks (merge-pathnames "clx-library" CLX-Pathname))
+     #+allegro nil			;;uses require form...
+     #-(or lispworks allegro) (merge-pathnames "clx-library" CLX-Pathname))
    (format T "~% %%%%%%% Loading ~A %%%%%%%%~%" #-apple "CLX"
 	                                        #+apple "MCL Libraries")
    #+apple
@@ -914,7 +923,8 @@ to a 31 character filename with a .lisp suffix."
           (ccl::require-interface 'windows)
           (ccl::require-interface 'picker)
           (terpri))
-   #-apple (load CLX-Loader)
+   #+allegro (require :clx)
+   #-(or apple allegro) (load CLX-Loader)
    )
   (t
    (format T "~%****** NOT Loading CLX *******~%")))
@@ -955,6 +965,10 @@ to a 31 character filename with a .lisp suffix."
          )
     num))
 
+
+#+allegro
+(require :xcw)
+
 #-apple
 (defun verify-display-can-be-opened ()
   (let* ((full-display-name (get-full-display-name))
@@ -963,11 +977,22 @@ to a 31 character filename with a .lisp suffix."
 		     #-(or allegro clisp) (machine-instance)
 		     #+clisp ""
 		     #+allegro (short-site-name)))
-	 (d-number (get-display-number full-display-name)))
+	 (d-number (get-display-number full-display-name))
+	 auth-name auth-data)
+    #-allegro
+    (declare (ignore auth-name auth-data))
+    #+allegro
+    (multiple-value-setq (auth-name auth-data)
+      ;; ~/.Xauthority should be UN-hard-coded to follow rules used
+      ;; by xdm. Note heinous use of unexported xcw function.
+      ;; [2003/09/29:rpg]
+      (xlib::get-authorization-key d-name d-number :tcp "~/.Xauthority"))
     (multiple-value-bind (val errorp)
 	#+cmu (ignore-errors (xlib:open-display d-name :display d-number))
 	#+allegro (excl::ignore-errors
-		   (xlib:open-display d-name :display d-number))
+		   (xlib:open-display d-name :display d-number
+				      :authorization-name auth-name
+				      :authorization-data auth-data))
 	#+lispworks (common-lisp:ignore-errors
 		     (xlib:open-display d-name :display d-number))
 	#-(or cmu allegro lispworks)

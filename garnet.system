@@ -1,6 +1,7 @@
 (in-package "COMMON-LISP-USER")
 
 (mk:defsystem garnet
-    :components ((:file "garnet-loader.lisp" :load-always t))
+    :source-extension "lisp"
+    :components ((:file "garnet-loader.lisp" :load-only t))
     :source-pathname "site-lisp:garnet;")
 

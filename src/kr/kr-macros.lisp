@@ -1656,10 +1656,15 @@ at slot ~S  (non-schema value is ~S, last schema was ~S)"
        "CREATE-INSTANCE ~S ~S: do not specify the :IS-A slot!  Ignored.~%"
        name class)
       (setf body (remove (assocq :IS-A body) body))))
-  `(create-schema ,name :GENERATE-INSTANCE
-    ;; class might be nil, which means no IS-A slot
-    ,@(if class `((:is-a ,class)))
-    ,@body))
+  `(progn
+     #+allegro
+     (excl:record-source-file ,name :type :kr-instance)
+     (create-schema ,name :GENERATE-INSTANCE
+		    ;; class might be nil, which means no IS-A slot
+		    ,@(if class `((:is-a ,class)))
+		    ,@body)
+     )
+  )
 
 
 

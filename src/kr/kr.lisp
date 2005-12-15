@@ -210,7 +210,7 @@
 ;;; RETURNS: the inherited value, or NIL.
 ;;; 
 (defun g-value-inherit-values (schema slot is-leaf slot-structure)
-  (declare (function formula-fn (t &optional t) t))
+  (declare (ftype (function (t &optional t) t) formula-fn))
   (let (has-parents)
     (if (a-local-only-slot slot)	; These CANNOT be inherited.
       (return-from g-value-inherit-values NIL))
@@ -807,7 +807,7 @@
 ;;; Helper function
 ;;;
 (defun eliminate-constant-formula ()
-  (declare (function destroy-constraint (t t) t))
+  (declare (ftype (function (t t) t) destroy-constraint))
   ;; This was a constant formula!  Commit suicide.
   (with-demons-disabled
       (destroy-constraint *schema-self* *schema-slot*))

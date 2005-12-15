@@ -97,8 +97,9 @@ Change log:
 	(not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
 					       (mp:process-stack-group opal::*main-event-loop-process*))))
 	#+(and allegro (version>= 7 0))
-	(not (zerop (mp:process-progn opal::*main-event-loop-process*
-				      tpl::*break-level*)))
+	(not (zerop (multiprocessing:symeval-in-process
+		     'tpl::*break-level*
+		     opal::*main-event-loop-process*)))
 	#+lucid NIL
 	#+lispworks
 	(let ((value (system::read-special-in-sg
@@ -116,7 +117,8 @@ Change log:
 	(not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
 		       (mp:process-stack-group mp:*current-process*))))
 	#+(and allegro (version>= 7 0))
-	(not (zerop (mp:process-progn mp:*current-process* 'tpl::*break-level*)))
+	(not (zerop (mp:symeval-in-process 'tpl::*break-level*
+		       (mp:process-stack-group mp:*current-process*))))
 	#+lucid NIL
 	#+lispworks
 	(let ((value (system::read-special-in-sg

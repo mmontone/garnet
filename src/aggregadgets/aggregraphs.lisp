@@ -16,6 +16,9 @@
 #|
 ======================================================================
 Change log:
+    6/17/04  Robert Goldman - The original version of aggregraphs 
+             crashed if the aggregraph was initially
+             created with no root nodes and nodes were later added.
     6/01/93  Andrew Mickish - Added some macros
     4/15/92  Martin Sjolin - Add #-cmu flags before :rehash-size 2.0
    03/25/92  Andrew Mickish - Get-Values ---> G-Value
@@ -285,7 +288,7 @@ Change log:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; definition of aggregraph object
 (kr:create-instance 'aggregraph opal:aggregadget
-                    
+   
    ;; must be specified in created instance to actually create graph
 
    (:source-roots nil)
@@ -302,7 +305,7 @@ Change log:
    (:link-prototype aggregraph-link-prototype)
    (:node-prototype-selector-function nil)
    (:link-prototype-selector-function nil)
-   ;(:interactors nil) ;; inherited from aggregadget
+					;(:interactors nil) ;; inherited from aggregadget
    (:h-spacing 20)
    (:v-spacing 5)
    (:test-to-distinguish-source-nodes #'eql)
@@ -315,9 +318,9 @@ Change log:
                            (child (kr:g-value link :to)))
                        ;; remove me from :links-{to/from}-me lists
                        (kr:s-value parent :links-from-me
-                            (remove link (kr:g-value parent :links-from-me)))
+				   (remove link (kr:g-value parent :links-from-me)))
                        (kr:s-value child :links-to-me
-                            (remove link (kr:g-value child :links-to-me)))
+				   (remove link (kr:g-value child :links-to-me)))
                        ;; delete any image links
                        (mapc #'(lambda (image-graph image-link)
                                  (kr:kr-send image-graph
@@ -359,157 +362,166 @@ Change log:
                      (opal:remove-component (kr:g-value graph :nodes) node)
                      (opal:destroy node)))
    (:add-node #'(lambda (graph source-node parent-g-nodes children-g-nodes)
-                  (let ((node (make-graph-node source-node graph)))
-                    (opal:add-component (kr:g-value graph :nodes) node)
-                    ;; add links from parents to node
-                    (dolist (parent parent-g-nodes)
-                      (kr:kr-send graph :add-link graph parent node))
-                    ;; add links from node to children
-                    (dolist (child children-g-nodes)
-                      (kr:kr-send graph :add-link graph node child))
-		    ;; add node to hash table
-		    (setf (gethash source-node
-				   (g-value graph :source->graph-node-table))
-			  node)
-                    ;; position node
-                    ;; check the cache first
-                    (let* ((cache (kr:g-value graph :layout-info-add-node-cache))
-                           (cache-parents (svref cache 0))
-                           (cache-children (svref cache 1)))
-                      (cond
-                       ;; if a cache hit, then use the value
-                       ((and (equal cache-parents parent-g-nodes)
-                             (equal cache-children children-g-nodes))
-                        (let* ((cache-left-val (svref cache 2))
-                               (cache-low-val (svref cache 3))
-                               (cache-high-val (svref cache 4))
-                               (cache-val-to-use (svref cache 5))
-                               (desired-top (if (eq cache-val-to-use :low)
-                                                cache-low-val
-                                                cache-high-val))
-			       top)
-			  (s-value node :left cache-left-val)
-			  (setf top (find-good-y-near-desired-y
-				     graph node desired-top))
-                          (s-value node :top top)
-                          ;; update values in the cache
-                          (cond
-                           ((eq cache-val-to-use :low)
-                            (if (<= top cache-low-val)
-                                (setf (svref cache 3)
-                                      (- top
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01)))
-                                ;; otherwise only search below from
-                                ;; now on (signal that you are at the top)
-                                (setf (svref cache 3) nil))
-                            ;; search below next time
-                            (setf (svref cache 5) :high))
-                           (t
-                            (if (>= top cache-high-val)
-                                (setf (svref cache 4)
-                                      (+ top
-                                         (kr:g-value node :height)
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01))))
-                            (if cache-low-val ;; not at the top
-                                ;; then search above next time
-                                (setf (svref cache 5) :low))))))
-                       (t 
-                        ;; if not a cache hit, then compute the
-                        ;; position normally
-                        (let* (;; first compute left
-                               ;;   based on children
-                               (right+space
-                                (and children-g-nodes
-                                     (map-reduce #'min
-                                                 #'(lambda (c)
-                                                     (kr:g-value c :left))
-                                                 children-g-nodes)))
-                               (cleft (and right+space
-                                           (- right+space (kr:g-value node :width)
-                                              (kr:g-value graph :h-spacing))))
-                               ;;   based on parents
-                               (pleft
-                                (and parent-g-nodes
-                                     (+ (map-reduce #'max
-                                                    #'(lambda (p)
-                                                        (+ (kr:g-value p :left)
-                                                           (kr:g-value p :width)))
-                                                    parent-g-nodes)
-                                        (kr:g-value graph :h-spacing))))
-                               ;;   total =
-                               ;;     0, if no parents or children
-                               ;;     pleft or cleft if other is nil
-                               ;;     average otherwise
-                               (left (cond
-                                      ((and (null pleft) (null cleft)) 0)
-                                      ((null pleft) cleft)
-                                      ((null cleft) pleft)
-                                      (t (floor (+ pleft cleft) 2))))
-                               ;; next compute top.  average over centers of
-                               ;; both parents and children
-                               (total-centers 0))
-                          (dolist (p parent-g-nodes)
-                                  (setf total-centers
-                                        (+ total-centers
-                                           (kr:g-value p :top)
-                                           (floor (kr:g-value p :height) 2))))
-                          (dolist (c children-g-nodes)
-                                  (setf total-centers
-                                        (+ total-centers
-                                           (kr:g-value c :top)
-                                           (floor (kr:g-value c :height) 2))))
-                          (let ((top (if (and (null parent-g-nodes)
-                                              (null children-g-nodes))
-                                         0
-                                       (- (floor total-centers
-                                                 (+ (length children-g-nodes)
-                                                    (length parent-g-nodes)))
-                                          (floor (kr:g-value node :height) 2)))))
-                            ;; now set the values
-                            (kr:s-value node :left left)
-                            (kr:s-value node :top (find-good-y-near-desired-y
-                                                   graph node top))
-                            ;; cache these values:
-                            (let ((cache (kr:g-value graph :layout-info-add-node-cache))
-                                  (actual-top (kr:g-value node :top)))
-                              (setf (svref cache 0) parent-g-nodes)
-                              (setf (svref cache 1) children-g-nodes)
-                              (setf (svref cache 2) left)
-                              (cond
-                               ((<= actual-top top)
-                                (setf (svref cache 3)
-                                      (- actual-top
-                                         (kr:g-value node :height)
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01)))
-                                (setf (svref cache 4)
-                                      (+ top
-                                         (kr:g-value node :height)
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01)))
-                                (setf (svref cache 5) :high))
-                               (t
-                                (setf (svref cache 3)
-                                      (- top
-                                         (kr:g-value node :height)
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01)))
-                                (setf (svref cache 4)
-                                      (+ actual-top
-                                         (kr:g-value node :height)
-                                         (floor (kr:g-value graph :v-spacing)
-                                                2.01)))
-                                (setf (svref cache 5) :low)))
-                              ))))))
-                    ;; add node to any image graphs
-                    (mapc #'(lambda (image-graph)
-                              (kr:kr-send image-graph
-                                          :primitive-add-node
-                                          image-graph node))
-                          (kr:g-value graph :image-graphs))
-                    )))
+		  (if (null (kr:g-value graph :nodes))
+		      ;; the structure was created with no source roots
+		      (cond ((or parent-g-nodes children-g-nodes)
+			     (error "Trying to add a node with parents or children to an empty graph."))
+			    ((g-value graph :source-roots)
+			     (error "Graph in anomalous state:  source-nodes but no graph nodes."))
+			    (t
+			     (setf (kr:g-value graph :source-roots) (list source-node))
+			     (create-internal-graph-structures graph)))
+		      (let ((node (make-graph-node source-node graph)))
+			(opal:add-component (kr:g-value graph :nodes) node)
+			;; add links from parents to node
+			(dolist (parent parent-g-nodes)
+			  (kr:kr-send graph :add-link graph parent node))
+			;; add links from node to children
+			(dolist (child children-g-nodes)
+			  (kr:kr-send graph :add-link graph node child))
+			;; add node to hash table
+			(setf (gethash source-node
+				       (g-value graph :source->graph-node-table))
+			      node)
+			;; position node
+			;; check the cache first
+			(let* ((cache (kr:g-value graph :layout-info-add-node-cache))
+			       (cache-parents (svref cache 0))
+			       (cache-children (svref cache 1)))
+			  (cond
+			    ;; if a cache hit, then use the value
+			    ((and (equal cache-parents parent-g-nodes)
+				  (equal cache-children children-g-nodes))
+			     (let* ((cache-left-val (svref cache 2))
+				    (cache-low-val (svref cache 3))
+				    (cache-high-val (svref cache 4))
+				    (cache-val-to-use (svref cache 5))
+				    (desired-top (if (eq cache-val-to-use :low)
+						     cache-low-val
+						     cache-high-val))
+				    top)
+			       (s-value node :left cache-left-val)
+			       (setf top (find-good-y-near-desired-y
+					  graph node desired-top))
+			       (s-value node :top top)
+			       ;; update values in the cache
+			       (cond
+				 ((eq cache-val-to-use :low)
+				  (if (<= top cache-low-val)
+				      (setf (svref cache 3)
+					    (- top
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01)))
+				      ;; otherwise only search below from
+				      ;; now on (signal that you are at the top)
+				      (setf (svref cache 3) nil))
+				  ;; search below next time
+				  (setf (svref cache 5) :high))
+				 (t
+				  (if (>= top cache-high-val)
+				      (setf (svref cache 4)
+					    (+ top
+					       (kr:g-value node :height)
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01))))
+				  (if cache-low-val ;; not at the top
+				      ;; then search above next time
+				      (setf (svref cache 5) :low))))))
+			    (t 
+			     ;; if not a cache hit, then compute the
+			     ;; position normally
+			     (let* (;; first compute left
+				    ;;   based on children
+				    (right+space
+				     (and children-g-nodes
+					  (map-reduce #'min
+						      #'(lambda (c)
+							  (kr:g-value c :left))
+						      children-g-nodes)))
+				    (cleft (and right+space
+						(- right+space (kr:g-value node :width)
+						   (kr:g-value graph :h-spacing))))
+				    ;;   based on parents
+				    (pleft
+				     (and parent-g-nodes
+					  (+ (map-reduce #'max
+							 #'(lambda (p)
+							     (+ (kr:g-value p :left)
+								(kr:g-value p :width)))
+							 parent-g-nodes)
+					     (kr:g-value graph :h-spacing))))
+				    ;;   total =
+				    ;;     0, if no parents or children
+				    ;;     pleft or cleft if other is nil
+				    ;;     average otherwise
+				    (left (cond
+					    ((and (null pleft) (null cleft)) 0)
+					    ((null pleft) cleft)
+					    ((null cleft) pleft)
+					    (t (floor (+ pleft cleft) 2))))
+				    ;; next compute top.  average over centers of
+				    ;; both parents and children
+				    (total-centers 0))
+			       (dolist (p parent-g-nodes)
+				 (setf total-centers
+				       (+ total-centers
+					  (kr:g-value p :top)
+					  (floor (kr:g-value p :height) 2))))
+			       (dolist (c children-g-nodes)
+				 (setf total-centers
+				       (+ total-centers
+					  (kr:g-value c :top)
+					  (floor (kr:g-value c :height) 2))))
+			       (let ((top (if (and (null parent-g-nodes)
+						   (null children-g-nodes))
+					      0
+					      (- (floor total-centers
+							(+ (length children-g-nodes)
+							   (length parent-g-nodes)))
+						 (floor (kr:g-value node :height) 2)))))
+				 ;; now set the values
+				 (kr:s-value node :left left)
+				 (kr:s-value node :top (find-good-y-near-desired-y
+							graph node top))
+				 ;; cache these values:
+				 (let ((cache (kr:g-value graph :layout-info-add-node-cache))
+				       (actual-top (kr:g-value node :top)))
+				   (setf (svref cache 0) parent-g-nodes)
+				   (setf (svref cache 1) children-g-nodes)
+				   (setf (svref cache 2) left)
+				   (cond
+				     ((<= actual-top top)
+				      (setf (svref cache 3)
+					    (- actual-top
+					       (kr:g-value node :height)
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01)))
+				      (setf (svref cache 4)
+					    (+ top
+					       (kr:g-value node :height)
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01)))
+				      (setf (svref cache 5) :high))
+				     (t
+				      (setf (svref cache 3)
+					    (- top
+					       (kr:g-value node :height)
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01)))
+				      (setf (svref cache 4)
+					    (+ actual-top
+					       (kr:g-value node :height)
+					       (floor (kr:g-value graph :v-spacing)
+						      2.01)))
+				      (setf (svref cache 5) :low)))
+				   ))))))
+			;; add node to any image graphs
+			(mapc #'(lambda (image-graph)
+				  (kr:kr-send image-graph
+					      :primitive-add-node
+					      image-graph node))
+			      (kr:g-value graph :image-graphs))
+			))))
    (:add-link #'(lambda (graph from to)
                   (let ((link (make-graph-link from to graph)))
                     (opal:add-component (kr:g-value graph :links) link)
@@ -534,9 +546,9 @@ Change log:
                            (remove (kr:g-value node :source-node)
                                    (kr:g-value graph :source-roots)))))
    (:source-to-graph-node
-         #'(lambda (graph source-node)
-             (gethash source-node
-                      (kr:g-value graph :source->graph-node-table))))
+    #'(lambda (graph source-node)
+	(gethash source-node
+		 (kr:g-value graph :source->graph-node-table))))
    (:find-link #'(lambda (graph from to)
                    (declare (ignore graph))
                    (intersection (kr:g-value from :links-from-me)
@@ -584,46 +596,58 @@ Change log:
  (when (and (kr:g-value self :source-roots)
             (kr:g-value self :children-function)
             (kr:g-value self :info-function))
-   (let ((node-agg (kr:create-instance nil opal:aggregate))
-         (link-agg (kr:create-instance nil opal:aggregate)))
-     ;; need to test that :source-roots, :children-function, and
-     ;; :info-function contain reasonable values
-     (kr:s-value self :nodes node-agg)
-     (kr:s-value self :links link-agg)
-     (opal:add-components self link-agg node-agg))
-   (kr:s-value self :source->graph-node-table
-               (make-hash-table
-                :test (kr:g-value self :test-to-distinguish-source-nodes)
-                :size 50
-                #-cmu :rehash-size #-cmu 2.0))
-   ;; test that if multiple prototypes are included that a selector
-   ;; function has been provided
-   (let ((node-prototype (kr:g-value self :node-prototype))
-         (link-prototype (kr:g-value self :link-prototype)))
-     (when (and (listp node-prototype)
-                (not (functionp-and-not-null
-                      (kr:g-value self :node-prototype-selector-function))))
-       (format t "~&Error in aggregraph:  :node-prototype is a list but no selector function was")
-       (format t "~&                      provided in slot :node-prototype-selector-function.")
-       (format t "~&                      First one in the list will be used.")
-       (kr:s-value self :node-prototype-selector-function
-                   #'(lambda (node l)
-                       (declare (ignore node))
-                       (car l))))
-     (when (and (listp link-prototype)
-                (not (functionp-and-not-null
-                      (kr:g-value self :link-prototype-selector-function))))
-       (format t "~&Error in aggregraph:  :link-prototype is a list but no selector function was")
-       (format t "~&                      provided in slot :link-prototype-selector-function.")
-       (format t "~&                      First one in the list will be used.")
-       (kr:s-value self :link-prototype-selector-function
-                   #'(lambda (from to l)
-                       (declare (ignore from to))
-                       (car l)))))
-   ;; create nodes and links
-   (create-aggregraph-nodes-and-links self)
-   ;; layout graph (place nodes)
-   (kr:kr-send self :layout-graph self)))
+   (create-internal-graph-structures self)))
+
+;;; Pulled this out of the initialize method for aggregraphs.  The
+;;; problem is that the old code structure didn't work when the graph
+;;; was first created without any nodes (as with a graph editor
+;;; aggregate), and then nodes were added later. [2004/06/17:rpg]
+
+;;; NOTE: Possibly this should be modified to be a KR method so that
+;;; people can modify it if different (additional) internal graph
+;;; structures are desired. [2004/06/17:rpg]
+(defun create-internal-graph-structures (self)
+  "SELF should be an aggregraph."
+  (let ((node-agg (kr:create-instance nil opal:aggregate))
+	(link-agg (kr:create-instance nil opal:aggregate)))
+    ;; need to test that :source-roots, :children-function, and
+    ;; :info-function contain reasonable values
+    (kr:s-value self :nodes node-agg)
+    (kr:s-value self :links link-agg)
+    (opal:add-components self link-agg node-agg))
+  (kr:s-value self :source->graph-node-table
+	      (make-hash-table
+	       :test (kr:g-value self :test-to-distinguish-source-nodes)
+	       :size 50
+	       #-cmu :rehash-size #-cmu 2.0))
+  ;; test that if multiple prototypes are included that a selector
+  ;; function has been provided
+  (let ((node-prototype (kr:g-value self :node-prototype))
+	(link-prototype (kr:g-value self :link-prototype)))
+    (when (and (listp node-prototype)
+	       (not (functionp-and-not-null
+		     (kr:g-value self :node-prototype-selector-function))))
+      (format t "~&Error in aggregraph:  :node-prototype is a list but no selector function was")
+      (format t "~&                      provided in slot :node-prototype-selector-function.")
+      (format t "~&                      First one in the list will be used.")
+      (kr:s-value self :node-prototype-selector-function
+		  #'(lambda (node l)
+		      (declare (ignore node))
+		      (car l))))
+    (when (and (listp link-prototype)
+	       (not (functionp-and-not-null
+		     (kr:g-value self :link-prototype-selector-function))))
+      (format t "~&Error in aggregraph:  :link-prototype is a list but no selector function was")
+      (format t "~&                      provided in slot :link-prototype-selector-function.")
+      (format t "~&                      First one in the list will be used.")
+      (kr:s-value self :link-prototype-selector-function
+		  #'(lambda (from to l)
+		      (declare (ignore from to))
+		      (car l)))))
+  ;; create nodes and links
+  (create-aggregraph-nodes-and-links self)
+  ;; layout graph (place nodes)
+  (kr:kr-send self :layout-graph self))
 
 (defun make-graph-node (source-node graph)
   (let* ((prototype-arg (kr:g-value graph :node-prototype))

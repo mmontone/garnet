@@ -51,8 +51,11 @@ Change log:
 ;; debugger, otherwise NIL
 (defun Listener-Process-Broken-P ()
   (when *Process-With-Main-Event-Loop*
-    #+allegro (not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
-		     (mp:process-stack-group *Process-With-Main-Event-Loop*))))
+    #+(and allegro allegro-version>= (version>= 7 0)) nil
+    (not (zerop (mp:process-progn *Process-With-Main-Event-Loop* tpl::*break-level*)))
+    #+(and allegro allegro-version>= (not (version>= 7 0)))
+    (not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
+						     (mp:process-stack-group *Process-With-Main-Event-Loop*))))
     #+lucid (lcl:process-in-the-debugger-p *Process-With-Main-Event-Loop*)
     #+lispworks (let ((value (system::read-special-in-sg
 			      (mp::process-stack-group

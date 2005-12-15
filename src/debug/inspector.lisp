@@ -93,8 +93,12 @@ Change log:
 		#-(or allegro lucid lispworks (and cmu mp)) T)
 	;; and if it is in the debugger...
 	;; the allegro code supplied by georgej@Franz.COM (George Jacob)
-	#+allegro (not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
-		   (mp:process-stack-group opal::*main-event-loop-process*))))
+	#+(and allegro (not (version>= 7 0)))
+	(not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
+					       (mp:process-stack-group opal::*main-event-loop-process*))))
+	#+(and allegro (version>= 7 0))
+	(not (zerop (mp:process-progn opal::*main-event-loop-process*
+				      tpl::*break-level*)))
 	#+lucid NIL
 	#+lispworks
 	(let ((value (system::read-special-in-sg
@@ -108,14 +112,17 @@ Change log:
       ;; (This might be wrong if there are multiple processes in the
       ;; application, but the one that crashed is NOT the one running m-e-l).
       (if opal::*inside-main-event-loop*
-	  #+allegro (not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
+	#+(and allegro (not (version>= 7 0)))
+	(not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
 		       (mp:process-stack-group mp:*current-process*))))
-	  #+lucid NIL
-	  #+lispworks
-	  (let ((value (system::read-special-in-sg
-			(mp::process-stack-group mp::*current-process*)
-			'system::*debug-level*)))
-	    (and (numberp value) (not (zerop value))))
+	#+(and allegro (version>= 7 0))
+	(not (zerop (mp:process-progn mp:*current-process* 'tpl::*break-level*)))
+	#+lucid NIL
+	#+lispworks
+	(let ((value (system::read-special-in-sg
+		      (mp::process-stack-group mp::*current-process*)
+		      'system::*debug-level*)))
+	  (and (numberp value) (not (zerop value))))
 	  #-(or allegro lucid lispworks) NIL
 	  ;; if not in m-e-l, then need to run it
 	  T)

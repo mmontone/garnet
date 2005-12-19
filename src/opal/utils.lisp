@@ -119,7 +119,7 @@
 #-cmu
 (defun garnet-restart-function ()
   (format t "*** Restarting Garnet ~A image created with opal:make-image ***~%"
-	  user::Garnet-Version-Number)
+	  common-lisp-user::Garnet-Version-Number)
   (if (boundp 'garnet-image-date)
       (format t "*** Image creation date: ~A ***~%" garnet-image-date))
   (opal:reconnect-garnet))
@@ -128,7 +128,7 @@
 #+cmu
 (defun garnet-restart-function ()
   (format t "*** Restarting Garnet ~A image created on ~A ***~%"
-	  user::Garnet-Version-Number
+	  common-lisp-user::Garnet-Version-Number
 	  garnet-image-date)
   (opal:reconnect-garnet))
 
@@ -173,9 +173,9 @@ Please consult your lisp's user manual for instructions.~%")
   #+allegro
   (progn  
     (if verbose (format t "~%Copying readtable..."))
-    (copy-readtable *readtable* user::Garnet-Readtable)
+    (copy-readtable *readtable* common-lisp-user::Garnet-Readtable)
     (setf (cdr (assoc '*readtable* excl:*cl-default-special-bindings*))
-          'user::Garnet-Readtable)
+          'common-lisp-user::Garnet-Readtable)
     (if verbose (format t "copied.~%")))
 
   (progn
@@ -231,7 +231,7 @@ Please consult your lisp's user manual for instructions.~%")
   #+cmu
   (progn
     (setf (getf ext:*herald-items* :garnet)
-	  `("    Garnet Version " ,user::Garnet-Version-Number))
+	  `("    Garnet Version " ,common-lisp-user::Garnet-Version-Number))
     ;; Note: for x86/mp CMUCL, garnet-restart-function must get
     ;; called after the multiprocessing stuff gets initialized.
     ;; So we append garnet-restart-function to the end of the
@@ -281,8 +281,8 @@ Please consult your lisp's user manual for instructions.~%")
 
 
 (defun Get-Garnet-Bitmap (bitmapname)
-  (opal:read-image (user::garnet-pathnames bitmapname
-				    user::Garnet-Bitmap-PathName)))
+  (opal:read-image (common-lisp-user::garnet-pathnames bitmapname
+				    common-lisp-user::Garnet-Bitmap-PathName)))
 
 
 

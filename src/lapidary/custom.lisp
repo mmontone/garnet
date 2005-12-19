@@ -26,8 +26,8 @@
 
 ;;; This function loads the bitmap specified from the Gilt directory
 (defun Get-Gilt-Bitmap (bitmapname)
-  (opal:read-image (user::garnet-pathnames bitmapname
-			 user::Garnet-Gilt-Bitmap-PathName)))
+  (opal:read-image (common-lisp-user::garnet-pathnames bitmapname
+			 common-lisp-user::Garnet-Gilt-Bitmap-PathName)))
 
 (defparameter HourGlassCursor
   (cons (create-instance NIL opal:bitmap

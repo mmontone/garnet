@@ -171,7 +171,7 @@ Change Log:
 ||#
 
 ;;; Assumes garnet loader already loaded.
-(user::garnet-load "gadgets:error-gadget-loader")
+(common-lisp-user::garnet-load "gadgets:error-gadget-loader")
 
 #||
 (defun add-error-input-priority-level ()
@@ -451,7 +451,7 @@ suppressed. "
     (string &key
 	    (start 0)
 	    (end (length string))
-	    (read-package (find-package :user))
+	    (read-package (find-package :common-lisp-user))
 	    (read-bindings nil)
 	    (default-value nil)
 	    (allow-debug nil)

@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -20,7 +20,7 @@
 ;;;   original structure and organization of the files.  Not all Gworld files
 ;;;   that were contributed are included in the Garnet project.
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (defparameter Gworld-Version-Number "1.0")
 

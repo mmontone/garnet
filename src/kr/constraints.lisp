@@ -16,10 +16,10 @@
 
 
 (eval-when (eval compile load)
-  (proclaim '(special user::*default-garnet-proclaim*))
-  (if (boundp 'user::*default-garnet-proclaim*)
-      (if user::*default-garnet-proclaim*
-        (proclaim user::*default-garnet-proclaim*))
+  (proclaim '(special common-lisp-user::*default-garnet-proclaim*))
+  (if (boundp 'common-lisp-user::*default-garnet-proclaim*)
+      (if common-lisp-user::*default-garnet-proclaim*
+        (proclaim common-lisp-user::*default-garnet-proclaim*))
       (proclaim '(optimize (safety 0) (space 0)
 		  (speed #-LUCID 3 #+LUCID 2) #+ALLEGRO (debug 0)))))
 

@@ -1,11 +1,11 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 
 ;;; 10/2/03 RGA --- Moved to new home.
 ;;; Created 6/25/92 RGA
 
 ;;; Loader for protected eval stuff.
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; check first to see if place is set
 (unless (boundp 'Garnet-Contrib-PathName)

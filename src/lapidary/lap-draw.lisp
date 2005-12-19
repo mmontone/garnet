@@ -21,11 +21,11 @@
 (dolist (gadget '("radio-buttons-loader"
 		  "text-buttons-loader"
 		  ))
-  (load (user::garnet-pathnames gadget
-			 user::Garnet-Gadgets-PathName)))
+  (load (common-lisp-user::garnet-pathnames gadget
+			 common-lisp-user::Garnet-Gadgets-PathName)))
 ;;;
 ;;;     Functions needed from Gilt
-(user::garnet-load "gilt:gilt-functions-loader")
+(common-lisp-user::garnet-load "gilt:gilt-functions-loader")
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -33,7 +33,7 @@
 (defun draw-fct-sel-fct (gadget value)
   (s-value (g-value gadget :parent) :value value))
 
-(setf user::*Garnet-Object-Just-Created* 
+(setf common-lisp-user::*Garnet-Object-Just-Created* 
 (create-instance 'draw-fct-gadget OPAL:AGGREGADGET
   (:value nil)
   (:WINDOW-LEFT 0)

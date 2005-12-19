@@ -63,7 +63,7 @@ Change log:
     5/22/92 Brad Myers - added :modal-p T windows
     5/19/92 Brad Myers - fix so new windows will work with inters that have
                            (:window T)
-    4/22/92 Pervin - Switch user::launch-process-p tells whether to
+    4/22/92 Pervin - Switch common-lisp-user::launch-process-p tells whether to
 			launch process at load time.
                      Used new function opal:main-event-loop-process-running-p
     4/14/92 Ed Pervin - uncommented out process code.  Got it to work on HP.
@@ -202,7 +202,7 @@ Change log:
   (unless (eq if-exists :append)
     (Format *trans-to-file*
 	    "Transcript of Garnet session from ~a.  Garnet Version = ~a~%"
-	    (Time-To-String) User::Garnet-Version-Number)
+	    (Time-To-String) Common-Lisp-User::Garnet-Version-Number)
     (format *trans-to-file*
 	    "Form for events: CHAR CODE MOUSEP DOWNP X Y TIME WIN-INDEX~%")
     (Format *trans-to-file* "Windows are:~%")
@@ -821,7 +821,7 @@ Change log:
   ;; variable is defined in inter:animation-process.lisp
   (setq *Process-With-Main-Event-Loop*
 	#+allegro mp:*current-process*
-	#+lucid user::*current-process*
+	#+lucid common-lisp-user::*current-process*
 	#+(and cmu mp) mp:*current-process*
 	#-(or allegro lucid (and cmu mp)) NIL)
   ;; In CMUCL, the default-event-hander is still invoked with a display.
@@ -840,7 +840,7 @@ Change log:
 ;;; Now that default-event-handler is defined, launch it for non-CMUCL.
 ;;; launch-process-p is defined in garnet-loader.lisp
 #-(and cmu (not mp))
-(when user::launch-process-p
+(when common-lisp-user::launch-process-p
   (opal:launch-main-event-loop-process))
 
 (defun main-event-loop (&key (exit-when-no-window-visible :on))

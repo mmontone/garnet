@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; This file created by LAPIDARY 2.0: A Garnet Interface Builder
 ;;; on Jul 7, 1992, 7:27 PM
@@ -13,7 +13,7 @@
 
 (declaim (special save-time-do-not-dump-slots))
 
-(setf user::*Used-Garnet-Version* "2.0")
+(setf common-lisp-user::*Used-Garnet-Version* "2.0")
 
 ;;;
 ;;;     Functions needed from Lapidary
@@ -25,7 +25,7 @@
   (:window-title "link parameters")
   (:window-width (o-formula (+ 20 (gvl :width))))
   (:window-height (o-formula (+ 20 (gvl :height))))
-  (:PACKAGE-NAME "USER")
+  (:PACKAGE-NAME "COMMON-LISP-USER")
   (:EXPORT-P NIL)
   (:parts `(
     (:OKCANCEL-BUTTON ,GARNET-GADGETS:TEXT-BUTTON-PANEL
@@ -56,7 +56,7 @@
           (:LEFT ,(o-formula (GVL :PARENT :CURSOR-TEXT-11159 :LEFT ) 41))
           (:TOP ,(o-formula (+ (LAPIDARY::GV-BOTTOM (GVL :PARENT :CURSOR-TEXT-11159 ) ) 20 ) 78))
           (:EXPORT-P T)
-          (:PACKAGE-NAME "USER")
+          (:PACKAGE-NAME "COMMON-LISP-USER")
           (:FONT ,(create-instance nil OPAL:FONT))
 	  (:STRING "Some of the slots in the object reference objects that might be parameters. These objects
 are listed below, along with the slots that reference them. If you make any of these objects

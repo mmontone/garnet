@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,7 +26,7 @@ Change log:
 ==================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (format t "Compiling Gilt...~%")
 
@@ -37,8 +37,8 @@ Change log:
 
 ;; Only loads this file when not compiling all of Garnet.
 (unless (or (get :garnet-modules :multifont)
-	    (and (boundp 'user::compile-opal-p) user::compile-opal-p
-		 (boundp 'user::compile-inter-p) user::compile-inter-p))
+	    (and (boundp 'user::compile-opal-p) common-lisp-user::compile-opal-p
+		 (boundp 'common-lisp-user::compile-inter-p) common-lisp-user::compile-inter-p))
   (garnet-load "opal:multifont-loader"))
 
 ;; Only loads these file when not compiling all of Garnet.
@@ -69,7 +69,7 @@ Change log:
 
 
 #+allegroV3.1
-(user::gc t)
+(common-lisp-user::gc t)
 
 (eval-when (eval load compile)
   (garnet-mkdir-if-needed Garnet-gilt-Pathname))
@@ -96,7 +96,7 @@ Change log:
   (let ((gilt-str (concatenate 'string "gilt:" file)))
     (garnet-compile gilt-str)
     (garnet-load gilt-str))
-  #+allegroV3.1(user::gc t))
+  #+allegroV3.1(common-lisp-user::gc t))
 
 (garnet-copy-files Garnet-Gilt-Src Garnet-Gilt-Pathname
 		   '("filter-functions-loader.lisp"

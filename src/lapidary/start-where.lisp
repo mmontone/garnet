@@ -26,7 +26,7 @@
 		  "labeled-box-loader"
 		  "text-buttons-loader"
 		  ))
-  (user::garnet-load (concatenate 'string "gadgets:" gadget)))
+  (common-lisp-user::garnet-load (concatenate 'string "gadgets:" gadget)))
 
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

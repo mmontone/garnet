@@ -144,7 +144,7 @@ Change log:
 (defparameter save-time-extra-do-not-dump-slots
   (list :point-to-leaf :select-function))
 
-(defparameter user::*gilt-obj* NIL) ; global variable set with current
+(defparameter common-lisp-user::*gilt-obj* NIL) ; global variable set with current
 				    ; selection
 
 (declaim (special save-file text-edit))
@@ -378,7 +378,7 @@ Change log:
   (format T ";;; on ~a~%" (inter::time-to-string))
   (format T ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;~%~%")
   (format T "(in-package ~s)~%~%" package)
-  (format T "(defparameter user::*Used-Gilt-Version* ~s)~%~%" Gilt-Version)
+  (format T "(defparameter common-lisp-user::*Used-Gilt-Version* ~s)~%~%" Gilt-Version)
   (Generate-Uses-List)
   (format T ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;~%~%")
   )
@@ -529,7 +529,7 @@ Change log:
 	     (s-value *objs-agg* :window-left (g-value *work-win* :left))
 	     (s-value *objs-agg* :window-title window-title)
 	     (s-value *objs-agg* :export-p export-p)
-	     (Format T "(defparameter user::*Garnet-Object-Just-Created* ~%")
+	     (Format T "(defparameter common-lisp-user::*Garnet-Object-Just-Created* ~%")
 	     (opal:write-gadget *objs-agg* T T)
 	     (Format T ")~%~%"))
 	   ;; finished with stuff that goes to the file
@@ -539,7 +539,7 @@ Change log:
 	   (format T "...Done saving file~%"))
 	(T (Gilt-Error "Cannot save to that file")))))
 
-(declaim (special user::*Garnet-Object-Just-Created*))
+(declaim (special common-lisp-user::*Garnet-Object-Just-Created*))
 
 ;;; This is called by the Read-file dialog box when OK is hit.  Values is a
 ;;; list of the gadgets and their values
@@ -557,9 +557,9 @@ Change log:
 	   (with-constants-disabled
 	     (Load filename))
 	   (format T "Restoring objects...~%")
-	   (let ((win-width (g-value user::*Garnet-Object-Just-Created*
+	   (let ((win-width (g-value common-lisp-user::*Garnet-Object-Just-Created*
 				     :window-width))
-		 (win-height (g-value user::*Garnet-Object-Just-Created*
+		 (win-height (g-value common-lisp-user::*Garnet-Object-Just-Created*
 				      :window-width)))
 	     (when win-width
 	       (s-value *work-win* :width
@@ -575,7 +575,7 @@ Change log:
 			    win-height))))
 	   (setq *Last-Filename* filename)
 	   (setq *Top-Gadget-Name*
-		 (or (name-for-schema user::*Garnet-Object-Just-Created*)
+		 (or (name-for-schema common-lisp-user::*Garnet-Object-Just-Created*)
 		     *Top-Gadget-Name*))
 	   ;; saved as one big aggregadget
 	   (unless addp 
@@ -584,22 +584,22 @@ Change log:
 	   
 	     ;; if not add, then replace, so use new file's values
 	     (s-value *objs-agg* :function-for-ok
-		      (g-value user::*Garnet-Object-Just-Created*
+		      (g-value common-lisp-user::*Garnet-Object-Just-Created*
 			       :function-for-ok))
 	     (s-value *objs-agg* :package-name
-		      (or (g-value user::*Garnet-Object-Just-Created*
+		      (or (g-value common-lisp-user::*Garnet-Object-Just-Created*
 				   :package-name)
-			  "USER"))
+			  "COMMON-LISP-USER"))
 	     (s-value *objs-agg* :window-title
-		      (or (g-value user::*Garnet-Object-Just-Created*
+		      (or (g-value common-lisp-user::*Garnet-Object-Just-Created*
 				   :window-title)
 			  "TEMP WINDOW"))
 	     (s-value *objs-agg* :export-p
-		      (g-value user::*Garnet-Object-Just-Created* :export-p))
-	     (let ((links (g-value user::*Garnet-Object-Just-Created* :links)))
+		      (g-value common-lisp-user::*Garnet-Object-Just-Created* :export-p))
+	     (let ((links (g-value common-lisp-user::*Garnet-Object-Just-Created* :links)))
 	       (s-value *objs-agg* :links links)
 	       (dolist (link links)
-		 (let ((val (get-value user::*Garnet-Object-Just-Created*
+		 (let ((val (get-value common-lisp-user::*Garnet-Object-Just-Created*
 				       link)))
 		   (if (formula-p val)
 		       (s-value *objs-agg* link (kr::copy-formula val))
@@ -607,12 +607,12 @@ Change log:
 	     )
 	   ;; now add all objects
 	   (dolist (obj (setq new-obj-list
-			 (copy-list (g-value user::*Garnet-Object-Just-Created*
+			 (copy-list (g-value common-lisp-user::*Garnet-Object-Just-Created*
 					     :components))))
 	     ;; The user's aggregadget was created with a :parts list, so its
 	     ;; :components slot is constant.
 	     (with-constants-disabled
-	       (opal:remove-component user::*Garnet-Object-Just-Created* obj))
+	       (opal:remove-component common-lisp-user::*Garnet-Object-Just-Created* obj))
 	     (s-value obj :do-not-dump-slots 
 		      (append create-time-do-not-dump-slots
 			      (g-value obj :do-not-dump-slots)))
@@ -765,7 +765,7 @@ Change log:
 	  (unless (or (eq T loaded) (get :garnet-modules loaded))
 	    ;; then it is a bitmap pretending to be an object.
 	    (opal:With-HourGlass-Cursor
-              (user::garnet-load (concatenate 'string "gadgets:"
+              (common-lisp-user::garnet-load (concatenate 'string "gadgets:"
                                               (g-value gadget :load-file)))))
 	  (setq newobj (with-constants-disabled (eval (first init))))
 	  (if (second init) (Init-Value newobj (second init))))
@@ -957,8 +957,8 @@ you give the 'Properties' command or go into Run mode."))))
 	       (Clean-up-popups)
 	       (when newselection
 		 (if (cdr newselection)
-		     (setq user::*gilt-obj* newselection)
-		     (setq user::*gilt-obj* (car newselection))))))
+		     (setq common-lisp-user::*gilt-obj* newselection)
+		     (setq common-lisp-user::*gilt-obj* (car newselection))))))
 	  (:interactors
 	   `((:select-it :modify
 	      (:waiting-priority ,*Selection-Priority-Level*)
@@ -1004,7 +1004,7 @@ you give the 'Properties' command or go into Run mode."))))
 				    (:width (o-formula (gvl :window :width)))
 				    (:height (o-formula (gvl :window :height)))
 				    ;; initial values for the Save Dialog box
-				    (:package-name "USER")
+				    (:package-name "COMMON-LISP-USER")
 				    (:window-title "TEMP WINDOW")
 				    (:export-p T)
 				    (:FUNCTION-FOR-OK NIL)

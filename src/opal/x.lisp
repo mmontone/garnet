@@ -634,9 +634,18 @@ pixmap format in the list of valid formats."
 	   :max-height max-height
 	   :user-specified-position-p user-specified-position-p
 	   :user-specified-size-p user-specified-size-p))
+
+    ;; this is marked as "obsolete" in the sources I have... [2005/12/18:rpg]
+    #|
     (xlib:set-standard-properties drawable
 				  :name title
 				  :icon-name icon-name)
+    |#
+    (xlib:set-wm-properties drawable
+			    :name title
+			    :icon-name icon-name)
+
+    
 
     ;;; The following allows you to destroy windows by hand using the
     ;;; window manager.  Unfortunately, this does not work in lispworks, but

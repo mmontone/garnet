@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -29,7 +29,7 @@
 ;;; 2/13/90 ECP Merged objects.lisp and eds-objects.lisp
 ;;; 1/4/90  ECP Added version number
 ;;;
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (defparameter Opal-Version-Number "1.3")
 

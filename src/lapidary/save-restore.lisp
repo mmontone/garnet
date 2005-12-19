@@ -22,8 +22,8 @@
 
 ;;; This function loads the bitmap specified from the Gilt directory
 (defun Get-Gilt-Bitmap (bitmapname)
-  (opal:read-image (user::garnet-pathnames bitmapname
-				     user::Garnet-Gilt-Bitmap-PathName)))
+  (opal:read-image (common-lisp-user::garnet-pathnames bitmapname
+				     common-lisp-user::Garnet-Gilt-Bitmap-PathName)))
 
 (defparameter HourGlassCursor
   (cons (create-instance NIL opal:bitmap
@@ -34,7 +34,7 @@
 
 (defvar *Last-Filename* "") ; last file name used to read or save a file
 (defvar *Last-WindowName* "") ; last window name used to read a file
-(defvar *Last-Package-Name* "USER"
+(defvar *Last-Package-Name* "COMMON-LISP-USER"
   "last package name used to read or save a file")
 (defparameter *Top-Gadget-Name* "TEMP-GADGET") ; name used for the top gadget
 (defvar *Top-Level-Obj* nil) ; current object being saved
@@ -205,15 +205,15 @@ are used."
 	  package)
   (format T ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;~%")
   (format T ";;; This file created by LAPIDARY ~a: A Garnet Interface Builder~%" 
-	  User::Garnet-Version-Number)
+	  Common-Lisp-User::Garnet-Version-Number)
   (format T ";;; on ~a~%" (inter::time-to-string))
   (format T ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;~%~%")  
   (format T "(in-package ~s)~%~%" package)
-  (Format T "(setf user::*Used-Garnet-Version* ~s)~%~%" User::Garnet-Version-Number)
+  (Format T "(setf common-lisp-user::*Used-Garnet-Version* ~s)~%~%" Common-Lisp-User::Garnet-Version-Number)
   (format t ";;;~%")
   (format t ";;;     Functions needed from Lapidary~%")
-  (format t "(load (user::garnet-pathnames \"lapidary-functions-loader\"
-			 user::Garnet-Lapidary-PathName))~%"))
+  (format t "(load (common-lisp-user::garnet-pathnames \"lapidary-functions-loader\"
+			 common-lisp-user::Garnet-Lapidary-PathName))~%"))
 
 
 ;;; This is called by the Save-file dialog box when OK is hit.  Values is a
@@ -324,7 +324,7 @@ one that appears on a window's title-bar or on a window's icon"
 		   (s-value obj :window-left (g-value window :left))
 		   (s-value obj :window-title window-title)))
 
-	   (Format T "(setf user::*Garnet-Objects-Just-Created* (list ~%")
+	   (Format T "(setf common-lisp-user::*Garnet-Objects-Just-Created* (list ~%")
 	   (opal:write-gadget (car *save-objects*) T T)
 	   ;; set initialize flag for write-gadget to nil for remaining objects
 	   (dolist (obj (cdr *save-objects*))
@@ -358,66 +358,66 @@ one that appears on a window's title-bar or on a window's icon"
   ;;; copy cursor
   (create-instance 'copy-cursor-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-copy.cursor"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (create-instance 'copy-mask-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-copy.mask"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (setf copy-cursor-pair (cons copy-cursor-bitmap copy-mask-bitmap))
 
   ;;; instance cursor
   (create-instance 'instance-cursor-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-instance.cursor"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (create-instance 'instance-mask-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-instance.mask"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (setf instance-cursor-pair (cons instance-cursor-bitmap instance-mask-bitmap))
 
   ;;; load cursor
   (create-instance 'load-cursor-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-load.cursor"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (create-instance 'load-mask-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-load.mask"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (setf load-cursor-pair (cons load-cursor-bitmap load-mask-bitmap))
 
   ;;; move cursor
   (create-instance 'move-cursor-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-move.cursor"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (create-instance 'move-mask-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-move.mask"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (setf move-cursor-pair (cons move-cursor-bitmap move-mask-bitmap))
 
   ;;; delete cursor
   (create-instance 'delete-cursor-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-delete.cursor"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (create-instance 'delete-mask-bitmap opal:bitmap
 		   (:image (opal:read-image
-			    (user::garnet-pathnames
+			    (common-lisp-user::garnet-pathnames
 			     "lapidary-delete.mask"
-			     User::Garnet-Bitmap-Pathname))))
+			     Common-Lisp-User::Garnet-Bitmap-Pathname))))
   (setf delete-cursor-pair (cons delete-cursor-bitmap delete-mask-bitmap)))
 
 (defun save-restore-do-go ()
@@ -547,7 +547,7 @@ one that appears on a window's title-bar or on a window's icon"
 		  window-name)))
 	(T (format T "Loading gadgets from file ~s...~%" filename)
 	   (SetHourGlassCursor readdialogwindow)
-	   (setf user::*Garnet-Objects-Just-Created* nil)
+	   (setf common-lisp-user::*Garnet-Objects-Just-Created* nil)
 	   ;; even if the load fails, we want to restore the regular cursor
 	   (unwind-protect
 	       (progn
@@ -556,19 +556,19 @@ one that appears on a window's title-bar or on a window's icon"
 	     ;; only do the next operations if the load was successful--we
 	     ;; assume that the load is successful if 
 	     ;; *Garnet-Objects-Just-Created* is set to a non-nil value
-	     (if user::*Garnet-Objects-Just-Created*
+	     (if common-lisp-user::*Garnet-Objects-Just-Created*
 		 (progn
-		   (when (not (listp user::*Garnet-Objects-Just-Created*))
-			 (setf user::*Garnet-Objects-Just-Created*
-			       (list user::*Garnet-Objects-Just-Created*)))
+		   (when (not (listp common-lisp-user::*Garnet-Objects-Just-Created*))
+			 (setf common-lisp-user::*Garnet-Objects-Just-Created*
+			       (list common-lisp-user::*Garnet-Objects-Just-Created*)))
 		   (setq *Last-Filename* filename)
 		   (setq *Last-WindowName* window-name)
 
 		 ; determine if the loaded objects are graphical objects that
 		 ; will have to be added to a window
-		   (when (not (is-a-p (car user::*Garnet-Objects-Just-Created*)
+		   (when (not (is-a-p (car common-lisp-user::*Garnet-Objects-Just-Created*)
 				      inter:interactor))
-			 (let* ((first-obj (car user::*Garnet-Objects-Just-Created*))
+			 (let* ((first-obj (car common-lisp-user::*Garnet-Objects-Just-Created*))
 				(window-p (g-value first-obj :window-p))
 				editor-agg)
 			   (when (null window)
@@ -610,7 +610,7 @@ one that appears on a window's title-bar or on a window's icon"
 				 (setq *Top-Gadget-Name*
 				       (or (name-for-schema first-obj)
 					   *Top-Gadget-Name*)))
-			     (setf new-obj-list user::*Garnet-Objects-Just-Created*))
+			     (setf new-obj-list common-lisp-user::*Garnet-Objects-Just-Created*))
 		   
 			   (dolist (obj new-obj-list)
 				   (fix-all-interactors obj nil)

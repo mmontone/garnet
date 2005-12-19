@@ -1,4 +1,4 @@
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;;; ======================================================================
 ;;; this function creates an object that simulated the selection feedback

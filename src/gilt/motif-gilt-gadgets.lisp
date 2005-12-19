@@ -96,7 +96,7 @@ Change log:
 		  (:motif-trill-device "motif-trill-device-loader")
 		  ))		    
     (unless (get :garnet-modules (car pair))
-      (user::garnet-load (concatenate 'string "gadgets:" (cadr pair))))))
+      (common-lisp-user::garnet-load (concatenate 'string "gadgets:" (cadr pair))))))
 
 ;; The Lucid compiler performs some kind of optimization that replaces
 ;; the quoted gadget references with the constant values, and it will
@@ -565,9 +565,9 @@ Change log:
 	    ;; want this to be a string, not a pathname.  *** PROBABLY NEED
 	    ;; something different for Apple.
 	    (:image-name
-	     (namestring (user::garnet-pathnames
+	     (namestring (common-lisp-user::garnet-pathnames
 			  "giltbitmap.bitmap"
-			  user::Garnet-Gilt-Bitmap-PathName)))
+			  common-lisp-user::Garnet-Gilt-Bitmap-PathName)))
 	    (:maker '((create-instance NIL opal:bitmap
 			:declare ((:parameters T :known-as :image-name)
 				  (:Type (known-as-type :known-as)
@@ -578,9 +578,9 @@ Change log:
 			(:image (o-formula (opal:read-image
 					    (gvl :image-name))))
 			(:image-name
-			 (namestring (user::garnet-pathnames
+			 (namestring (common-lisp-user::garnet-pathnames
 				      "giltbitmap.bitmap"
-				      user::Garnet-Gilt-Bitmap-PathName)))))))
+				      common-lisp-user::Garnet-Gilt-Bitmap-PathName)))))))
 
        (create-instance NIL opal:pixmap
 	    (:constant T)
@@ -590,8 +590,8 @@ Change log:
 	    ;; want this to be a string, not a pathname.  *** PROBABLY NEED
 	    ;; something different for Apple.
 	    (:image-name
-	     (namestring (user::garnet-pathnames "garnetlogo.xpm"
-						 user::Garnet-Pixmap-Pathname)))
+	     (namestring (common-lisp-user::garnet-pathnames "garnetlogo.xpm"
+						 common-lisp-user::Garnet-Pixmap-Pathname)))
 	    (:maker '((create-instance NIL opal:pixmap
 			:declare ((:parameters T :known-as :image-name)
 				  (:Type (known-as-type :known-as)
@@ -602,9 +602,9 @@ Change log:
 			(:image (o-formula (opal:read-xpm-file
 					    (gvl :image-name))))
 			(:image-name
-			 (namestring (user::garnet-pathnames
+			 (namestring (common-lisp-user::garnet-pathnames
 				      "garnetlogo.xpm"
-				      user::Garnet-Pixmap-Pathname)))))))
+				      common-lisp-user::Garnet-Pixmap-Pathname)))))))
 
        (create-instance NIL opal:text
 	  (:constant T)

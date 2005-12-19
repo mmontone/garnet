@@ -19,10 +19,10 @@
 (in-package "LAPIDARY")
 
 ;; These variables appear in many files
-(declaim (special user::*garnet-objects-just-created*
-		  user::*garnet-object-just-created*
-		  user::*used-gilt-version*
-		  user::*used-garnet-version*))
+(declaim (special common-lisp-user::*garnet-objects-just-created*
+		  common-lisp-user::*garnet-object-just-created*
+		  common-lisp-user::*used-gilt-version*
+		  common-lisp-user::*used-garnet-version*))
 
 (eval-when (eval load compile)
   (export '(lapidary-two-point-interactor directional-move-grow-interactor

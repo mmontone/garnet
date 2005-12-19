@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;; 
 ;;; ______________________________________________________________________
 ;;;
@@ -23,7 +23,7 @@ Change log:
 ============================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (defparameter KR-Version-Number "2.3.4")
 

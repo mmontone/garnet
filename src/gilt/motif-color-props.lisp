@@ -315,7 +315,7 @@ Change log:
       (:WIDTH ,(o-formula (THIRD (GVL :BOX)) 52))
       (:HEIGHT ,(o-formula (FOURTH (GVL :BOX)) 28))))))
 
-(setf user::*Garnet-Object-Just-Created* 
+(setf common-lisp-user::*Garnet-Object-Just-Created* 
 (create-instance 'COLOR-PROP OPAL:AGGREGADGET
   (:WINDOW-LEFT 0)
   (:WINDOW-TOP 0)

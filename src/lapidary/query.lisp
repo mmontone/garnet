@@ -9,25 +9,25 @@
 ;;;     MULTIFONT-TEXT from package OPAL
 (dolist (gadget '("text-buttons-loader"
 		  ))
-  (load (user::garnet-pathnames gadget
-			  user::Garnet-Gadgets-PathName)))
+  (load (common-lisp-user::garnet-pathnames gadget
+			  common-lisp-user::Garnet-Gadgets-PathName)))
 ;;;
 ;;;     Functions needed from Gilt
 (dolist (file '("gilt-functions-loader"
 		"filter-functions-loader"))
-  (load (user::garnet-pathnames file
-			  user::Garnet-Gilt-PathName)))
+  (load (common-lisp-user::garnet-pathnames file
+			  common-lisp-user::Garnet-Gilt-PathName)))
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (in-package "LAPIDARY")
 
-(defparameter user::*Used-Gilt-Version* "V3.0")
+(defparameter common-lisp-user::*Used-Gilt-Version* "V3.0")
 
 (eval-when (eval load compile)
   (export '(INTER-AGG-QUERY)))
 
-(defparameter user::*Garnet-Object-Just-Created* 
+(defparameter common-lisp-user::*Garnet-Object-Just-Created* 
 (create-instance 'INTER-AGG-QUERY OPAL:AGGREGADGET
   (:FUNCTION-FOR-OK NIL)
   (:PACKAGE-NAME "LAPIDARY")

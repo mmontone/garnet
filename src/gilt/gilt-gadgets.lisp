@@ -81,7 +81,7 @@ Change log:
 		  #+lucid (:menubar "menubar-loader")
 		  ))
     (unless (get :garnet-modules (car pair))
-      (user::garnet-load (concatenate 'string "gadgets:" (cadr pair)))))
+      (common-lisp-user::garnet-load (concatenate 'string "gadgets:" (cadr pair)))))
   )
 
 ;; The Lucid compiler performs some kind of optimization that replaces
@@ -488,8 +488,8 @@ Change log:
 	    (:loaded T)
 	    (:image (o-formula (opal:read-image (gvl :image-name))))
 	    (:image-name
-	     (namestring (user::garnet-pathnames "giltbitmap.bitmap"
-			     	  user::Garnet-Gilt-Bitmap-PathName)))
+	     (namestring (common-lisp-user::garnet-pathnames "giltbitmap.bitmap"
+			     	  common-lisp-user::Garnet-Gilt-Bitmap-PathName)))
 	    (:maker '((create-instance NIL opal:bitmap
 			:declare ((:parameters T :known-as :image-name)
 				  (:Type (known-as-type :known-as)
@@ -501,8 +501,8 @@ Change log:
 					    (gvl :image-name))))
 			;; want this to be a string, not a pathname.
 			(:image-name
-			 (namestring (user::garnet-pathnames "giltbitmap.bitmap"
-					  user::Garnet-Gilt-Bitmap-PathName))
+			 (namestring (common-lisp-user::garnet-pathnames "giltbitmap.bitmap"
+					  common-lisp-user::Garnet-Gilt-Bitmap-PathName))
 			 )))))
        (create-instance NIL opal:Multifont-Text
 	    (:constant T)
@@ -535,8 +535,8 @@ Change log:
 	    (:loaded T)
 	    ;; want this to be a string, not a pathname.
 	    (:image-name
-	     (namestring (user::garnet-pathnames "garnetlogo.xpm"
-						 user::Garnet-Pixmap-Pathname)))
+	     (namestring (common-lisp-user::garnet-pathnames "garnetlogo.xpm"
+						 common-lisp-user::Garnet-Pixmap-Pathname)))
 	    (:maker '((create-instance NIL opal:pixmap
 			:declare ((:parameters T :known-as :image-name)
 				  (:Type (known-as-type :known-as)
@@ -547,9 +547,9 @@ Change log:
 			(:image (o-formula (opal:read-xpm-file
 					    (gvl :image-name))))
 			(:image-name
-			 (namestring (user::garnet-pathnames
+			 (namestring (common-lisp-user::garnet-pathnames
 				      "garnetlogo.xpm"
-				      user::Garnet-Pixmap-Pathname)))))))
+				      common-lisp-user::Garnet-Pixmap-Pathname)))))))
        )
     (s-value (g-value scroll-box :field-text :string) :first-vis-char 4)
     ))

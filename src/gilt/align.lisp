@@ -24,7 +24,7 @@ Change log:
 |#
 
 ;;; Functions needed from Gilt
-;;; (load (user::garnet-pathnames "gilt-functions-loader" user::Garnet-Gilt-PathName))
+;;; (load (common-lisp-user::garnet-pathnames "gilt-functions-loader" common-lisp-user::Garnet-Gilt-PathName))
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -83,14 +83,14 @@ Change log:
                           "motif-scrolling-window-loader"
 			  "motif-save-gadget-loader"
                           "motif-error-gadget-loader"))
-          (user::garnet-load (concatenate 'string "gadgets:" gadget)))
+          (common-lisp-user::garnet-load (concatenate 'string "gadgets:" gadget)))
 
         ;; load gesture-loader
-        (user::garnet-load "gestures:gesture-loader")
+        (common-lisp-user::garnet-load "gestures:gesture-loader")
 
         ;; load training code
-        (load (user::garnet-pathnames "train"
-			       user::Garnet-Gesture-PathName))))
+        (load (common-lisp-user::garnet-pathnames "train"
+			       common-lisp-user::Garnet-Gesture-PathName))))
 
 ;; global variables definitions
 
@@ -928,7 +928,7 @@ Change log:
     (:query-message "replace existing file")
     (:modal-p t)
     (:initial-directory 
-     (namestring user::Garnet-Gesture-Data-PathName))
+     (namestring common-lisp-user::Garnet-Gesture-Data-PathName))
     (:selection-function #'save-classifier))
 
     ;; create a load dialog
@@ -936,7 +936,7 @@ Change log:
         (:parent-window TOP-WIN)
     (:modal-p t) 
     (:initial-directory 
-     (namestring user::Garnet-Gesture-Data-PathName))
+     (namestring common-lisp-user::Garnet-Gesture-Data-PathName))
     (:selection-function #'load-classifier))
 
     ;; create classifier menu 

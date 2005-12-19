@@ -8,7 +8,7 @@
 
 (in-package :rga)
 
-(user::garnet-load "contrib:protected-eval-loader")
+(common-lisp-user::garnet-load "contrib:protected-eval-loader")
 
 ;;;
 ;;;----------------------------------------------------------------------

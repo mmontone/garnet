@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,7 +16,7 @@ Change log:
 ==================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; check first to see if pathname variable is set
 (unless (boundp 'Garnet-Gilt-PathName)
@@ -26,7 +26,7 @@ Change log:
 ;;;
 (unless (get :garnet-modules :Filter-Functions)
   (format t "Loading Filter functions...~%")
-  (load (user::garnet-pathnames "filter-functions"
+  (load (common-lisp-user::garnet-pathnames "filter-functions"
 			 #+cmu "gilt:"
 			 #+(not cmu) Garnet-Gilt-PathName)
 	:verbose T)

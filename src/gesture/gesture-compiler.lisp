@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,7 +21,7 @@
 ;;; 02/20/92 Andrew Mickish - Created
 ;;;
 
-(in-package :USER)
+(in-package :COMMON-LISP-USER)
 
 (dolist (pair '((:motif-text-buttons "motif-text-buttons-loader")
 		(:motif-scrolling-labeled-box "motif-scrolling-labeled-box-loader")

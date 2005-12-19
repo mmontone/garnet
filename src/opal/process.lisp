@@ -263,7 +263,7 @@
   (and opal::*main-event-loop-process*
        (not (eq opal::*main-event-loop-process*
 		#+(or allegro lispworks (and cmu mp)) mp:*current-process*
-		#+lucid user::*current-process*
+		#+lucid common-lisp-user::*current-process*
 		#-(or allegro lucid lispworks (and cmu mp)) T)
 	    )))
 
@@ -277,42 +277,42 @@
 (defun update-start-fn (window)
   (declare (ignore window))
   #+ALLEGRO
-  (if user::update-locking-p
+  (if common-lisp-user::update-locking-p
       (unless (eq (mp:process-lock-locker *update-lock*) mp:*current-process*)
 	;; Lock only if lock is held by a different process, or unlocked.
 	(mp:process-lock *update-lock*)))
   #+old-lispworks
-  (if user::update-locking-p
+  (if common-lisp-user::update-locking-p
       (mp:process-lock *update-lock*))
 
   #+lispworks
   ;; CT 2Sep93
-  (if user::update-locking-p
+  (if common-lisp-user::update-locking-p
       (unless (eq (mp:lock-owner *update-lock*) mp:*current-process*)
 	;; Lock only if lock is held by a different process, or unlocked.
 	(mp:process-lock *update-lock*)))
       
   #+LUCID
-  (if user::update-locking-p
+  (if common-lisp-user::update-locking-p
       (lcl:process-lock *update-lock*)))
 
 
 (defun update-stop-fn (window)
   (declare (ignore window))
   #+ALLEGRO
-  (if (and user::update-locking-p
+  (if (and common-lisp-user::update-locking-p
 	   (eq (mp:process-lock-locker *update-lock*) mp:*current-process*))
       (mp:process-unlock *update-lock*))
   #+old-lispworks
-  (if user::update-locking-p
+  (if common-lisp-user::update-locking-p
       (mp:process-unlock *update-lock*))
   
   #+lispworks
   ;; CT 3Sep93
-  (if (and user::update-locking-p
+  (if (and common-lisp-user::update-locking-p
 	   (eq (mp:lock-owner *update-lock*) mp:*current-process*))
       (mp:process-unlock *update-lock*))
     
   #+LUCID
-  (if user::update-locking-p
-      (lcl:process-unlock *update-lock* user::*current-process* :ignore)))
+  (if common-lisp-user::update-locking-p
+      (lcl:process-unlock *update-lock* common-lisp-user::*current-process* :ignore)))

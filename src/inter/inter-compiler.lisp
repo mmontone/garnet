@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,7 +27,7 @@
 ;;; 3/22/90 Robert Cook Define the "INTERACTORS" package for the
 ;;;			TI Explorer
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; Only loads this file when not compiling all of Garnet.
 (unless (or (and (boundp 'compile-opal-p) compile-opal-p)

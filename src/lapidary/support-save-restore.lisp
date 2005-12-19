@@ -354,12 +354,12 @@
 ;;; into memory. If the gadget represents the contents of a window, return
 ;;; the value of the gadget's :window-width slot
 (defun max-right-side ()
-  (declare (special user::*Garnet-Objects-Just-Created*))
-  (let ((first-obj (car user::*Garnet-Objects-Just-Created*))
+  (declare (special common-lisp-user::*Garnet-Objects-Just-Created*))
+  (let ((first-obj (car common-lisp-user::*Garnet-Objects-Just-Created*))
 	(max-right 0))
     (if (g-value first-obj :window-p)
 	(setf max-right (g-value first-obj :window-width))
-      (dolist (obj user::*Garnet-Objects-Just-Created*)
+      (dolist (obj common-lisp-user::*Garnet-Objects-Just-Created*)
 	      (when (> (opal:right obj) max-right)
 		    (setf max-right (opal:right obj)))))
     max-right))
@@ -368,17 +368,17 @@
 ;;; into memory. If the gadget represents the contents of a window, return
 ;;; the value of the gadget's :window-height slot
 (defun max-bottom-side ()
-  (declare (special user::*Garnet-Objects-Just-Created*))
-  (let ((first-obj (car user::*Garnet-Objects-Just-Created*))
+  (declare (special common-lisp-user::*Garnet-Objects-Just-Created*))
+  (let ((first-obj (car common-lisp-user::*Garnet-Objects-Just-Created*))
 	(max-bottom 0))
     (if (g-value first-obj :window-p)
 	(setf max-bottom (g-value first-obj :window-height))
-      (dolist (obj user::*Garnet-Objects-Just-Created*)
+      (dolist (obj common-lisp-user::*Garnet-Objects-Just-Created*)
 	      (when (> (opal:bottom obj) max-bottom)
 		    (setf max-bottom (opal:bottom obj)))))
     max-bottom))
 
-(declaim (special user::*Garnet-Object-Just-Created*))
+(declaim (special common-lisp-user::*Garnet-Object-Just-Created*))
 
 ;; check-for-links only examines non-interactor objects. if it finds
 ;; a slot that points to an object which is not in the aggregate

@@ -24,7 +24,7 @@
 (eval-when (eval load compile)
   (export '(PROMPT-GADGET)))
 
-(setf user::*Garnet-Object-Just-Created* 
+(setf common-lisp-user::*Garnet-Object-Just-Created* 
 (create-instance 'PROMPT-GADGET OPAL:AGGREGADGET
   (:WINDOW-LEFT 0)
   (:WINDOW-TOP 0)

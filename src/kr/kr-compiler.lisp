@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
@@ -23,7 +23,7 @@
 ;;; 22-Mar-90 Robert Cook Define the "KR" and "KR-DEBUG" packages
 ;;;			   for the TI Explorer
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (eval-when (eval load compile)
   (garnet-mkdir-if-needed Garnet-KR-Pathname))

@@ -1,10 +1,10 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 
 ;;; Created 6/25/92 RGA
 
 ;;; Loader for protected eval stuff.
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (unless (get :garnet-modules :prompter)
   (format t "Loading Prompter~%")

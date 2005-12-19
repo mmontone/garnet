@@ -16,12 +16,12 @@
 
 (dolist (gadget '("scrolling-menu-loader"
 		  ))
-  (load (user::garnet-pathnames gadget
-			 user::Garnet-Gadgets-PathName)))
+  (load (common-lisp-user::garnet-pathnames gadget
+			 common-lisp-user::Garnet-Gadgets-PathName)))
 ;;;
 ;;;     Functions needed from Gilt
-(load (user::garnet-pathnames "gilt-functions-loader"
-			 user::Garnet-Gilt-PathName))
+(load (common-lisp-user::garnet-pathnames "gilt-functions-loader"
+			 common-lisp-user::Garnet-Gilt-PathName))
 ;;;
 |#
 

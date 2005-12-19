@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,7 +19,7 @@ Change log:
 ==================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; check first to see if place is set
 (unless (boundp 'Garnet-Gadgets-PathName)
@@ -29,7 +29,7 @@ Change log:
 ;;;
 (unless (get :garnet-modules :menu)
   (format t "Loading Menu...~%")
-  (load (user::garnet-pathnames "menu"
+  (load (common-lisp-user::garnet-pathnames "menu"
 			 #+cmu "gadgets:"
 			 #+(not cmu) Garnet-Gadgets-PathName)
 	:verbose T)

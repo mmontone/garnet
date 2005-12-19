@@ -160,7 +160,7 @@
 
 (defvar GARNET-CALCULATOR-INIT
   (unless (get :garnet-modules :error-gadget-utils)
-    (user::garnet-load "gadgets:error-gadget-utils")))
+    (common-lisp-user::garnet-load "gadgets:error-gadget-utils")))
 
 (defvar *Demo-App-Obj* NIL)
 
@@ -872,8 +872,8 @@ top-tag
 	   (opal:destroy object)))
   (if destroy-app-object? (kr:destroy-schema app-object))
   ;;for demo-controller
-  (if (fboundp 'User::Garnet-Note-Quitted)
-      (user::Garnet-Note-Quitted "GARNET-CALCULATOR"))))
+  (if (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+      (common-lisp-user::Garnet-Note-Quitted "GARNET-CALCULATOR"))))
 
 
 
@@ -891,5 +891,5 @@ top-tag
     (stop-calc *Demo-App-Obj*)
     (setf *Demo-App-Obj* NIL)
     ;;for demo-controller
-    (if (fboundp 'User::Garnet-Note-Quitted)
-	(user::Garnet-Note-Quitted "GARNET-CALCULATOR"))))
+    (if (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+	(common-lisp-user::Garnet-Note-Quitted "GARNET-CALCULATOR"))))

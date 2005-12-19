@@ -53,14 +53,14 @@ Change log:
 (defvar DEMO-ARITH-INIT
   (progn
     ;;;  Load ps-loader.
-    (user::garnet-load "ps:ps-loader")
+    (common-lisp-user::garnet-load "ps:ps-loader")
 
     (dolist (gadget '("text-buttons-loader" "arrow-line-loader"
 		      "scrolling-window-loader"))
-      (user::garnet-load (concatenate 'string "gadgets:" gadget)))
+      (common-lisp-user::garnet-load (concatenate 'string "gadgets:" gadget)))
 
     ;;; Load gesture-loader
-    (user::garnet-load "gestures:gesture-loader")))
+    (common-lisp-user::garnet-load "gestures:gesture-loader")))
 
 
 ;;;------------------------------------------------------------------------
@@ -471,8 +471,8 @@ Change log:
   (declare (ignore g v))
   (opal:destroy TOP-WIN)
   ;;for demo-controller
-  (unless (and (fboundp 'user::Garnet-Note-Quitted)
-           (user::Garnet-Note-Quitted "DEMO-ARITH"))))
+  (unless (and (fboundp 'common-lisp-user::Garnet-Note-Quitted)
+           (common-lisp-user::Garnet-Note-Quitted "DEMO-ARITH"))))
 
 (defun PostScript-Window (g v)
   (declare (ignore g v))
@@ -806,8 +806,8 @@ Change log:
        (:start-where T) 
        (:window work-win)
        (:classifier (inter:gest-classifier-read 
-                        (user::garnet-pathnames "demo-arith.classifier"
-			     #-cmu user::Garnet-Gesture-Data-Pathname
+                        (common-lisp-user::garnet-pathnames "demo-arith.classifier"
+			     #-cmu common-lisp-user::Garnet-Gesture-Data-Pathname
 			     #+cmu "gesture-data:")))
        (:final-function #'handle-gesture)
        (:max-dist-to-mean 20)

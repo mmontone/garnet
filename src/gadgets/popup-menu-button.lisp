@@ -180,12 +180,12 @@
 
 #-apple
 (create-instance 'lines-bitmap opal:bitmap
-    (:image (opal:read-image (user::garnet-pathnames "pop-up-icon-no-border.bm"
-					     user::Garnet-Bitmap-Pathname))))
+    (:image (opal:read-image (common-lisp-user::garnet-pathnames "pop-up-icon-no-border.bm"
+					     common-lisp-user::Garnet-Bitmap-Pathname))))
 #-apple
 (create-instance 'downarrow-bitmap opal:bitmap
-    (:image (opal:read-image (user::garnet-pathnames "downarrow.bm"
-					     user::Garnet-Bitmap-Pathname))))
+    (:image (opal:read-image (common-lisp-user::garnet-pathnames "downarrow.bm"
+					     common-lisp-user::Garnet-Bitmap-Pathname))))
 
 (create-instance 'Popup-Menu-Button gg:text-button
   :declare ((:parameters :left :top :string :items :v-spacing :h-align

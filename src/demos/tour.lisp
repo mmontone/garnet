@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,7 +17,7 @@
 
 
 
-(in-package :USER)
+(in-package :COMMON-LISP-USER)
 (use-package '(:COMMON-LISP :KR :KR-DEBUG :GARNET-DEBUG))
 
 (defvar MYWINDOW NIL)
@@ -26,26 +26,26 @@
                 "v-slider-loader"
                 "menu-loader"
                 "v-scroll-loader"))
-   (user::garnet-load (concatenate 'string "gadgets:" file)))
+   (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file)))
 
 (dolist (file '("mge" "demo-othello"))
-   (user::garnet-load (concatenate 'string "demos:" file)))
+   (common-lisp-user::garnet-load (concatenate 'string "demos:" file)))
 
 
 ; Old loads kept below just in case                
 #|
-(user::garnet-load (user::garnet-pathnames "radio-buttons-loader" user::Garnet-Gadgets-PathName)
+(common-lisp-user::garnet-load (common-lisp-user::garnet-pathnames "radio-buttons-loader" common-lisp-user::Garnet-Gadgets-PathName)
       :verbose T)
-(load (user::garnet-pathnames "v-slider-loader" user::Garnet-Gadgets-PathName) :verbose T)
-(load (user::garnet-pathnames "menu-loader" user::Garnet-Gadgets-PathName) :verbose T)
-(load (user::garnet-pathnames "v-scroll-loader" user::Garnet-Gadgets-PathName) :verbose T)
+(load (common-lisp-user::garnet-pathnames "v-slider-loader" common-lisp-user::Garnet-Gadgets-PathName) :verbose T)
+(load (common-lisp-user::garnet-pathnames "menu-loader" common-lisp-user::Garnet-Gadgets-PathName) :verbose T)
+(load (common-lisp-user::garnet-pathnames "v-scroll-loader" common-lisp-user::Garnet-Gadgets-PathName) :verbose T)
 
-(load (user::garnet-pathnames "mge" Garnet-Demos-PathName) :verbose T)
-(load (user::garnet-pathnames "demo-othello" Garnet-Demos-PathName) :verbose T)
+(load (common-lisp-user::garnet-pathnames "mge" Garnet-Demos-PathName) :verbose T)
+(load (common-lisp-user::garnet-pathnames "demo-othello" Garnet-Demos-PathName) :verbose T)
 |#
 
 
-#+allegro-v4.0 (unintern 'path (find-package "COMMON-LISP-USER"))
+#+allegro-v4.0 (unintern 'path (find-package "COMMON-LISP-COMMON-LISP-USER"))
 (create-instance 'moving-rectangle opal:rectangle
 		 (:box '(80 20 100 150))
 		 (:left (o-formula (first (gvl :box))))
@@ -58,7 +58,7 @@
   T)
 
 (defun start-editing ()
-  (mge:editor-show-window)
+  (mge:do-go)
   T)
 
 (defun stop-othello ()

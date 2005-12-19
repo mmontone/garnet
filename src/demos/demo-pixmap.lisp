@@ -22,11 +22,11 @@
 (in-package :DEMO-PIXMAP)
 
 (unless (get :garnet-modules :text-buttons)
-  (user::garnet-load "gadgets:text-buttons-loader"))
+  (common-lisp-user::garnet-load "gadgets:text-buttons-loader"))
 (unless (get :garnet-modules :scrolling-labeled-box)
-  (user::garnet-load "gadgets:scrolling-labeled-box-loader"))
+  (common-lisp-user::garnet-load "gadgets:scrolling-labeled-box-loader"))
 (unless (get :garnet-modules :ps)
-   (user::garnet-load "ps:ps-loader"))
+   (common-lisp-user::garnet-load "ps:ps-loader"))
 
 (declaim (special COLOR-PROP CHANGER W A FEED-RECT
 		  MY-SQUARE FEED-RECT W2 A2 COLOR-BOX
@@ -315,7 +315,7 @@
       (:left 10)
       (:top 150)
       (:width 250)
-      (:value (namestring (user::garnet-pathnames "eye.xpm" user::Garnet-Pixmap-Pathname)))
+      (:value (namestring (common-lisp-user::garnet-pathnames "eye.xpm" common-lisp-user::Garnet-Pixmap-Pathname)))
       (:label-string "Input file:")))
   (setq *output-file-name-box*
     (create-instance NIL garnet-gadgets:scrolling-labeled-box
@@ -381,6 +381,6 @@
   (opal:destroy w3)
   (opal:destroy w2)
   ;;for demo-controller
-  (if (fboundp 'User::Garnet-Note-Quitted)
-      (User::Garnet-Note-Quitted "DEMO-PIXMAP"))
+  (if (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+      (Common-Lisp-User::Garnet-Note-Quitted "DEMO-PIXMAP"))
   )

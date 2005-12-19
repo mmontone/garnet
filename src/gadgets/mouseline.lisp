@@ -393,7 +393,7 @@ Change log:
 #+garnet-test
 (defun MouseLine-Go ()
     (unless (get :garnet-modules :text-buttons)
-      (user::garnet-load "gg:text-buttons-loader"))
+      (common-lisp-user::garnet-load "gg:text-buttons-loader"))
     (create-instance 'MouseLine-Win inter:interactor-window
       (:title "MouseLine Tester Window")
       (:aggregate (create-instance 'MouseLine-Agg opal:aggregate)))

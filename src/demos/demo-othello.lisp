@@ -37,12 +37,12 @@ Change Log:
 		  MESSAGES-HEADER MESSAGES-UNDERLINE MESSAGE OUTER-SQUARE))
 
 (dolist (gadget '("v-scroll-loader" "menu-loader"))
-  (user::garnet-load (concatenate 'string "gadgets:"
+  (common-lisp-user::garnet-load (concatenate 'string "gadgets:"
                                   gadget)))
 
 (unless (get :garnet-modules :mge)
   (format t "Loading MGE editor...~%")
-  (user::garnet-load (concatenate 'string "demos:" 
+  (common-lisp-user::garnet-load (concatenate 'string "demos:" 
                                   "mge"))
   (setf (get :garnet-modules :mge) t))
 
@@ -669,6 +669,6 @@ Change Log:
   (declare (ignore inter obj))
   (Do-Stop)
   ;;for demo-controller
-    (unless (and (fboundp 'User::Garnet-Note-Quitted)
-		 (User::Garnet-Note-Quitted "DEMO-OTHELLO")))
+    (unless (and (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+		 (Common-Lisp-User::Garnet-Note-Quitted "DEMO-OTHELLO")))
 )

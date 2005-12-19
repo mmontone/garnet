@@ -53,17 +53,17 @@ Change log:
 
 ;; Only loads this file when not compiling all of Garnet.
 (unless (get :garnet-modules :multifont)
-  (user::garnet-load (concatenate 'string "opal:" "multifont-loader")))
+  (common-lisp-user::garnet-load (concatenate 'string "opal:" "multifont-loader")))
 
 ;; Load menubar gadget.
 (unless (get :garnet-modules :motif-menubar)
-   (user::garnet-load (concatenate 'string "gadgets:" "motif-menubar-loader")
+   (common-lisp-user::garnet-load (concatenate 'string "gadgets:" "motif-menubar-loader")
          
 ))
 
 ;; Load scrolling window gadget.
 (unless (get :garnet-modules :motif-scrolling-window)
-   (user::garnet-load (concatenate 'string "gadgets:" "motif-scrolling-window-loader")
+   (common-lisp-user::garnet-load (concatenate 'string "gadgets:" "motif-scrolling-window-loader")
         
 ))
 
@@ -422,8 +422,8 @@ Font changing:
    (opal:destroy pull-down)
    (opal:destroy win)
   ;;for demo-controller
-   (unless (and (fboundp 'User::Garnet-Note-Quitted)
-                (User::Garnet-Note-Quitted "DEMO-MULTIFONT"))
+   (unless (and (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+                (Common-Lisp-User::Garnet-Note-Quitted "DEMO-MULTIFONT"))
    )
 )
 

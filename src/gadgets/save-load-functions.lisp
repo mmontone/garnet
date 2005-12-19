@@ -128,7 +128,7 @@
 
 (defun Check-Save-Filename (save-gad filename)
   (let* ((Prev-Dir (g-value save-gad :prev-dir))
-	 (full-fn (user::garnet-pathnames Prev-Dir filename))
+	 (full-fn (common-lisp-user::garnet-pathnames Prev-Dir filename))
 	 (qg (g-value save-gad :query-window))
 	 (dummy NIL))
     (if (AND ;;Already exists
@@ -378,7 +378,7 @@
 (defun Do-Load-File (load-gad filename)
   (hide-load-gadget load-gad)
   (kr-send load-gad :selection-function load-gad
-	   (user::garnet-pathnames (g-value load-gad :prev-dir) filename))
+	   (common-lisp-user::garnet-pathnames (g-value load-gad :prev-dir) filename))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

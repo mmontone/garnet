@@ -91,7 +91,7 @@ Change log:
   (setq *vp* w)
 
   (setq *input*
-    (open (user::garnet-pathnames "circles.data" user::Garnet-DataFile-PathName)
+    (open (common-lisp-user::garnet-pathnames "circles.data" common-lisp-user::Garnet-DataFile-PathName)
           :direction :input))
 
   ;; gray rectangle behind virtual aggregate

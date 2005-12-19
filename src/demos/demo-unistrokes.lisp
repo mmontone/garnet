@@ -50,12 +50,12 @@ Change log:
 		      "motif-scrolling-window-loader"
 		      "motif-save-gadget-loader"
 		      "motif-error-gadget-loader"))
-      (user::garnet-load (concatenate 'string "gadgets:" gadget)))
+      (common-lisp-user::garnet-load (concatenate 'string "gadgets:" gadget)))
 
-    (user::garnet-load "opal:multifont-loader")
+    (common-lisp-user::garnet-load "opal:multifont-loader")
     
     ;; load gesture-loader
-    (user::garnet-load "gesture:gesture-loader")))
+    (common-lisp-user::garnet-load "gesture:gesture-loader")))
 
 ;; global variables definitions
 
@@ -345,8 +345,8 @@ Change log:
     (opal:destroy ORANGE-LINE-1)
     (opal:destroy ORANGE-LINE-2)
 
-    (if (fboundp 'User::Garnet-Note-Quitted)
-	(User::Garnet-Note-Quitted "DEMO-UNISTROKES"))
+    (if (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+	(Common-Lisp-User::Garnet-Note-Quitted "DEMO-UNISTROKES"))
 
     #-cmu (inter:exit-main-event-loop))
 
@@ -465,8 +465,8 @@ Change log:
         (:max-dist-to-mean 100)
         (:classifier  
 	 (inter:gest-classifier-read 
-	  (user::garnet-pathnames "demo-unistrokes-edit.classifier"
-			   user::Garnet-Gesture-Data-Pathname)))
+	  (common-lisp-user::garnet-pathnames "demo-unistrokes-edit.classifier"
+			   common-lisp-user::Garnet-Gesture-Data-Pathname)))
         (:final-function #'handle-edit-gesture))
 
     ;; use red-line to show gesture icon currently selected
@@ -670,9 +670,9 @@ Change log:
     (multiple-value-setq 
 	(*unistroke-classifier* *unistroke-examples*)
 	(inter:gest-classifier-read
-	 (user::garnet-pathnames "demo-unistrokes.classifier"
+	 (common-lisp-user::garnet-pathnames "demo-unistrokes.classifier"
 			  #+cmu "gesture-data:"
-			  #-cmu user::Garnet-Gesture-Data-Pathname)))
+			  #-cmu common-lisp-user::Garnet-Gesture-Data-Pathname)))
     (s-value UNISTROKE-ICON-AGGL :items *unistroke-examples*)
 
     ;; create a gesture interactor to recognize the unistrokes

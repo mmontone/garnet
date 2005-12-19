@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -47,13 +47,13 @@
 ;;;			   for the TI Explorer
 ;;; 02/16/90 - Andrew Mickish - Removed defvar for Garnet-Gadgets-Pathname
 
-(in-package :USER)
+(in-package :COMMON-LISP-USER)
 
 ;; Only loads this file when not compiling all of Garnet.
 (unless (get :garnet-modules :multifont)
-  (load (user::garnet-pathnames "multifont-loader"
+  (load (common-lisp-user::garnet-pathnames "multifont-loader"
 			 #+cmu "opal:"
-			 #+(not cmu) user::Garnet-Opal-PathName)))
+			 #+(not cmu) common-lisp-user::Garnet-Opal-PathName)))
 
 (eval-when (eval load compile)
   (garnet-mkdir-if-needed Garnet-Gadgets-Pathname))

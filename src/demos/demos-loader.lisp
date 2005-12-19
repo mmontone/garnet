@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,7 +21,7 @@
 ;;; 4-Jan-90 Mickish - Load Demo-Gadgets-Loader instead of Demo-Gadgets
 ;;;
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (defparameter Demos-Version-Number "1.0")
 
@@ -35,7 +35,7 @@
 
 ;;;  Load Demos Controller ...
 
-(load (user::garnet-pathnames "demos-controller" Garnet-Demos-PathName)
+(load (common-lisp-user::garnet-pathnames "demos-controller" Garnet-Demos-PathName)
 	:verbose T)
 
 (setf (get :garnet-modules :demos) t)

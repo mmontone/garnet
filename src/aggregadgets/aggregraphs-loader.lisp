@@ -19,7 +19,7 @@ Change log:
 =========================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (format t "Loading Aggregraphs ...~%")
 

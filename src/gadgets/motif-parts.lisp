@@ -60,9 +60,9 @@
 (defvar MOTIF-GADGETS-INIT
   (dolist (pair '((:GAD-scroll-parts "GAD-scroll-parts")))
     (unless (get :garnet-modules (car pair))
-      (load (user::garnet-pathnames (cadr pair)
+      (load (common-lisp-user::garnet-pathnames (cadr pair)
 			     #+cmu "gadgets:"
-			     #+(not cmu) user::Garnet-Gadgets-PathName)))))
+			     #+(not cmu) common-lisp-user::Garnet-Gadgets-PathName)))))
 
 
 ;;;  Values for changing the brightness of the foreground-color

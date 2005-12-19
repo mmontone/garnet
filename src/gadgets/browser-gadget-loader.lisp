@@ -1,4 +1,4 @@
-;;; -*- Mode: Lisp, Fill, Save; Package: USER -*-
+;;; -*- Mode: Lisp, Fill, Save; Package: COMMON-LISP-USER -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,7 +16,7 @@ Change log:
 ==================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; check first to see if place is set
 (unless (boundp 'Garnet-Gadgets-PathName)

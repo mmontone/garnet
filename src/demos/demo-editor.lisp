@@ -40,7 +40,7 @@ Change log:
 		(:graphics-selection "graphics-loader")
 		(:arrow-line "arrow-line-loader")))
   (when (not (get :garnet-modules (car pair)))
-    (user::garnet-load (concatenate 'string "gadgets:" (cadr pair)))))
+    (common-lisp-user::garnet-load (concatenate 'string "gadgets:" (cadr pair)))))
 
 
 ;; Eliminate compile warnings for named objects
@@ -219,8 +219,8 @@ Change log:
   (declare (ignore menu-item))
   (opal:destroy (g-value toolkit-obj :window))
   ;;for demo-controller
-  (unless (and (fboundp 'User::Garnet-Note-Quitted)
-	       (User::Garnet-Note-Quitted "DEMO-EDITOR")))
+  (unless (and (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+	       (Common-Lisp-User::Garnet-Note-Quitted "DEMO-EDITOR")))
 )
 
 ;;;@newpage()

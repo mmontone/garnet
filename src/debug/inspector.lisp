@@ -87,7 +87,7 @@ Change log:
       ;; if the current process is the same as the m-e-l process
       (when (eq opal::*main-event-loop-process*
 		#+allegro mp:*current-process*
-		#+lucid user::*current-process*
+		#+lucid common-lisp-user::*current-process*
                 #+lispworks mp::*current-process*
                 #+(and cmu mp) mp:*current-process*
 		#-(or allegro lucid lispworks (and cmu mp)) T)
@@ -117,8 +117,7 @@ Change log:
 	(not (zerop (mp:symeval-in-stack-group 'tpl::*break-level*
 		       (mp:process-stack-group mp:*current-process*))))
 	#+(and allegro (version>= 7 0))
-	(not (zerop (mp:symeval-in-process 'tpl::*break-level*
-		       (mp:process-stack-group mp:*current-process*))))
+	(not (zerop (mp:symeval-in-process 'tpl::*break-level* mp:*current-process*)))
 	#+lucid NIL
 	#+lispworks
 	(let ((value (system::read-special-in-sg

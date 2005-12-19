@@ -39,7 +39,7 @@
   (dolist (file '("text-buttons-loader"
 		  "labeled-box-loader"
 		  "browser-gadget-loader"))
-    (user::garnet-load (concatenate 'string "gadgets:" file))))
+    (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file))))
 
 
 ;;   Schemata defined in the DO-GO procedure which are referenced by other
@@ -223,6 +223,6 @@
   (declare (ignore gadget value))
   (do-stop)
    ;;for demo-controller
-  (unless (and (fboundp 'user::Garnet-Note-Quitted)
-	       (user::Garnet-Note-Quitted "DEMO-FILE-BROWSER")))
+  (unless (and (fboundp 'common-lisp-user::Garnet-Note-Quitted)
+	       (common-lisp-user::Garnet-Note-Quitted "DEMO-FILE-BROWSER")))
 )

@@ -24,7 +24,7 @@
 		   (error "You need to load Garnet first."))
 	   (defvar initialization					    ; So this will only be done once
 	     (progn
-	       (user::garnet-load "gadgets:menubar-loader")		    ; The menubar gadget
+	       (common-lisp-user::garnet-load "gadgets:menubar-loader")		    ; The menubar gadget
 	       (use-package 'kr))))					    ; Use Garnet's KR object package
 
 

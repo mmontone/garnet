@@ -73,7 +73,7 @@ Change log:
 ============================================================
 |#
 
-;;(user::garnet-load "gadgets:scrolling-labeled-box-loader")
+;;(common-lisp-user::garnet-load "gadgets:scrolling-labeled-box-loader")
 
 (in-package "GARNET-GADGETS")
  

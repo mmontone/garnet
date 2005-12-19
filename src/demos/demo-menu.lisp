@@ -60,7 +60,7 @@ Change log:
 (in-package :DEMO-MENU)
 
 (when (not (get :garnet-modules :text-buttons))
-  (user::garnet-load "gadgets:text-buttons-loader"))
+  (common-lisp-user::garnet-load "gadgets:text-buttons-loader"))
 
 (declaim (special FRAME FEEDBACK DEMO-MENU-INTERACTOR MENU1-ITEM-PROTOTYPE
 		  MENU1 MENU2 MENU3 MENU4 MENU5 MENU6 PLUS-FEEDBACK

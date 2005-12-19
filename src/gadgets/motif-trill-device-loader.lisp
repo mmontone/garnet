@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,7 +14,7 @@
 ;;; Change log:
 ;;; Rajan Parthasarathy - Created
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (unless (boundp 'Garnet-Gadgets-PathName)
   (error "Load 'Garnet-Loader' first to set Garnet-Gadgets-PathName before
@@ -26,7 +26,7 @@
 		  (:motif-trill-device "motif-trill-device")
 		  ))
     (unless (get :garnet-modules (car pair))
-      (load (user::garnet-pathnames (cadr pair)
+      (load (common-lisp-user::garnet-pathnames (cadr pair)
 			     #+cmu "gadgets:"
 			     #+(not cmu) Garnet-Gadgets-PathName)
 	    :verbose T)))

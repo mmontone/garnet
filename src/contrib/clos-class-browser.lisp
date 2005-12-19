@@ -4,8 +4,8 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (load garnet-aggregraphs-loader)
-  (load (user::garnet-pathnames "motif-scrolling-window-loader"
-				user::Garnet-Gadgets-PathName)))
+  (load (common-lisp-user::garnet-pathnames "motif-scrolling-window-loader"
+				common-lisp-user::Garnet-Gadgets-PathName)))
 
 (defparameter *clos-class-browser-max-width* 900) ;max width for the window
 (defparameter *clos-class-browser-max-height* 700) ;max height for the window

@@ -46,16 +46,16 @@
 
 ;; Load multifont stuff.
 (unless (get :garnet-modules :multifont)
-   (load (user::garnet-pathnames "multifont-loader" user::Garnet-Opal-PathName)
+   (load (common-lisp-user::garnet-pathnames "multifont-loader" common-lisp-user::Garnet-Opal-PathName)
          :verbose T))
 
 (dolist (file '("x-buttons-loader"
 		"text-buttons-loader"
 		"scrolling-window-loader"
 		"mouseline-loader"))
-  (user::garnet-load (concatenate 'string "gadgets:" file)))
+  (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file)))
 
-(user::garnet-load "demos:demo-logo")
+(common-lisp-user::garnet-load "demos:demo-logo")
 
 
 ;; export nothing, just work around a bug in CMUCL.
@@ -240,8 +240,8 @@ Click the button to start the demo."))
 
       (when (member (car objlist) *unloaded* :test #'string=)
             (load 
-              (user::garnet-pathnames
-	       (string-downcase package-name) user::Garnet-Demos-PathName))
+              (common-lisp-user::garnet-pathnames
+	       (string-downcase package-name) common-lisp-user::Garnet-Demos-PathName))
             (setq *unloaded* (remove (car objlist) *unloaded* :test #'string=)))
       (opal:set-text text (string-trim (list #\newline #\space)
        (with-output-to-string (*standard-output*)
@@ -273,7 +273,7 @@ Click the button to start the demo."))
         (stop (deselected objlist)))
       (setq *running* (copy-list objlist))))
 
-(defun user::Garnet-Note-Quitted (package)
+(defun common-lisp-user::Garnet-Note-Quitted (package)
   (let ((button-name NIL))
   (when (and (boundp 'win1) win1)
     (dolist (item *package-list*)

@@ -49,7 +49,7 @@ Change log:
 
 ;; Load multifont stuff.
 (unless (get :garnet-modules :multifont)
-   (user::garnet-load (concatenate 'string "opal:" "multifont-loader")))
+   (common-lisp-user::garnet-load (concatenate 'string "opal:" "multifont-loader")))
 
   
 ;;; ================================================================

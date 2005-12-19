@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,7 +17,7 @@ Change log:
 ==================================================================
 |#
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; check first to see if place is set
 (unless (boundp 'Garnet-Gadgets-PathName)
@@ -25,15 +25,15 @@ Change log:
 
 ;; Make sure multifont stuff is loaded.
 (unless (get :garnet-modules :multifont)
-  (load (user::garnet-pathnames "multifont-loader"
+  (load (common-lisp-user::garnet-pathnames "multifont-loader"
 			 #+cmu "opal:"
-			 #+(not cmu) user::Garnet-Opal-PathName)))
+			 #+(not cmu) common-lisp-user::Garnet-Opal-PathName)))
 
 ;;; Now load the multifont gadget
 ;;;
 (unless (get :garnet-modules :multifont-gadget)
   (format t "Loading Multifont-Gadget...~%")
-  (load (user::garnet-pathnames "multifont-gadget"
+  (load (common-lisp-user::garnet-pathnames "multifont-gadget"
 			 #+cmu "gadgets:"
 			 #+(not cmu) Garnet-Gadgets-PathName)
 	:verbose T)

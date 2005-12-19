@@ -55,7 +55,7 @@
   (dolist (file '("radio-buttons-loader" "text-buttons-loader"
 		  "labeled-box-loader" "trill-device-loader"
 		  "error-gadget-loader" "browser-gadget-loader"))
-    (user::garnet-load (concatenate 'string "gadgets:" file))))
+    (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file))))
 
 
 
@@ -309,7 +309,7 @@
   (declare (ignore gadget value))
   (do-stop)
   ;;for demo-controller
-  (unless (and (fboundp 'user::Garnet-Note-Quitted)
-	       (user::Garnet-Note-Quitted "DEMO-SCHEMA-BROWSER")))
+  (unless (and (fboundp 'common-lisp-user::Garnet-Note-Quitted)
+	       (common-lisp-user::Garnet-Note-Quitted "DEMO-SCHEMA-BROWSER")))
 )
 

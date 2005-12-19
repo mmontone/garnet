@@ -86,7 +86,7 @@
 					      :end1 end)))))))
     (when (null display)
       (let* ((x-display (xlib:open-display display-name))
-	     (x-screen (nth user::Garnet-Screen-Number
+	     (x-screen (nth common-lisp-user::Garnet-Screen-Number
                             (xlib:display-roots x-display)))
 	     (x-root (xlib:screen-root x-screen))
 	     (x-line-style-gc

@@ -60,8 +60,8 @@
   (unless (and (find-symbol "AGGREGRAPH" :opal)
 	       (boundp (find-symbol "AGGREGRAPH" :opal))
 	       (kr:schema-p (symbol-value (find-symbol "AGGREGRAPH" :opal))))
-    (load user::Garnet-Aggregraphs-Loader))
-  (user::garnet-load "gadgets:menubar-loader"))
+    (load common-lisp-user::Garnet-Aggregraphs-Loader))
+  (common-lisp-user::garnet-load "gadgets:menubar-loader"))
 
 
 

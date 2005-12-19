@@ -36,7 +36,7 @@ Change log:
 ;;; Load GAD-button-parts unless already loaded
 ;;;
 (unless (get :garnet-modules :graphics-selection)
-  (user::garnet-load (concatenate 'string "gadgets:"
+  (common-lisp-user::garnet-load (concatenate 'string "gadgets:"
                                   "graphics-loader"))) 
 	
 

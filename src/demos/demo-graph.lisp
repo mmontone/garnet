@@ -32,10 +32,10 @@
 ;;
 (defvar DEMO-GRAPH-INIT
   (progn
-    (load user::Garnet-Aggregraphs-Loader)
+    (load common-lisp-user::Garnet-Aggregraphs-Loader)
     (dolist (file '("text-buttons-loader" "scrolling-labeled-box-loader"
 		    "error-gadget-loader"))
-   (user::garnet-load (concatenate 'string "gadgets:" file)))))
+   (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file)))))
 
 
 (declaim (special DEMO-GRAPH-WIN DEMO-GRAPH-TOP-AGG SCHEMA-GRAPH

@@ -69,7 +69,7 @@
 (defvar GARNETDRAW-INIT
   (progn
     ;;;  Load ps-loader.
-    (user::garnet-load "ps:ps-loader")
+    (common-lisp-user::garnet-load "ps:ps-loader")
 
     ;;;  Load gadgets.
     (dolist (file '("multi-selection-loader" "polyline-creator-loader"
@@ -79,7 +79,7 @@
 		    "motif-error-gadget-loader"
 		    "motif-save-gadget-loader"
 		    "standard-edit-loader"))
-      (user::garnet-load (concatenate 'string "gadgets:" file)))))
+      (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file)))))
 
 #|
 ====================================================================
@@ -96,7 +96,7 @@ parts of the file
 		  MOVING-LINE MOVING-OVAL MOVING-RECT MOVING-ROUNDTANGLE
 		  PALETTE-FEEDBACK TEXT-FEEDBACK
 		  TOOLS-MENU TOP-DRAW-AGG WIN PS-READ-WIN GRID-WIN SAVE-WIN
-		  GRID-OBJ MAIN-MENU USER::*GARNET-OBJECT-JUST-CREATED*
+		  GRID-OBJ MAIN-MENU COMMON-LISP-USER::*GARNET-OBJECT-JUST-CREATED*
 		  EDIT-POLYLINE-INTER CREATOR-DOUBLEARROLINE TOOL-FEEDBACK
 		  LINE-FEEDBACK LINE-PALETTE PALETTE-ITEM STIPPLE-PALETTE
 		  COLOR-PALETTE-ITEM CREATOR-LINE CREATOR-RECT
@@ -356,7 +356,7 @@ DIALOG BOX FUNCTIONS
 
 	  (unless (schema-p *DRAW-AGG*) 
 	    ;; then is a new style file, have to set *draw-agg*
-	    (setf *draw-agg* user::*Garnet-Object-Just-Created*))
+	    (setf *draw-agg* common-lisp-user::*Garnet-Object-Just-Created*))
 	  (s-value MOVER-GROWER :start-where (list :element-of-or-none
 						   *DRAW-AGG*))
 	  (s-value CREATE-OR-EDIT :start-where
@@ -392,14 +392,14 @@ DIALOG BOX FUNCTIONS
 	  GarnetDraw-Version)
   (format T ";;; on ~a~%" (inter::time-to-string))
   (format T ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;~%~%")
-  (format T "(in-package :USER)~%(use-package :KR)~%~%")
-  (format T "(defparameter user::*Used-GarnetDraw-Version* ~s)~%~%"
+  (format T "(in-package :COMMON-LISP-USER)~%(use-package :KR)~%~%")
+  (format T "(defparameter common-lisp-user::*Used-GarnetDraw-Version* ~s)~%~%"
 	  GarnetDraw-Version)
-  (s-value *draw-agg* :package-name "USER")
+  (s-value *draw-agg* :package-name "COMMON-LISP-USER")
   (s-value *draw-agg* :window-height (g-value draw-win :height))
   (s-value *draw-agg* :window-width (g-value draw-win :width))
   (s-value *draw-agg* :window-title "Garnet Draw")
-  (Format T "(defparameter user::*Garnet-Object-Just-Created* ~%")
+  (Format T "(defparameter common-lisp-user::*Garnet-Object-Just-Created* ~%")
   (opal:write-gadget *DRAW-AGG* T T)
   (format t ")~%")))
 
@@ -777,11 +777,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "line.bm"
-		    (user::garnet-pathnames 
+		  (common-lisp-user::garnet-pathnames "line.bm"
+		    (common-lisp-user::garnet-pathnames 
 		     #+apple "garnetdraw:"
                      #-apple "garnetdraw/" 
-                     user::garnet-bitmap-pathname))))))))
+                     common-lisp-user::garnet-bitmap-pathname))))))))
 
        (:rect-tool ,opal:aggregadget
 	(:left 5) (:height 32) (:width 32)
@@ -793,11 +793,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "rectangle.bm"
-		    (user::garnet-pathnames 
+		  (common-lisp-user::garnet-pathnames "rectangle.bm"
+		    (common-lisp-user::garnet-pathnames 
 		       #+apple "garnetdraw:"
                        #-apple "garnetdraw/"
-                           user::garnet-bitmap-pathname))))))))
+                           common-lisp-user::garnet-bitmap-pathname))))))))
        (:roundrect-tool ,opal:aggregadget
 	(:left 5) (:height 32) (:width 32)
 	(:top ,(o-formula (+ 31 (gvl :parent :rect-tool :top))))
@@ -808,11 +808,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "roundrect.bm"
-		    (user::garnet-pathnames 
+		  (common-lisp-user::garnet-pathnames "roundrect.bm"
+		    (common-lisp-user::garnet-pathnames 
 		      #+apple "garnetdraw:"
                       #-apple "garnetdraw/"
-                       user::garnet-bitmap-pathname))))))))
+                       common-lisp-user::garnet-bitmap-pathname))))))))
        (:oval-tool ,opal:aggregadget
 	(:feedback-object ,moving-oval)
 	(:creator-object ,creator-oval)
@@ -823,11 +823,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "oval.bm"
-		    (user::garnet-pathnames
+		  (common-lisp-user::garnet-pathnames "oval.bm"
+		    (common-lisp-user::garnet-pathnames
                        #+apple "garnetdraw:"
                        #-apple "garnetdraw/"
-		            user::garnet-bitmap-pathname))))))))
+		            common-lisp-user::garnet-bitmap-pathname))))))))
        (:text-tool ,opal:aggregadget
 	(:feedback-object ,TEXT-FEEDBACK)
 	(:creator-object ,TEXT-FEEDBACK)
@@ -855,11 +855,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "polygon.bm"
-		    (user::garnet-pathnames
+		  (common-lisp-user::garnet-pathnames "polygon.bm"
+		    (common-lisp-user::garnet-pathnames
                       #+apple "garnetdraw:"
                       #-apple "garnetdraw/"
-		         user::garnet-bitmap-pathname))))))))
+		         common-lisp-user::garnet-bitmap-pathname))))))))
 				       
        (:arrowline-tool ,opal:aggregadget
 	(:feedback-object ,new-moving-arrowline)
@@ -871,11 +871,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "linearrow.bm"
-		    (user::garnet-pathnames 
+		  (common-lisp-user::garnet-pathnames "linearrow.bm"
+		    (common-lisp-user::garnet-pathnames 
 		     #+apple "garnetdraw:" 
                      #-apple "garnetdraw/"
-                           user::garnet-bitmap-pathname))))))))
+                           common-lisp-user::garnet-bitmap-pathname))))))))
        (:doublearrowline-tool ,opal:aggregadget
 	(:feedback-object ,MOVING-DOUBLEARROWLINE)
 	(:creator-object ,creator-DOUBLEARROWLINE)
@@ -886,11 +886,11 @@ where it goes.
 	       (:left 5) (:top ,(o-formula (gvl :parent :top)))
 	       (:image
 		,(opal:read-image
-		  (user::garnet-pathnames "doublelinearrow.bm"
-		    (user::garnet-pathnames 
+		  (common-lisp-user::garnet-pathnames "doublelinearrow.bm"
+		    (common-lisp-user::garnet-pathnames 
 		     #+apple "garnetdraw:" 
                      #-apple "garnetdraw/"
-                         user::garnet-bitmap-pathname))))))))))
+                         common-lisp-user::garnet-bitmap-pathname))))))))))
     (:interactors
      `((:tool-interactor ,inter:button-interactor
 	(:window ,(o-formula (gvl :operates-on :window)))
@@ -1868,8 +1868,8 @@ To edit a polygon(s):
 	(opal:destroy (eval sym))))
 
   ;;for demo-controller
-  (unless (and (fboundp 'User::Garnet-Note-Quitted)
-	       (User::Garnet-Note-Quitted "GARNETDRAW")))
+  (unless (and (fboundp 'Common-Lisp-User::Garnet-Note-Quitted)
+	       (Common-Lisp-User::Garnet-Note-Quitted "GARNETDRAW")))
   )
 
 #|

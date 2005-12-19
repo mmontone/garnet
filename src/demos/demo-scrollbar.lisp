@@ -54,7 +54,7 @@
 
 (defvar DEMO-SCROLLBAR-INIT
   (dolist (file '("motif-v-scroll-loader"))
-    (user::garnet-load (concatenate 'string "gadgets:" file))))
+    (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file))))
 
 (declaim (special OPEN-INTER OPEN-UP-ARROW OPEN-END-RECT OPEN-TRILL-BOX
 		  OPEN-DOWN-ARROW OPEN-SCROLLBAR OPEN-TOP-AGG OPEN-VP OPEN-TEXT

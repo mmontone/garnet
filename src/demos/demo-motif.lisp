@@ -56,7 +56,7 @@
 		  "motif-radio-buttons-loader" "motif-menu-loader"
 		  "motif-scrolling-labeled-box-loader" "motif-gauge-loader"
                   "motif-scrolling-window-loader"))
-    (user::garnet-load (concatenate 'string "gadgets:" file))))
+    (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file))))
 
 (declaim (special COMBO-BOX RED-BOX GREEN-BOX BLUE-BOX RED-BAR GREEN-BAR
 		  BLUE-BAR GROUND-BUTTONS SHADE-SLIDER SHADE-BUTTONS

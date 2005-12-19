@@ -186,7 +186,7 @@ or evaluated literal expression that it is passed as a second argument."
    ":update or :up will update all windows"
    (opal:update-all-windows))
 
-  ((equal :user grepl-item) ":user sets the package to user." (in-package "USER"))
+  ((equal :user grepl-item) ":user sets the package to user." (in-package "COMMON-LISP-USER"))
   ((eq :opal item)   ":opal will set the package to OPAL."   (in-package "OPAL"))
 
   ((equal :redo grepl-item) 

@@ -134,7 +134,7 @@ Change log:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *C32-package* (find-package "USER")
+(defparameter *C32-package* (find-package "COMMON-LISP-USER")
   "This package is used for all READ operations.  It allows the user to
   type values and object names without a package prefix.")
 
@@ -153,14 +153,14 @@ Change log:
 (create-instance 'reg-font opal:font)
 
 (create-instance 'form-icon opal:bitmap
-  (:image (opal:read-image (user::garnet-pathnames
+  (:image (opal:read-image (common-lisp-user::garnet-pathnames
 			    "formula-icon.bm"
-			    user::Garnet-C32-Bitmap-PathName))))
+			    common-lisp-user::Garnet-C32-Bitmap-PathName))))
 
 (create-instance 'inherited-icon opal:bitmap
-  (:image (opal:read-image (user::garnet-pathnames
+  (:image (opal:read-image (common-lisp-user::garnet-pathnames
 			    "inherited-icon.bm"
-			    user::Garnet-C32-Bitmap-Pathname))))
+			    common-lisp-user::Garnet-C32-Bitmap-Pathname))))
 
 (defparameter Font-Height (max (opal:string-height ital-font "/")
 			       (opal:string-height reg-font "/")))
@@ -1138,7 +1138,7 @@ Change log:
      agg
      (create-instance nil gg:scrolling-labeled-box
        (:left 10) (:top 170) (:width 270)
-       (:label-string "Current package:") (:value "USER")
+       (:label-string "Current package:") (:value "COMMON-LISP-USER")
        (:selection-function 'set-current-package)
        ; (:constant T)
        ))

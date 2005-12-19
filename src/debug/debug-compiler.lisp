@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,16 +19,16 @@
 ;;;  4/12/90 Mitchell    Added #+allegro (gc t)
 ;;;  3/22/90 Robert Cook Define the "GARNET-DEBUG" package for the TI Explorer
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 ;; load utilities needed by inspector, unless already loaded
 
 (unless (get :garnet-modules :multifont)
-  (load (user::garnet-pathnames "multifont-loader" user::Garnet-Opal-PathName)))
+  (load (common-lisp-user::garnet-pathnames "multifont-loader" common-lisp-user::Garnet-Opal-PathName)))
 (unless (get :garnet-modules :text-buttons)
-  (load (user::garnet-pathnames "text-buttons-loader" user::Garnet-Gadgets-PathName)))
+  (load (common-lisp-user::garnet-pathnames "text-buttons-loader" common-lisp-user::Garnet-Gadgets-PathName)))
 (unless (get :garnet-modules :error-gadget-utils)
-  (user::garnet-load "gg:error-gadget-utils"))
+  (common-lisp-user::garnet-load "gg:error-gadget-utils"))
 
 (eval-when (eval load compile)
   (garnet-mkdir-if-needed Garnet-debug-Pathname))

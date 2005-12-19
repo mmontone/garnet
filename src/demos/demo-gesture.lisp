@@ -31,7 +31,7 @@ Change log:
 ;; Load the gesture interactor, unless already loaded 
 (defvar DEMO-GESTURE-INIT
     ;; load gesture-loader
-    (user::garnet-load (concatenate 'string "gesture:" "gesture-loader")))
+    (common-lisp-user::garnet-load (concatenate 'string "gesture:" "gesture-loader")))
 
 
 ;; global variables definitions
@@ -200,8 +200,8 @@ Change log:
         (:running-where (list :in TOP-WIN))
         (:start-event :LEFTDOWN)
         (:classifier (inter:gest-classifier-read
-                         (user::garnet-pathnames "demo-gesture.classifier"
-                                          user::Garnet-Gesture-Data-Pathname)))
+                         (common-lisp-user::garnet-pathnames "demo-gesture.classifier"
+                                          common-lisp-user::Garnet-Gesture-Data-Pathname)))
         (:final-function #'handle-gesture)
         (:min-non-ambig-prob .95)
         (:max-dist-to-mean 60)

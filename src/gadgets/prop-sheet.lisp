@@ -1238,7 +1238,7 @@ so set there"      val slot fail-objs
 #+garnet-test
 (defun prop-sheet-for-obj-Go ()
   (unless (get :garnet-modules :error-gadget)
-    (user::garnet-load "gg:error-gadget-loader"))
+    (common-lisp-user::garnet-load "gg:error-gadget-loader"))
   (create-instance 'prop-test-error-gad error-gadget)
   (create-instance 'prop-sheet-for-obj-win inter:interactor-window
 		   (:aggregate (create-instance 'prop-sheet-for-obj-agg

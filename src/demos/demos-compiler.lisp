@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: USER; Base: 10 -*-
+;;; -*- Mode: LISP; Syntax: Common-Lisp; Package: COMMON-LISP-USER; Base: 10 -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;         The Garnet User Interface Development Environment.      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,18 +33,18 @@
 ;;; 2-Apr-90 Cook/Pervin Added #+explorer part.
 ;;;
 
-(in-package "USER")
+(in-package "COMMON-LISP-USER")
 
 (unless (get :garnet-modules :multifont)
-  (load (user::garnet-pathnames "multifont-loader" user::Garnet-Opal-PathName)))
+  (load (common-lisp-user::garnet-pathnames "multifont-loader" common-lisp-user::Garnet-Opal-PathName)))
 (unless (get :garnet-modules :aggregraphs)
-  (load user::Garnet-Aggregraphs-Loader))
+  (load common-lisp-user::Garnet-Aggregraphs-Loader))
 (unless (get :garnet-modules :gadgets)
-  (load user::Garnet-Gadgets-Loader))
+  (load common-lisp-user::Garnet-Gadgets-Loader))
 (unless (get :garnet-modules :ps)
-  (load user::Garnet-PS-Loader))
+  (load common-lisp-user::Garnet-PS-Loader))
 (unless (get :garnet-modules :gesture)
-  (load user::Garnet-Gesture-Loader))
+  (load common-lisp-user::Garnet-Gesture-Loader))
 
 (eval-when (eval load compile)
   (garnet-mkdir-if-needed Garnet-demos-Pathname))

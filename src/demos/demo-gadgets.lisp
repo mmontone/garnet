@@ -34,7 +34,7 @@
 ;;;             Moved definition of DEMO-X-BUTTONS-OBJ so that DEMO-H-SCROLL-OBJ
 ;;;             formulas will be initialized correctly.
 ;;;             Removed setf's so that instances are created with explicit names
-;;;  07/23/90 - Edward Pervin - Added "user::" before Garnet-Gadgets-PathName
+;;;  07/23/90 - Edward Pervin - Added "common-lisp-user::" before Garnet-Gadgets-PathName
 ;;;
 
 (in-package :DEMO-GADGETS)
@@ -45,7 +45,7 @@
 		  "menu-loader" "text-buttons-loader"
 		  "x-buttons-loader" "radio-buttons-loader"
 		  "labeled-box-loader" "scrolling-labeled-box-loader"))
-          (user::garnet-load (concatenate 'string "gadgets:" file))))
+          (common-lisp-user::garnet-load (concatenate 'string "gadgets:" file))))
                                    
 
 (declaim (special DEMO-GADGETS-WIN DEMO-GADGETS-TOP-AGG

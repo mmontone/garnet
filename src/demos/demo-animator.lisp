@@ -33,7 +33,7 @@ Change log:
 #+garnet-processes
 (defvar DEMO-ANIMATOR-INIT
     (dolist (gadget '("gadgets:text-buttons-loader"))
-	    (user::garnet-load gadget))
+	    (common-lisp-user::garnet-load gadget))
   )
 
 (defparameter pixmapfilename "eye")
@@ -48,10 +48,10 @@ Change log:
 		    (format T "~a..." (1+ i))
 		    (force-output)
 		    (setq filename
-			  (user::garnet-pathnames
+			  (common-lisp-user::garnet-pathnames
 			   (format NIL "~a~a.xpm" pixmapfilename
 					   (1+ i))
-			   user::Garnet-Pixmap-Pathname))
+			   common-lisp-user::Garnet-Pixmap-Pathname))
 		    (push (opal:read-xpm-file filename) pics)
 		    (if (= i 5)
 			(setq i 12)

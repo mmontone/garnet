@@ -47,8 +47,8 @@ Change log:
    (:x1 33)(:x2 47)(:y2 (o-formula (gvl :y1))))
 
 (defparameter image
-  (opal:read-image (user::garnet-pathnames "indicator.bm"
-				    user::Garnet-Bitmap-PathName)))
+  (opal:read-image (common-lisp-user::garnet-pathnames "indicator.bm"
+				    common-lisp-user::Garnet-Bitmap-PathName)))
 
 
 

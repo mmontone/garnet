@@ -38,7 +38,7 @@
 ;;;Set this to T if you want the name of the bin directory to
 ;;;vary with the version of garnet, handy if you are debugging
 ;;;with multiple Lisp versions.
-(setq Multiple-Garnet-Bin-Dirs t)
+(setq Multiple-Garnet-Bin-Dirs nil)
 
 
 ;;; The :GARNET-DEBUG option allows many different kinds of run-time checking,

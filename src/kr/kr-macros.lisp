@@ -1638,7 +1638,10 @@ at slot ~S  (non-schema value is ~S, last schema was ~S)"
 
 
 ;;;; CREATE-INSTANCE
-;;; 
+;;;
+;;; I am not sure the following enhancement will work because of the
+;;; quote around the instance name... [2005/12/20:rpg]
+#+allegro (excl::define-simple-parser create-instance second)
 (defmacro create-instance (name class &body body)
   (when (and (listp class)
 	     (eq (car class) 'QUOTE))

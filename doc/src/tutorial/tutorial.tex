@@ -1,34 +1,35 @@
-\device{postscript}
-\make{manual}
-\disable{figurecontents}
-\libraryfile{Garnet}
-\string{TitleString = `Garnet Tutorial'}
-\use{Bibliography = `garnet.bib'}
+%\device{postscript}
+%\make{manual}
+%\disable{figurecontents}
+%\libraryfile{Garnet}
+%\string{TitleString = `Garnet Tutorial'}
+%\use{Bibliography = `garnet.bib'}
 
 \begin{titlepage}
-\begin{titlebox}
-\vspace{0.6 inch}
-\bg{Garnet Tutorial}
+%\begin{titlebox}
+\vspace{0.6in}
 
-{\bf Andrew Mickish}
-\vspace{0.3 line}
-\value{date}
-\end{titlebox}
-\vspace{0.5 inch}
-\begin{center}
-{\bf Abstract}\end{center}
-\begin{text}
-This tutorial has been designed to introduce the reader to the
-basic concepts of Garnet.  The reader should have already taken the
-Garnet Tour before starting the tutorial.
-\vspace{0.5 inch}
-\include{creditetc.mss}
-\end{text}
+\centering{\Large{\textbf{Garnet Tutorial}}} \\
+
+\centering{{\bf Andrew Mickish} }
+\vspace{0.3in} 
+\centering{\today{}}
+  % \value{date}
+  % \end{titlebox}
+  \vspace{0.5in}
+  \begin{center} {\bf Abstract}\end{center}
+  % \begin{text}
+  This tutorial has been designed to introduce the reader to the basic
+  concepts of Garnet.  The reader should have already taken the Garnet
+  Tour before starting the tutorial.  \vspace{0.5in}
+  \include{creditetc}
+  % \end{center}
+  % \end{text}
 \end{titlepage}
 
 
-\include{pagenumbers.mss}
-\set{page = tutorial-first-page}
+% \include{pagenumbers.mss}
+% \set{page = tutorial-first-page}
 
 \chapter{Setting Up}
 
@@ -57,7 +58,9 @@ process.  Also, type in the following line so that references to
 the KR package can be eliminated (we will explicitly reference the
 other Garnet packages):
 
-\programexample{(use-package :KR)}
+\begin{programexample}
+(use-package :KR)
+\end{programexample}
 
 
 \chapter{The Prototype-Instance System}
@@ -86,17 +89,17 @@ filling style.  Naturally, this leads to an inheritance hierarchy
 among the objects in the Garnet system.
 In fact, there is one root object in Garnet -- the \pr{view-object} -- that
 all other objects are instances of (except for interactors, which have
-their own root).  Figure \ref{opal-inheritance}
+their own root).  Figure \ref{opalInheritance}
 shows some of the objects in Garnet and how they fit into the
 inheritance hierarchy.  (The average user will never be concerned with
 the actual \pr{view-object} or \pr{graphical-object} prototypes.)
 
-\begin{group}
-\bar{}
+% \begin{group}
+% \bar{}
 \begin{figure}
-\begin{center}
-\graphic{Postscript=`tutorial/opal-inheritance.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+  \begin{center}
+    \epsfig{file=opal-inheritance.ps,width=.9\textwidth}
+  \end{center}
 \caption{The inheritance hierarchy among some of the Garnet prototype objects.
 All of the standard shapes in garnet are instances of the
 \pr{graphical-object} prototype.  As an example of inheritance, the
@@ -104,13 +107,13 @@ All of the standard shapes in garnet are instances of the
 they inherit most of their properties from the \pr{arc} prototype
 object.  The Gadgets (the Garnet widgets) are not pictured in this
 hierarchy, but most of them are instances of the \pr{aggregadget} object.}
-\tag{opal-inheritance}
-\bar{}
+\tag{opalInheritance}
+%\bar{}
 \end{figure}
-\end{group}
-\vspace{1 line}
+%\end{group}
+%\vspace{1 line}
 
-\begin{group}
+%\begin{group}
 To see an example of inheritance, let's create an instance of a window
 and look at some of its inherited values.  After you have loaded Garnet,
 type in the following code.
@@ -120,8 +123,8 @@ type in the following code.
    (:left 800) (:top 100))
 (opal:update MY-WIN)  {\it ; To make the window appear}
 \end{programexample}
-\end{group}
-\vspace{1 line}
+%\end{group}
+%\vspace{1 line}
 
 The window should appear in the upper-right corner of your screen.
 In the definition of the MY-WIN schema, we gave a value of 800 to the
@@ -167,7 +170,7 @@ MY-WIN, we would get back the new values, since the old ones are no
 longer inherited.
 
 The inheritance hierarchy which was partially pictured in Figure
-\ref{opal-inheritance} is traced from the leaves toward the root
+\ref{opalInheritance} is traced from the leaves toward the root
 (from right to left) during a search for a value.
 Whenever we use \pr{gv} to get the value of a slot, the object
 first checks to see if it has a local value for that slot.  If there
@@ -182,7 +185,9 @@ Since we are now finished with the example of MY-WIN, let's destroy it
 so it does not interfere with future examples in this tutorial.  Type
 in the following line.
 
-\programexample{(opal:destroy MY-WIN)}
+\begin{programexample}
+(opal:destroy MY-WIN)
+\end{programexample}
 
 
 \section{Prototypes}
@@ -196,14 +201,15 @@ us to define these objects more efficiently, by creating several
 similar objects as instances of a single prototype.
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/proto-rects.ps',boundingbox=File}\end{center}
+  \epsfig{file=proto-rects.ps}
+\end{center}
 \caption{Three instances created from one prototype rectangle.}
-\tag{proto-rects}
+\tag{protoRects}
 \end{figure}
 
-To start, look at the picture in Figure \ref{proto-rects}.  We are
+To start, look at the picture in Figure \ref{protoRects}.  We are
 going to define three rectangles with three different filling styles
 and put them in a window.  First, let's create a window with a
 top-level aggregate.  (For now, just think of an aggregate as an
@@ -272,12 +278,14 @@ three instances inherit their width and height from the prototype,
 even when the prototype changes.
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/changed-proto.ps',boundingbox=File}\end{center}
+  %
+%\graphic{Postscript=`tutorial/changed-proto.ps',boundingbox=File}\end{center}
+  \epsfig{file=changed-proto.ps}\end{center}
 \caption{The instances change whenever the prototype object changes.}
 \tag{changed-proto}
-\bar{}
+%\bar{}
 \end{figure}
 
 For our last look at inheritance in this section, let's try to
@@ -301,13 +309,15 @@ This shows how inheritance can be used flexibly to make specific
 exceptions to the prototype object.
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/override.ps',boundingbox=File}\end{center}
+%\graphic{Postscript=`tutorial/override.ps',boundingbox=File}\end{center}
+\epsfig{file=override.ps}
+\end{center}
 \caption{The width of R3 is overridden, so it is no longer inherited
 from the prototype.}
 \tag{override}
-\bar{}
+%\bar{}
 \end{figure}
 
 
@@ -339,10 +349,12 @@ the lisp listener.  The Inspector window that appears will look like figure
 
 \begin{figure}
 \begin{center}
-\graphic{Postscript=`tutorial/inspector.ps',boundingbox=File, magnify=.75}\end{center}
+%\graphic{Postscript=`tutorial/inspector.ps',boundingbox=File, magnify=.75}\end{center}
+\epsfig{file=inspector.ps}
+\end{center}
 \caption{The Inspector displaying the slots and values of rectangle R3.}
 \tag{inspector}
-\bar{}
+%\bar{}
 \end{figure}
 
 The local slots and values for R3 are shown in the Inspector window.
@@ -373,7 +385,7 @@ object and hitting HELP again, or you can select text that is already displayed
 in the Inspector and using the `\pr{Show Object}' or `\pr{Show in New}'
 buttons.  For example, to examine the \pr{opal:black-fill} object that is the
 value of R3's \pr{:filling-style} slot, either click-and-drag or double-click
-on the \pr{\#k{\tt\char`\<}OPAL:BLACK-FILL>} value and press the `\pr{Show in New}' button.
+on the \pr{\#k<OPAL:BLACK-FILL>} value and press the `\pr{Show in New}' button.
 The object will be displayed in a new window.
 
 When you are finished with the Inspector, you can click on the `\pr{Done}' or
@@ -390,9 +402,11 @@ and how to use the Inspector for debugging more compilcated examples.
 Most objects in Garnet have a list of {\it parameters}, which are stored in the
 \pr{:parameters} slot.  This is a list of all customizable properties of
 the object.  For example, \pr{gv opal:rectangle :parameter} yields:
-\vspace{.5 line}
+%\vspace{.5 line}
 
-\programexample{(:LEFT :TOP :WIDTH :HEIGHT :LINE-STYLE :FILLING-STYLE :DRAW-FUNCTION :VISIBLE)}
+\begin{programexample}
+(:LEFT :TOP :WIDTH :HEIGHT :LINE-STYLE :FILLING-STYLE :DRAW-FUNCTION :VISIBLE)
+\end{programexample}
 
 These can be considered the `public' slots of \pr{opal:rectangle}, which can
 be given customized values when instances are created.  If values are not
@@ -428,7 +442,9 @@ Before moving on to the next section, destroy the window so that it
 does not interfere with future examples in this tutorial.  Type the
 following line.
 
-\programexample{(opal:destroy WIN)}
+\begin{programexample}
+(opal:destroy WIN)
+\end{programexample}
 				
 Destroying the window will also destroy all of the objects that were
 added to its aggregate.  We can no longer manipulate R1, R2, and R3,
@@ -463,7 +479,9 @@ PROTO-RECT, which still exists in memory.  If we now enter the
 following new schema definition for an object by the same name, then
 the old PROTO-RECT will be destroyed.
 
-\programexample{(create-instance 'PROTO-RECT opal:rectangle)}
+\begin{programexample}
+(create-instance 'PROTO-RECT opal:rectangle)
+\end{programexample}
 
 When the new schema is entered, a warning is given that the old object
 is being destroyed.  You can safely ignore this message, assuming that
@@ -504,7 +522,9 @@ Usually it is convenient to assign an unnamed object to a local
 variable.  The following line creates a circle and assigns it to the
 new variable MY-CIRCLE.
 
-\programexample{(setf MY-CIRCLE (create-instance NIL opal:circle))}
+\begin{programexample}
+(setf MY-CIRCLE (create-instance NIL opal:circle))
+\end{programexample}
 
 Now MY-CIRCLE will have the generated circle as its value.  If the
 same line were entered again, the old circle would not be destroyed,
@@ -571,17 +591,18 @@ is formed.  This hierarchy describes the way that objects are grouped together.
 Figure \ref{v-scroll-hierarchy} shows how the objects that comprise a
 vertical scroll bar might be conceptually organized.
 
-\begin{group}
+% \begin{group}
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/v-scroll-hierarchy.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+%\graphic{Postscript=`tutorial/v-scroll-hierarchy.ps',boundingbox=File,magnify=.75}
+\epsfig{file=v-scroll-hierarchy.ps}
+                 \end{center}
 \caption{One possible hierarchy for the objects that make up a scroll bar.}
 \tag{v-scroll-hierarchy}
-\bar{}
+%\bar{}
 \end{figure}
-\end{group}
+% \end{group}
 
 In the scroll bar hierarchy, all of the leaves correspond to shapes
 that appear in the scroll bar.  The leaves are always Opal graphic
@@ -618,7 +639,7 @@ with a list in the \pr{:parts} slot.  In an aggrelist, a single object
 is defined to be an `item-prototype', and the aggrelist automatically
 generates several instances of that object to make its components.
 The aggregraph is a type of aggregadget, where all the components are
-nodes and arcs that make up a graph.  Figures \ref{opal-inheritance}
+nodes and arcs that make up a graph.  Figures \ref{opalInheritance}
 and \ref{v-scroll-hierarchy} were created using Garnet aggregraphs.
 For several examples and a complete discussion of how to use
 aggregraphs, see the Aggregadgets, Aggrelists, and Aggregraphs
@@ -799,15 +820,16 @@ the top of a certain rectangle, then all the objects will change
 position whenever the rectangle is moved.
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/align-top.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+%\graphic{Postscript=`tutorial/align-top.ps',boundingbox=File,magnify=.75}
+\epsfig{file=align-top.ps}
+\end{center}
 \caption{Three objects that are all aligned with the same top.  The
 top of the gray rectangle is constrained to the white rectangle, and
 the top of the black circle is constrained to the top of the gray rectangle.}
 \tag{align-top}
-\bar{}
+%\bar{}
 \end{figure}
 
 As our first example of defining constraints among objects, we will
@@ -861,7 +883,7 @@ the gray rectangle was defined using the functions \pr{o-formula} and
 expression is a constraint.  When \pr{gv} is used inside a formula,
 it causes a dependency to be established on the referenced slot, so that
 the formula will be reevaluated when the value in the referenced slot
-changes.  \foot{There is another function called \pr{g-value}
+changes.  \footnote{There is another function called \pr{g-value}
 that is similar
 to \pr{gv}, except that it never causes dependencies to be established.
 Older versions of Garnet required that \pr{gv} only be used inside
@@ -979,12 +1001,14 @@ problem is to use constraints in the dimension slots of the selection
 box that depend on the dimensions of the object it is over.
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/obj-over.ps',boundingbox=File, magnify=.75}\end{center}
+%\graphic{Postscript=`tutorial/obj-over.ps',boundingbox=File, magnify=.75}
+\epsfig{file=obj-over.ps}
+\end{center}
 \caption{A selection box drawn around an object.}
 \tag{obj-over}
-\bar{}
+%\bar{}
 \end{figure}
 
 In the traditional approach, we use the slot \pr{:obj-over} in the
@@ -1072,23 +1096,24 @@ components defined in an aggregadget have their \pr{:parent} slot set
 in this way.  In this section, we will examine how this slot can be
 used to communicate between components of an aggregadget.
 
-\vspace{1 line}
-\begin{group}
+% \vspace{1 line}
+%\begin{group}
 The aggregadget we will use in this example will make the picture of
 concentric circles in Figure \ref{concentric-circles}.  Suppose that
 we want to be able to change the size and position of the circles
 easily, and that this should be done by setting as few slots as
 possible.
-\end{group}
-\vspace{.5 line}
+% \end{group}
+% \vspace{.5 line}
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/con-circles.ps',boundingbox=File}\end{center}
+% graphic{Postscript=`tutorial/con-circles.ps',boundingbox=File}
+\epsfig{file=con-circles.ps}\end{center}
 \caption{An aggregadget with three circles as components.}
 \tag{concentric-circles}
-\bar{}
+%\bar{}
 \end{figure}
 
 From the picture, we see that the dimensions of the black circle are
@@ -1201,7 +1226,9 @@ parent aggregadget, and then back down into another component.
 To examine these pointer slots more closely, try executing the
 following line.
 
-\programexample{(gv CON-CIRCLES :white-circle)}
+\begin{programexample}
+(gv CON-CIRCLES :white-circle)
+\end{programexample}
 
 The value returned by this \pr{gv} call is the internally
 generated name of the white circle.  This name was generated with a
@@ -1210,17 +1237,23 @@ white circle in Garnet (see Section \ref{unnamed-objects}).  You can
 also look at slots of the components directly, by adding slot names to
 the end of the \pr{gv} call, like
 
-\programexample{(gv CON-CIRCLES :white-circle :top)}
+\begin{programexample}
+(gv CON-CIRCLES :white-circle :top)
+\end{programexample}
 
 or even
 
-\programexample{(gv CON-CIRCLES :white-circle :parent)}
+\begin{programexample}
+(gv CON-CIRCLES :white-circle :parent)
+\end{programexample}
 
 This is the end of the section regarding constraints.  Destroy the window
 we have been using to keep it from interfering with future examples in
 the tutorial.
 
-\programexample{(opal:destroy CONSTRAINTS-WIN)}
+\begin{programexample}
+(opal:destroy CONSTRAINTS-WIN)
+\end{programexample}
 
 
 
@@ -1364,13 +1397,15 @@ prompt.  (You may execute the \pr{main-event-loop} call again at any
 Lisp prompt.)
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/inter-white.ps',boundingbox=File}  \graphic{Postscript=`tutorial/inter-black.ps',boundingbox=File}\end{center}
+% graphic{Postscript=`tutorial/inter-white.ps',boundingbox=File}
+\epsfig{file=inter-white.ps}  % graphic{Postscript=`tutorial/inter-black.ps',boundingbox=File}
+\epsfig{file=inter-black.ps}\end{center}
 \caption{The rectangle CHANGING-RECT when its \pr{:selected} slot is NIL
 (the default), and when it is set to T by the interactor (when the
 mouse is clicked over it).}
-\bar{}
+%\bar{}
 \end{figure}
 
 
@@ -1604,7 +1639,9 @@ Since we have finished this section on interactors, destroy the window
 so that it does not interfere with the next example.  Type the
 following line.
 
-\programexample{(opal:destroy INTER-WIN)}
+\begin{programexample}
+(opal:destroy INTER-WIN)
+\end{programexample}
 
 
 \chapter{Programming}
@@ -1615,7 +1652,7 @@ following line.
 In this section, we will go through a comprehensive example that pulls
 together all the concepts that have been discussed in this tutorial.
 The final objective will be the panel of text buttons in Figure
-\ref{text-buttons}.  We will use an aggregadget to assemble a group
+\ref{textButtons}.  We will use an aggregadget to assemble a group
 of objects into a single button, then use an aggrelist to make
 multiple copies of the text button and organize them into a list for
 the panel, and finally create a button interactor to manage the panel.
@@ -1643,10 +1680,10 @@ aggregate hierarchy.  We will keep TOP-AGG as the top-level aggregate
 throughout this example, but we will be changing its components continually.
 
 Now we can begin adding objects to TOP-AGG (throughout this discussion
-you should periodically check Figure \ref{text-buttons} to see why we
+you should periodically check Figure \ref{textButtons} to see why we
 are creating particular objects).  Let's start by assembling a button.
 We will first create a couple of rectangles that have a fixed position
-so that we get the window in Figure \ref{two-rects}.  Since we
+so that we get the window in Figure \ref{twoRects}.  Since we
 want the rectangles to have the same dimensions, we can make a
 prototype object and then create two instances with appropriate
 position values.
@@ -1668,13 +1705,13 @@ position values.
 \end{programexample}
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/two-rects.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+% graphic{Postscript=`tutorial/two-rects.ps',boundingbox=File,magnify=.75}
+\epsfig{file=two-rects.ps}\end{center}
 \caption{The two rectangles R1 and R2, which are instances of PROTO-RECT.}
-\tag{two-rects}
-\bar{}
+\tag{twoRects}
+%\bar{}
 \end{figure}
 
 Keeping in mind our goal of making a panel of text buttons, one
@@ -1699,7 +1736,7 @@ When we create an aggregadget, we essentially create an aggregate and
 add the components (along with pointer slots) all at once.  Our task
 is to build an aggregadget
 with two rectangles as components which will look like Figure
-\ref{two-rects}.  Since we already know what we want the
+\ref{twoRects}.  Since we already know what we want the
 rectangles to look like in the window, putting a simple aggregadget
 together using our previously defined R1 and R2 rectangles is
 straightforward.  However, the key to avoiding tedious
@@ -1711,7 +1748,7 @@ For the present, let's assume that we will always be giving absolute
 numbers to our top-level aggregadget (but not its components).  The first
 problem we want to address
 is how to devise formulas for the positions of the rectangles.
-By referring back to Figure \ref{two-rects},
+By referring back to Figure \ref{twoRects},
 we see that the entire aggregate has its upper-left
 coordinate at one corner of the gray rectangle, and its lower-right
 coordinate on the shadow.  Therefore, it is a reasonable design
@@ -1850,7 +1887,7 @@ As usual, remember to remove the current BUTTON from the window using
 
 \subsection{The Label of the Button}
 
-Referring to Figure \ref{text-buttons} again, we see that the text
+Referring to Figure \ref{textButtons} again, we see that the text
 button needs a white rectangle to be centered over the gray one, and text
 should be centered inside the white rectangle.  We will want the string of
 the text object to be a top level slot in the aggregadget so that we
@@ -1934,13 +1971,14 @@ automatically for the instances.
 \end{programexample}
 
 \begin{figure}
-\bar{}
+%\bar{}
 \begin{center}
-\graphic{Postscript=`tutorial/several-buttons.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+% graphic{Postscript=`tutorial/several-buttons.ps',boundingbox=File,magnify=.75}
+\epsfig{file=several-buttons.ps}
+\end{center}
 \caption{The BUTTON object and two instances of it.}
 \tag{several-buttons}
-\bar{}
+%\bar{}
 \end{figure}
 
 This feature of aggregadgets means that you do not need to manually
@@ -1957,7 +1995,7 @@ Even though instances of the aggregadget will automatically generate
 components, the instances BUTTON-1 and BUTTON-2 show that we still
 need to manually supply coordinates to the aggregadget in order to
 position it.  When we create the finished text button panel in Figure
-\ref{text-buttons}, we don't want to calculate the position of each
+\ref{textButtons}, we don't want to calculate the position of each
 text button in the window.  (Notice that this is similar to the
 problem we faced several sections ago -- that we didn't want to
 compute the position of each rectangle within a text button.)  The
@@ -1983,12 +2021,13 @@ aggregadget.  So, let's try the following code.
 
 \begin{figure}
 \begin{center}
-\graphic{Postscript=`tutorial/five-buttons.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+% graphic{Postscript=`tutorial/five-buttons.ps',boundingbox=File,magnify=.75}
+\epsfig{file=five-buttons.ps}
+\end{center}
 \caption{An aggrelist with an \pr{:items} value of 5 and the BUTTON
 aggregadget as its \pr{:item-prototype}.}
 \tag{five-buttons}
-\bar{}
+%\bar{}
 \end{figure}
 
 By supplying the number 5 in the \pr{:items} slot, we tell the
@@ -2080,7 +2119,7 @@ Before we attach this interactor to the PANEL aggregadget, we are
 going to have to change a few of the formulas in the button and its
 components.  The question to ask is -- how should the graphics change
 when we press the mouse over the button?  By looking at the full
-text-buttons picture in Figure \ref{text-buttons}, we see that the
+text-buttons picture in Figure \ref{textButtons}, we see that the
 gray rectangle should move down and to the right, settling over the
 shadow.  Therefore, we will have to change the formulas for the
 \pr{:left} and \pr{:top} of the gray rectangle.  We do not have to
@@ -2173,11 +2212,12 @@ to try the code again with the values in place.
 
 \begin{figure}
 \begin{center}
-\graphic{Postscript=`tutorial/text-buttons.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+% graphic{Postscript=`tutorial/text-buttons.ps',boundingbox=File,magnify=.75}
+\epsfig{file=text-buttons.ps}
+\end{center}
 \caption{The finished text button panel.}
-\tag{text-buttons}
-\bar{}
+\tag{textButtons}
+%\bar{}
 \end{figure}
 
 Once you have entered the \pr{main-event-loop} (not necessary in CMUCL,
@@ -2190,7 +2230,9 @@ cleared, and the components return to their original position.
 
 Remember to destroy the window when you are finished with this example.
 
-\programexample{(opal:destroy BUTTON-WIN)}
+\begin{programexample}
+(opal:destroy BUTTON-WIN)
+\end{programexample}
 
 
 \section{Referencing Objects in Functions}
@@ -2238,8 +2280,8 @@ their generated names.
 
 \begin{figure}
 \begin{center}
-\graphic{Postscript=`tutorial/unnamed-windows.ps',boundingbox=File,
-                 magnify=.75}\end{center}
+% graphic{Postscript=`tutorial/unnamed-windows.ps',boundingbox=File,magnify=.75}
+\epsfig{file=unnamed-windows.ps}\end{center}
 \caption{Three windows created with the function \pr{Make-Win}.}
 \tag{unnamed-windows}
 \end{figure}
@@ -2353,7 +2395,7 @@ the variable.  One formula will be an \pr{o-formula}, and one will be a plain
 	 (:right2 (formula `(+ (gvl :left) ,*width*))))
 Object A
 
-\#k{\tt\char`\<}A{\tt\char`\>}
+#k<A>
 {\bf lisp>} (gv A :right1)
 110
 {\bf lisp>} (gv A :right2)
@@ -2398,10 +2440,10 @@ expression used the current value of \pr{*width*}.  A \pr{ps} of the
 
 \begin{programexample}
 {\bf lisp>} (ps (get-value A :right1))
-\{\#k{\tt\char`\<}F74{\tt\char`\>}
+\{#k<F74>
   lambda:        (+ (gvl :left) *width*)
   cached value:  (55 . T)
-  on schema \#k{\tt\char`\<}A{\tt\char`\>}, slot :RIGHT1
+  on schema #k<A>, slot :RIGHT1
   \}
 
 NIL
@@ -2413,10 +2455,10 @@ the `,' dereferenced it.
 
 \begin{programexample}
 {\bf lisp>} (ps (get-value A :right2))
-\{\#k{\tt\char`\<}F73{\tt\char`\>}
+\{#k<F73>
   lambda:        (+ (gvl :left) 100)
   cached value:  (133 . T)
-  on schema \#k{\tt\char`\<}A{\tt\char`\>}, slot :RIGHT2
+  on schema #k<A>, slot :RIGHT2
   \}
 
 NIL
@@ -2480,7 +2522,9 @@ simple example window with step-by-step interaction with the Inspector.
 
 \section{PS}
 
-\programexample{kr:PS {\it object}}
+\begin{programexample}
+kr:PS {\it object})
+\end{programexample}
 
 The function \pr{ps} (which stands for `print schema') is used to examine
 individual schemas.  When \pr{ps} is called with a Garnet object, a list
@@ -2495,7 +2539,9 @@ control the amount of information that \pr{ps} prints.
 
 \section{Flash}
 
-\programexample{garnet-debug:Flash {\it object} \&optional {\it n}}
+\begin{programexample}
+  (garnet-debug:Flash {\it object} \&optional {\it n})
+\end{programexample}
 
 The function \pr{flash}
 helps you to visually locate {\it object} in a window by flashing the bounding
@@ -2507,7 +2553,9 @@ of why the object will not flash.
 
 \section{Ident}
 
-\programexample{garnet-debug:Ident}
+\begin{programexample}
+garnet-debug:Ident
+\end{programexample}
 
 The function \pr{ident} takes no parameters.  After you call \pr{ident},
 Garnet waits for the next input event in any Garnet window,

@@ -11,18 +11,19 @@
 
 \centering{\Large{\textbf{Garnet Tutorial}}} \\
 
-\centering{{\bf Andrew Mickish} }
-\vspace{0.3in} 
+\centering{{\bf Andrew Mickish} } \\
+%\vspace{0.3in} 
 \centering{\today{}}
   % \value{date}
   % \end{titlebox}
-  \vspace{0.5in}
+%  \vspace{\fill}
   \begin{center} {\bf Abstract}\end{center}
   % \begin{text}
   This tutorial has been designed to introduce the reader to the basic
   concepts of Garnet.  The reader should have already taken the Garnet
-  Tour before starting the tutorial.  \vspace{0.5in}
-  \include{creditetc}
+  Tour before starting the tutorial.
+  \vspace{\fill}
+  \input{creditetc}
   % \end{center}
   % \end{text}
 \end{titlepage}
@@ -99,8 +100,10 @@ the actual \pr{view-object} or \pr{graphical-object} prototypes.)
 % \begin{group}
 % \bar{}
 \begin{figure}
+  \htmlimage{notransparent}
   \begin{center}
-    \epsfig{file=opal-inheritance.ps,width=.9\textwidth}
+    \includegraphics{opal-inheritance}
+%    \epsfig{file=opal-inheritance.ps,width=.9\textwidth}
   \end{center}
 \caption{The inheritance hierarchy among some of the Garnet prototype objects.
 All of the standard shapes in garnet are instances of the

@@ -37,7 +37,7 @@ Change log:
 
 ;; Only loads this file when not compiling all of Garnet.
 (unless (or (get :garnet-modules :multifont)
-	    (and (boundp 'user::compile-opal-p) common-lisp-user::compile-opal-p
+	    (and (boundp 'common-lisp-user::compile-opal-p) common-lisp-user::compile-opal-p
 		 (boundp 'common-lisp-user::compile-inter-p) common-lisp-user::compile-inter-p))
   (garnet-load "opal:multifont-loader"))
 

@@ -207,7 +207,7 @@ which may make it easier to run cross platform.
 #-lucid
 (in-package :COMMON-LISP-USER)
 
-(defparameter Garnet-Version-Number "3.0")
+(defparameter Garnet-Version-Number "3.1rc")
 (pushnew :GARNET *features*)
 (pushnew :GARNET-V3.0 *features*)
 
@@ -957,7 +957,7 @@ to a 31 character filename with a .lisp suffix."
 ;;;    gadgets directory).
 ;;;
 (defvar *compiler-extension*
-  #+allegro ".fasl"
+  #+(or allegro sbcl) ".fasl"
   #+(and lucid sparc)     ".sbin"
   #+(and lucid pa)        ".hbin"
   #+cmu         (concatenate 'string "." (c:backend-fasl-file-type c:*backend*))

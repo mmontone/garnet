@@ -1901,8 +1901,13 @@ pixmap format in the list of valid formats."
 	(xlib:open-display opal::*default-x-display-name*
 			   :display *default-x-display-number*)
 	#+allegro
-	(common-windows::open-display-with-auth
-	 opal::*default-x-display-name* *default-x-display-number*)
+	(or
+	 (ignore-errors
+	   (common-windows::open-display-with-auth
+	    opal::*default-x-display-name* *default-x-display-number*))
+	 (ignore-errors
+	   (xlib:open-display opal::*default-x-display-name*
+			   :display *default-x-display-number*)))
 	)
   (setq opal::*default-x-screen*
         (nth opal::*default-x-screen-number*
@@ -1928,7 +1933,13 @@ pixmap format in the list of valid formats."
 		opal::*default-x-display-name*
 		:display *default-x-display-number*)
 	       #+allegro
-	       (xcw::open-display-with-auth opal::*default-x-display-name* *default-x-display-number*)
+	       (or
+		(ignore-errors
+		  (xcw::open-display-with-auth opal::*default-x-display-name* *default-x-display-number*))
+		(ignore-errors
+		  (xlib:open-display
+		   opal::*default-x-display-name*
+		   :display *default-x-display-number*)))
 	       ))))
   (setq opal::*white* (xlib:screen-white-pixel opal::*default-x-screen*))
   (setq opal::*black* (xlib:screen-black-pixel opal::*default-x-screen*))

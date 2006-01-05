@@ -325,7 +325,13 @@
 ;;;
 ;;; The following info is obtained from scan.c in XPM-3.4k library.
 ;;;
-(defconstant +printable+
+#+sbcl
+(defmacro define-constant (name value &optional doc)
+       `(defconstant ,name (if (boundp ',name) (symbol-value ',name) ,value)
+                           ,@(when doc (list doc))))
+(#+sbcl define-constant
+ #-sbcl defconstant
+ +printable+
 #+nil   " .XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|"
   ".XoO+@#$%&*=-;:>,<1234567890qwertyuipasdfghjklzxcvbnmMNBVCZASDFGHJKLPIUYTREWQ!~^/()_`'][{}|"
   "Sequence of printable characters; taken from scan.c in XPM-3.4k library.")

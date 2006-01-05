@@ -480,6 +480,7 @@ Garnet-Loader again."))
 
 (defvar Your-Garnet-Pathname
   (if (member garnet-version '(:external :external-cmu
+			       :external-sbcl
 			       :external-4.2
 			       :external-4.2-sunos
 			       :external-4.2-solaris
@@ -492,7 +493,7 @@ Garnet-Loader again."))
       ;; This should work on Ansi compliant lisps.  Try it, if not
       ;; hardcode the pathname.
       (namestring (make-pathname :directory
-				  (pathname-directory *load-truename*)))
+				 (pathname-directory *load-truename*)))
       #+comment"**FILL THIS IN**"                ;; SET THIS
 
       ;; Values useful at CMU:
@@ -516,20 +517,42 @@ not support it."
 ;;; RGA added this function as a cleaner way of handling the differences
 ;;; between Unix and Mac file naming conventions.  This will loose on pre-ansi
 ;;; lisps, but I can live with that (I think).
+
+;;; RGA's original form really doesn't work properly in some lisps,
+;;; because we are using it to create directory pathnames, but what
+;;; you get out will often NOT be a directory. [2006/01/05:rpg]
 (defun append-directory (pathnme dirstring)
   "This is a little utility for accessing the subdirectory of a
 directory."
   (let ((pnd (pathname-directory pathnme))
 	(dlist (if (listp dirstring) dirstring
 		 (list dirstring))))
-    (merge-pathnames (make-pathname :directory (append pnd dlist))
-		     pathnme)))
+    (let ((raw-pathname
+	   (merge-pathnames (make-pathname :directory (append pnd dlist))
+			    pathnme)))
+      (directorify raw-pathname))))
+       
+
+;;; ripped from the bowels of asdf-install... [2006/01/05:rpg]       
+(defun directorify (name)
+  ;; input name may or may not have a training #\/, but we know we
+  ;; want a directory
+  (let ((path (pathname name)))
+    (if (pathname-name path)
+        (merge-pathnames
+         (make-pathname :directory `(:relative ,(pathname-name path)))
+         (make-pathname :directory (pathname-directory path)
+                        :host (pathname-host path)))
+        path)))
+       
 
 
-
+;;; the following is just bloody awful, but I won't be able to fix it
+;;; until version 4 comes along. [2006/01/05:rpg]
 (defun Get-Garnet-Binary-Pathname (version)
   (let ((directory-name
 	 (case version
+	   (:external-sbcl "bin.sbcl")
 	   (:external-6.2-solaris "bin6.2")
 	   (:external-6.1-solaris "bin6.1")
 	   (:external-5.0-solaris "bin5.0")
@@ -1053,8 +1076,8 @@ to a 31 character filename with a .lisp suffix."
    (defparameter CLX-Loader
      #+lucid (merge-pathnames "windows" CLX-Pathname)
      #+lispworks (merge-pathnames "defsys" CLX-Pathname)
-     #+allegro nil			;;uses require form...
-     #-(or lucid allegro lispworks) (merge-pathnames "clx" CLX-Pathname))
+     #+(or allegro sbcl) nil			;;uses require form...
+     #-(or lucid allegro sbcl lispworks) (merge-pathnames "clx" CLX-Pathname))
    (format T "~% %%%%%%% Loading ~A %%%%%%%%~%" #-apple "CLX"
 	                                        #+apple "MCL Libraries")
    ;; RGA if we are running apply and CLX, then assume we
@@ -1100,8 +1123,8 @@ to a 31 character filename with a .lisp suffix."
           (ccl::require-interface 'windows)
           (ccl::require-interface 'ColorPicker)
           (terpri))
-   #+allegro (require :clx)
-   #-(or apple allegro) (load CLX-Loader)
+   #+(or allegro sbcl) (require :clx)
+   #-(or apple sbcl allegro) (load CLX-Loader)
    )
   (t
    (format T "~%****** NOT Loading CLX *******~%")))
@@ -1404,11 +1427,14 @@ running Garnet."
   #+cmu
   (ext:process-output (ext:run-program "/bin/sh" (list "-c" command)
 				       :wait NIL :output :stream))
+  #+sbcl
+  (sb-ext:process-output (sb-ext:run-program "/bin/sh" (list "-c" command)
+				       :wait NIL :output :stream))
   #+lispworks
   (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
   #+clisp
   (ext:make-pipe-input-stream (string command))
-  #-(or allegro lucid cmu lispworks clisp)
+  #-(or allegro lucid cmu lispworks clisp sbcl)
   (error "Don't know how to execute shell functions in this lisp"))
 
 ;;; RGA  This will loose on Windows

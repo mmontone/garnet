@@ -629,8 +629,8 @@
   (let ((p-name (concatenate 'string (symbol-name simple-type) "P"))
 	(-p-name (concatenate 'string (symbol-name simple-type) "-P")))
     (cond ((memberq simple-type '(NULL ATOM)) simple-type)
-	  (T (or (find-symbol p-name 'lisp)
-		 (find-symbol -p-name 'lisp)
+	  (T (or (find-symbol p-name 'common-lisp)
+		 (find-symbol -p-name 'common-lisp)
 		 (find-symbol p-name)
 		 (find-symbol -p-name)
 		 (error "Could not find predicate for simple-type ~S~%"

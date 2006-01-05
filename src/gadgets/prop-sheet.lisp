@@ -1015,7 +1015,13 @@ Change log:
 	  (setq slot-descs (nreverse slot-descs))))
     slot-descs))
 
-(defconstant tnil (list T NIL))
+#+sbcl
+(defmacro define-constant (name value &optional doc)
+       `(defconstant ,name (if (boundp ',name) (symbol-value ',name) ,value)
+                           ,@(when doc (list doc))))
+(#+sbcl define-constant
+ #-sbcl defconstant
+ tnil (list T NIL))
 
 ;;; Returns NIL if slot should be omitted, or else a description
 ;;; of the appropriate form (depending on whether a gadget or not)

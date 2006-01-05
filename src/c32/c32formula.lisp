@@ -900,8 +900,16 @@ doesn't call it that" cur-agg known-as p))
 |#
 
 
-(defconstant x-type-slots '(:left :width :x1 :x2))
-(defconstant y-type-slots '(:top :height :y1 :y2))
+#+sbcl
+(defmacro define-constant (name value &optional doc)
+       `(defconstant ,name (if (boundp ',name) (symbol-value ',name) ,value)
+                           ,@(when doc (list doc))))
+(#+sbcl define-constant
+ #-sbcl defconstant
+ x-type-slots '(:left :width :x1 :x2))
+(#+sbcl define-constant
+ #-sbcl defconstant
+ y-type-slots '(:top :height :y1 :y2))
 
 ;; Maps slots for copy from x to y type or visa-versa
 (defun map-slots (from-slot to-slot slot-list)

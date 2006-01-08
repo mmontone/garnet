@@ -1,38 +1,40 @@
-\device{postscript}
-\make{manual}
-\disable{figurecontents}
-\libraryfile{Garnet}
-\string{TitleString = `Garnet Tour'}
-\use{Bibliography = `garnet.bib'}
+% \device{postscript}
+% \make{manual}
+%\disable{figurecontents}
+%\libraryfile{Garnet}
+% \string{TitleString = `Garnet Tour'}
+% \use{Bibliography = `garnet.bib'}
 \begin{titlepage}
-\begin{titlebox}
-\vspace{0.6 inch}
-\bg{On-line tour through Garnet}
+%\begin{titlebox}
+\vspace{0.6in}
+\begin{center}
+  {\Large \textbf{On-line tour through Garnet}}
 
-{\bf Brad A. Myers}
-\vspace{0.3 line}
-\value{date}
-\end{titlebox}
-\vspace{0.5 inch}
+  {\large {\bf Brad A. Myers}} \\
+  \textbf{Revised and translated to LaTeX by Robert P. Goldman}\\
+  \vspace{0.3in}
+  \today{}
+\end{center}
+\vspace{\fill}
 \begin{center}
 {\bf Abstract}\end{center}
-\begin{text}
+
 This document provides an on-line tour through some of the features of the
 Garnet toolkit.  It serves as an introduction to the toolkit and how to
 program with it.  This document and tour do {\it not} assume that the reader
 has read the reference manuals.  The tour only assumes that the reader is
 familiar with CommonLisp and has loaded the Garnet software.
 
-\vspace{0.5 inch}
-\include{creditetc.mss}
-\end{text}
+\vspace{0.5in}
+\input{../creditetc}
+%\end{text}
 \end{titlepage}
 
 
-\define{typ=ux}
+%\define{typ=ux}
 
-\include{pagenumbers.mss}
-\set{page = tour-first-page}
+%\include{pagenumbers.mss}
+%\set{page = tour-first-page}
 \chapter{Introduction}
 The Garnet User Interface Development Environment contains a comprehensive
 set of tools that make it significantly easier to design and implement
@@ -136,7 +138,7 @@ errors might cause Garnet or even Lisp to get messed up.  In order of
 severity, you can try the following recovery strategies after leaving
 the debugger:
 \begin{itemize}
-\item If Lisp does not seem to be responding, try typing {\tt\char`\^}C (or whatever your
+\item If Lisp does not seem to be responding, try typing {\texttt \^}C (or whatever your
 break character is -- Command-comma in MCL) {\it to the lisp window}
 (move the mouse cursor to the Lisp window first).
 
@@ -172,13 +174,13 @@ to execute any of the commands before that (except to load Garnet and the
 tour).
 
 If Lisp seems to be stuck in an infinite loop, you can break out by typing
-the break character (often {\tt\char`\^}C \dash control-C) or the abort command in
+the break character (often {\texttt \^}C -- control-C) or the abort command in
 MCL (Command-comma).  It will throw you into the debugger.
 
 If you start something over, or retype a command, you may see messages
 like:
 \begin{programexample}
-Warning - create-schema is destroying the old \#k{\tt\char`\<}MGE::TRILL{\tt\char`\>}.
+Warning - create-schema is destroying the old \#k<MGE::TRILL>.
 \end{programexample}
 This is a debugging statement is you can just ignore it.
 
@@ -288,7 +290,7 @@ following into Lisp:
 \end{programexample}
 This function loops forever, so you then have to hit the
 \pr{F1} key while the cursor is in a Garnet window to exit
-\pr{main-event-loop}.  Alternatively, you can type {\tt\char`\^}C or Command-period,
+\pr{main-event-loop}.  Alternatively, you can type {\texttt \^}C or Command-period,
 or whatever your operating system break character is,
 in the Lisp window.  Also, it is permissible (though unnecessary) to call
 \pr{main-event-loop} within a version of Lisp which supports background
@@ -336,7 +338,7 @@ Type the text shown underlined to Lisp.  Be sure to start with an open
 parenthesis and be careful about where the quotes and colons go.
 \begin{programexample}
 * \typ{(create-instance 'MYWINDOW inter:interactor-window)}
-\#k{\tt\char`\<}MYWINDOW{\tt\char`\>}
+\#k<MYWINDOW>
 \end{programexample}
 
 \index{update}
@@ -358,7 +360,7 @@ objects you create.  An aggregate holds a collection of other objects; it
 does not have any graphic appearance itself.
 \begin{programexample}
 * \typ{(create-instance 'MYAGG opal:aggregate)}
-\#k{\tt\char`\<}MYAGG{\tt\char`\>}
+\#k<MYAGG>
 \end{programexample}
 This aggregate will be the special top level aggregate in the window, that
 will hold all the objects to be displayed in the window.  You will use the
@@ -369,9 +371,9 @@ which stants for ``get value''.  All slot names in Garnet start
 with a colon.
 \begin{programexample}
 * \typ{(s-value MYWINDOW :aggregate MYAGG)}
-\#k{\tt\char`\<}MYAGG{\tt\char`\>}
+\#k<MYAGG>
 * \typ{(gv MYWINDOW :aggregate)}
-\#k{\tt\char`\<}MYAGG{\tt\char`\>}
+\#k<MYAGG>
 \end{programexample}
 
 \index{moving-rectangle}
@@ -379,7 +381,7 @@ with a colon.
 Now, you will create a rectangle.
 \begin{programexample}
 * \typ{(create-instance 'MYRECT MOVING-RECTANGLE)}
-\#k{\tt\char`\<}MYRECT{\tt\char`\>}
+\#k<MYRECT>
 \end{programexample}
 \sm{[Note: MOVING-RECTANGLE is defined in the \pr{user} package by
 \pr{tour.lisp} as a specialization of the general \pr{opal:rectangle} prototype.]}
@@ -392,7 +394,7 @@ rectangle uses the function
 it.
 \begin{programexample}
 * \typ{(opal:add-component MYAGG MYRECT)}
-\#k{\tt\char`\<}MYRECT{\tt\char`\>}
+\#k<MYRECT>
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -409,7 +411,7 @@ names begin with a colon, and that nothing happens until you do the
 \pr{update}.
 \begin{programexample}
 * \typ{(s-value MYRECT :filling-style opal:gray-fill)}
-\#k{\tt\char`\<}GRAY-FILL{\tt\char`\>}
+\#k<GRAY-FILL>
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -434,9 +436,9 @@ aggregate and update the window.
 \begin{programexample}
 * \typ{(create-instance 'MYTEXT opal:text (:left 200)(:top 80)
       (:string `Hello World'))}
-\#k{\tt\char`\<}MYTEXT{\tt\char`\>}
+\#k<MYTEXT>
 * \typ{(opal:add-component MYAGG MYTEXT)}
-\#k{\tt\char`\<}MYTEXT{\tt\char`\>}
+\#k<MYTEXT>
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -482,7 +484,7 @@ Note that the particular number returned by the \pr{s-value} call will not
 be the same as shown below.
 \begin{programexample}
 * \typ{(s-value MYTEXT :top (o-formula (gv MYRECT :top)))}
-\#k{\tt\char`\<}F3875{\tt\char`\>}   {\it the number will be different}
+\#k<F3875>   {\it the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -526,7 +528,7 @@ they are created.  However, if you are not using a recent version of
 CMU, Allegro, LispWorks, Lucid, or MCL CommonLisp, interactors only run
 while the \pr{main-event-loop} procedure is operating.
 \pr{Main-Event-Loop} does not exit, so you will have to hit the \pr{F1} key
-while the cursor is in the Garnet window, or type {\tt\char`\^}C (or
+while the cursor is in the Garnet window, or type {\texttt \^}C (or
 whatever your operating system break character is) while the cursor is in
 the Lisp window, to be able to type further Lisp expressions.
 
@@ -534,7 +536,7 @@ the Lisp window, to be able to type further Lisp expressions.
 * \typ{(create-instance 'MYMOVER inter:move-grow-interactor
 	(:start-where (list :in MYRECT))
 	(:window MYWINDOW))}
-\#k{\tt\char`\<}MYMOVER{\tt\char`\>}
+\#k<MYMOVER>
 \end{programexample}
 If your Lisp requires it, then type:
 \begin{programexample}
@@ -564,7 +566,7 @@ if necessary).
 	(:window MYWINDOW)
 	(:start-event :rightdown)
 	(:stop-event :rightdown))}
-\#k{\tt\char`\<}MYTYPER{\tt\char`\>}
+\#k<MYTYPER>
 \end{programexample}
 If your Lisp requires it, then type:
 \begin{programexample}
@@ -574,41 +576,41 @@ If your Lisp requires it, then type:
 Now, if you press with the right mouse button on the string, you can change
 the string by typing.  The available editing commands include:
 \begin{description}
-\item[] \pr{{\tt\char`\^}h, delete, backspace}: delete previous character.
+\item[] \pr{{\texttt \^}h, delete, backspace}: delete previous character.
 
-\item[] \pr{{\tt\char`\^}w, {\tt\char`\^}backspace, {\tt\char`\^}delete}: delete previous word.
+\item[] \pr{{\texttt \^}w, {\texttt \^}backspace, {\texttt \^}delete}: delete previous word.
 
-\item[] \pr{{\tt\char`\^}d}: delete next character.
+\item[] \pr{{\texttt \^}d}: delete next character.
 
-\item[] \pr{{\tt\char`\^}u}: delete entire string.
+\item[] \pr{{\texttt \^}u}: delete entire string.
 
-\item[] \pr{{\tt\char`\^}b, left-arrow}: go back one character.
+\item[] \pr{{\texttt \^}b, left-arrow}: go back one character.
 
-\item[] \pr{{\tt\char`\^}f, right-arrow}: go forward one character.
+\item[] \pr{{\texttt \^}f, right-arrow}: go forward one character.
 
-\item[] \pr{{\tt\char`\^}n, down-arrow}: go vertically down one line.
+\item[] \pr{{\texttt \^}n, down-arrow}: go vertically down one line.
 
-\item[] \pr{{\tt\char`\^}p, up-arrow}: go vertically up one line.
+\item[] \pr{{\texttt \^}p, up-arrow}: go vertically up one line.
 
-\item[] \pr{{\tt\char`\^}{\tt\char`\<}, {\tt\char`\^}comma, home}: go to the beginning of the string.
+\item[] \pr{{\texttt \^}<, {\texttt \^}comma, home}: go to the beginning of the string.
 
-\item[] \pr{{\tt\char`\^}>, {\tt\char`\^}period, end}: go to the end of the string.
+\item[] \pr{{\texttt \^}>, {\texttt \^}period, end}: go to the end of the string.
 
-\item[] \pr{{\tt\char`\^}a}: go to beginning of the current line.
+\item[] \pr{{\texttt \^}a}: go to beginning of the current line.
 
-\item[] \pr{{\tt\char`\^}e}: go to end of the current line.
+\item[] \pr{{\texttt \^}e}: go to end of the current line.
 
-\item[] \pr{{\tt\char`\^}y, insert}: insert the contents of the X or Mac cut buffer into
+\item[] \pr{{\texttt \^}y, insert}: insert the contents of the X or Mac cut buffer into
 the string at the current point.
 
-\item[] \pr{{\tt\char`\^}c}: copy the current string to the X or Mac cut buffer.
+\item[] \pr{{\texttt \^}c}: copy the current string to the X or Mac cut buffer.
 
-\item[] \pr{enter, return, {\tt\char`\^}j, {\tt\char`\^}J}: Go to new line.
+\item[] \pr{enter, return, {\texttt \^}j, {\texttt \^}J}: Go to new line.
 
 \item[] \pr{left button down inside the string}: move the cursor to the
 specified point.
 
-\item[] \pr{{\tt\char`\^}G}: Abort the edits and return the string to the way it was before
+\item[] \pr{{\texttt \^}G}: Abort the edits and return the string to the way it was before
 editing started.
 \end{description}
 All other characters go into the string (except other control characters
@@ -671,9 +673,9 @@ the string.
 * \typ{(create-instance 'MYBUTTONS gg:radio-button-panel
         (:items '(:center :left :right))
 	(:left 350)(:top 20))}
-\#k{\tt\char`\<}MYBUTTONS{\tt\char`\>}
+\#k<MYBUTTONS>
 * \typ{(opal:add-component MYAGG MYBUTTONS)}
-\#k{\tt\char`\<}MYBUTTONS{\tt\char`\>}
+\#k<MYBUTTONS>
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -695,7 +697,7 @@ if necessary).
 
 \begin{programexample}
 * \typ{(s-value MYTEXT :justification (o-formula (gv MYBUTTONS :value)))}
-\#k{\tt\char`\<}F2312{\tt\char`\>}   {\it the number will be different}
+\#k<F2312>   {\it the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -737,9 +739,9 @@ vertical slider object:
 \begin{programexample}
 * \typ{(create-instance 'MYSLIDER gg:v-slider
 	(:left 10)(:top 20))}
-\#k{\tt\char`\<}MYSLIDER{\tt\char`\>}
+\#k<MYSLIDER>
 * \typ{(opal:add-component MYAGG MYSLIDER)}
-\#k{\tt\char`\<}MYSLIDER{\tt\char`\>}
+\#k<MYSLIDER>
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -767,7 +769,7 @@ style of the rectangle to the value returned by the slider:
 \begin{programexample}
 * \typ{(s-value MYRECT :filling-style
 		(o-formula (opal:halftone (gv MYSLIDER :value))))}
-\#k{\tt\char`\<}F5940{\tt\char`\>}   {\it the number will be different}
+\#k<F5940>   {\it the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -917,7 +919,7 @@ To quit GarnetDraw, either select `Quit' from the menubar, or type:
 
 If you are not in a Lisp which supports background processes, and
 you are running something in Garnet, then you need to type F1 in a
-Garnet window or {\tt\char`\^}C in your Lisp window to get back to the Lisp
+Garnet window or {\texttt \^}C in your Lisp window to get back to the Lisp
 read-eval-print loop.
 
 \index{stop-tour}
@@ -935,22 +937,22 @@ button or type \pr{(stop-othello)} to Lisp.  To just get rid of MYWINDOW,
 type \pr{(opal:destroy MYWINDOW)}.
 
 The command that exits Lisp is different for different implementations.
-For CMU CommonLisp, type: \programexample{* \typ{(quit)}}
+For CMU CommonLisp, type: \verb+* \typ{(quit)}+
 
-for Lucid CommonLisp, type: \programexample{* \typ{(system:quit)}}
+for Lucid CommonLisp, type: \verb+* \typ{(system:quit)}+
 
-for LispWorks, type: \programexample{* \typ{(bye)}}
+for LispWorks, type: \verb+* \typ{(bye)}+
 
-for Allegro CommonLisp, type: \programexample{* \typ{:ex}}
+for Allegro CommonLisp, type: \verb+* \typ{:ex}+
 
-and for MCL, type: \programexample{* \typ{(quit)}}
+and for MCL, type: \verb+* (quit)+
 
 This returns you to the shell (or to the finder on the Mac), and you
 can log out.  It is not necessary to run \pr{(stop-othello)} or
 \pr{(stop-tour)} before quitting Lisp.
 
 If the quit command doesn't work for any reason,
-you can probably quit by typing {\tt\char`\^}Z to pause to the shell and
+you can probably quit by typing \texttt{\^Z} to pause to the shell and
 then kill the lisp process (or just log out).
 
 \chapter{Conclusion}
@@ -968,7 +970,12 @@ These commands are stored in
 the file \pr{tourcommands.lisp} which is stored in the \pr{demos} source
 directory (usually \pr{garnet/src/demos/tourcommands.lisp}).
 If you have this document in a window on the screen, you can
-copy-@{\tt\char`\|}and-@{\tt\char`\|}paste to move text from below into your Lisp window.
+copy 
+%% I don't know how to fix these.... [2006/01/08:rpg]
+% -@{\texttt \char`\|} 
+and 
+% -@{\texttt \char`\|} 
+paste to move text from below into your Lisp window.
 {\it Note: do
 not just load \pr{tourcommands}, since it will run all the demos and quickly
 quit; just copy the commands one-by-one from the file}.
@@ -978,7 +985,7 @@ This listing does not show the prompts or Lisp's responses to these commands.
 {\bf First, load the Garnet software.  You will have to replace \pr{xxx}
 with your directory path to Garnet:}
 \begin{programexample}
-(load `/xxx/garnet/garnet-loader')
+(load `/xxx/garnet/garnet-loader)'
 (garnet-load `demos:tour')
 \end{programexample}
 
@@ -1017,7 +1024,7 @@ with your directory path to Garnet:}
   (:window MYWINDOW))
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 
 (create-instance 'MYTYPER inter:text-interactor
   (:start-where (list :in MYTEXT))
@@ -1026,7 +1033,7 @@ with your directory path to Garnet:}
   (:stop-event :rightdown))
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 
 (s-value MYTEXT :justification :right)
 (opal:update MYWINDOW)
@@ -1041,13 +1048,13 @@ with your directory path to Garnet:}
 (opal:update MYWINDOW)
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 
 (s-value MYTEXT :justification (o-formula (gv MYBUTTONS :value)))
 (opal:update MYWINDOW)
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 
 (s-value MYBUTTONS :direction :horizontal)
 (opal:update MYWINDOW)
@@ -1061,14 +1068,14 @@ with your directory path to Garnet:}
 (opal:update MYWINDOW)
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 
 (s-value MYRECT :filling-style (o-formula
 				(opal:halftone (gv MYSLIDER :value))))
 (opal:update MYWINDOW)
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
-                                          {\it ;type F1 or {\tt\char`\^}C to exit when finished.}
+                                          {\it ;type F1 or \^C to exit when finished.}
 \end{programexample}
 
 {\bf To just get Othello to run, execute the following line.

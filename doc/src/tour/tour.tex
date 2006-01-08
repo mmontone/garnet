@@ -82,7 +82,7 @@ are part of the names and must be typed as shown.  For example,
 In this document, the text that the user types (e.g, you) is shown underlined
 in the code examples.  Most of the code looks like the following:
 \begin{programexample}
-* \typ{(+ 3 4)}
+* (+ 3 4)
 7
 \end{programexample}
 The `*' is the prompt from Lisp to tell you it is ready to accept input
@@ -287,7 +287,7 @@ properly after becoming uncovered (or de-iconified), or that Garnet is
 completely ignoring all your keyboard and mouse input, then type the
 following into Lisp:
 \begin{programexample}
-* \typ{(inter:main-event-loop)}
+* (inter:main-event-loop)
 \end{programexample}
 This function loops forever, so you then have to hit the
 \pr{F1} key while the cursor is in a Garnet window to exit
@@ -309,11 +309,11 @@ For example, if the Garnet files are in the directory
 \pr{/usr/xxx/garnet/}, then type the following:
 
 \begin{programexample}
-* \typ{(load `/usr/xxx/garnet/garnet-loader')}
+* (load "/usr/xxx/garnet/garnet-loader")
 \end{programexample}
 Which will print out lots of stuff.  Then type:
 \begin{programexample}
-* \typ{(garnet-load `demos:tour')}
+* \typ{(garnet-load "demos:tour")}
 \end{programexample}
 Note that \pr{garnet-load}\index{Garnet-Load} is a useful procedure
 provided by Garnet to simplify loading Garnet files.  It takes one
@@ -360,7 +360,7 @@ Now, you are going to create an ``aggregate'' object to hold all the other
 objects you create.  An aggregate holds a collection of other objects; it
 does not have any graphic appearance itself.
 \begin{programexample}
-* \typ{(create-instance 'MYAGG opal:aggregate)}
+* (create-instance 'MYAGG opal:aggregate)
 \#k<MYAGG>
 \end{programexample}
 This aggregate will be the special top level aggregate in the window, that
@@ -371,9 +371,9 @@ and the new value.  To read the value of the slot, use the function \pr{gv},
 which stants for ``get value''.  All slot names in Garnet start
 with a colon.
 \begin{programexample}
-* \typ{(s-value MYWINDOW :aggregate MYAGG)}
+* (s-value MYWINDOW :aggregate MYAGG)
 \#k<MYAGG>
-* \typ{(gv MYWINDOW :aggregate)}
+* (gv MYWINDOW :aggregate)
 \#k<MYAGG>
 \end{programexample}
 
@@ -381,7 +381,7 @@ with a colon.
 \index{rectangle}
 Now, you will create a rectangle.
 \begin{programexample}
-* \typ{(create-instance 'MYRECT MOVING-RECTANGLE)}
+* (create-instance 'MYRECT MOVING-RECTANGLE)
 \#k<MYRECT>
 \end{programexample}
 \sm{[Note: MOVING-RECTANGLE is defined in the \pr{user} package by
@@ -485,7 +485,7 @@ Note that the particular number returned by the \pr{s-value} call will not
 be the same as shown below.
 \begin{programexample}
 * \typ{(s-value MYTEXT :top (o-formula (gv MYRECT :top)))}
-\#k<F3875>   {\it the number will be different}
+\#k<F3875>   {\it ; the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -698,7 +698,7 @@ if necessary).
 
 \begin{programexample}
 * \typ{(s-value MYTEXT :justification (o-formula (gv MYBUTTONS :value)))}
-\#k<F2312>   {\it the number will be different}
+\#k<F2312>   {\it ; the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -780,7 +780,7 @@ style of the rectangle to the value returned by the slider:
 \begin{programexample}
 * \typ{(s-value MYRECT :filling-style
 		(o-formula (opal:halftone (gv MYSLIDER :value))))}
-\#k<F5940>   {\it the number will be different}
+\#k<F5940>   {\it ; the number will be different}
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -937,7 +937,7 @@ read-eval-print loop.
 To get rid everything at once (MYWINDOW, the Othello game, and the
 editor for the game pieces), just type:
 \begin{programexample}
-* \typ{(stop-tour)}
+* (stop-tour)
 `Thank you for your interest in the Garnet Project'
 \end{programexample}
 
@@ -948,13 +948,13 @@ button or type \pr{(stop-othello)} to Lisp.  To just get rid of MYWINDOW,
 type \pr{(opal:destroy MYWINDOW)}.
 
 The command that exits Lisp is different for different implementations.
-For CMU CommonLisp, type: \verb+* \typ{(quit)}+
+For CMU CommonLisp, type: \verb+* (quit)+
 
-for Lucid CommonLisp, type: \verb+* \typ{(system:quit)}+
+for Lucid CommonLisp, type: \verb+* (system:quit)+
 
-for LispWorks, type: \verb+* \typ{(bye)}+
+for LispWorks, type: \verb+* (bye)+
 
-for Allegro CommonLisp, type: \verb+* \typ{:ex}+
+for Allegro CommonLisp, type: \verb+* :ex+
 
 and for MCL, type: \verb+* (quit)+
 

@@ -709,6 +709,16 @@ If your Lisp requires it, then type:
 Now, whenever you press on one of the buttons, the text will re-adjust
 itself.
 
+\textbf{NOTE:}
+\textit{In my Common Lisp, where the main-event-loop isn't started and
+stopped specially, the above does not work properly.  The problem is
+that when the constraint is set up, there is no initial value for the
+buttons object, i.e., the value is NIL.  NIL is not an acceptable
+value for the \texttt{:justification} slot of the text object, so I
+get an error.  This should be easy to tweak, but I don't have time to
+fix it right now.  The easiest way to work around this problem is
+simply to click on one of the buttons before adding the constraint. [2006/01/08:rpg]}
+
 All of the built-in toolkit items have a large number of parameters to
 allow users to customize their look and feel.  For example, you can change
 the radio buttons to be horizontal instead of vertical:
@@ -985,8 +995,8 @@ This listing does not show the prompts or Lisp's responses to these commands.
 {\bf First, load the Garnet software.  You will have to replace \pr{xxx}
 with your directory path to Garnet:}
 \begin{programexample}
-(load `/xxx/garnet/garnet-loader)'
-(garnet-load `demos:tour')
+(load "/xxx/garnet/garnet-loader")
+(garnet-load "demos:tour")
 \end{programexample}
 
 
@@ -998,7 +1008,7 @@ with your directory path to Garnet:}
 (create-instance 'MYAGG opal:aggregate)
 (s-value MYWINDOW :aggregate MYAGG)
 (gv MYWINDOW :aggregate)
-(create-instance 'MYRECT MOVING-RECTANGLE) {\it ; In the USER package}
+(create-instance 'MYRECT MOVING-RECTANGLE) {\it ; In the COMMON-LISP-USER package}
 (opal:add-component MYAGG MYRECT)
 (opal:update MYWINDOW)
 
@@ -1006,7 +1016,7 @@ with your directory path to Garnet:}
 (opal:update MYWINDOW)
 
 (create-instance 'MYTEXT opal:text (:left 200)(:top 80)
-	(:string `Hello World'))
+	(:string "Hello World"))
 (opal:add-component MYAGG MYTEXT)
 (opal:update MYWINDOW)
 

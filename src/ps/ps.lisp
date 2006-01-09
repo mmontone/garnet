@@ -1175,7 +1175,7 @@ ArcDict /mtrx matrix put
 				     "Untitled"))
 			  (creator (concatenate 'string
 				     "Make-PS-File -- Garnet Version "
-				     user::Garnet-Version-Number))
+				     common-lisp-user::Garnet-Version-Number))
 			  (for "")
 			  (comment "")
 			  ;; For debugging the bbox computations

@@ -1076,8 +1076,8 @@ to a 31 character filename with a .lisp suffix."
    (defparameter CLX-Loader
      #+lucid (merge-pathnames "windows" CLX-Pathname)
      #+lispworks (merge-pathnames "defsys" CLX-Pathname)
-     #+(or allegro sbcl) nil			;;uses require form...
-     #-(or lucid allegro sbcl lispworks) (merge-pathnames "clx" CLX-Pathname))
+     #+(or allegro cmu sbcl) nil			;;uses require form...
+     #-(or lucid allegro sbcl cmu lispworks) (merge-pathnames "clx" CLX-Pathname))
    (format T "~% %%%%%%% Loading ~A %%%%%%%%~%" #-apple "CLX"
 	                                        #+apple "MCL Libraries")
    ;; RGA if we are running apply and CLX, then assume we
@@ -1123,8 +1123,8 @@ to a 31 character filename with a .lisp suffix."
           (ccl::require-interface 'windows)
           (ccl::require-interface 'ColorPicker)
           (terpri))
-   #+(or allegro sbcl) (require :clx)
-   #-(or apple sbcl allegro) (load CLX-Loader)
+   #+(or allegro sbcl cmu) (require :clx)
+   #-(or apple sbcl cmu allegro) (load CLX-Loader)
    )
   (t
    (format T "~%****** NOT Loading CLX *******~%")))

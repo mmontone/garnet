@@ -40,7 +40,6 @@
 ;;;
 (in-package "OPAL")
 
-
 ;;;===========================================================================
 ;;;
 ;;;  Global variables
@@ -54,7 +53,8 @@
   #+ALLEGRO (mp:make-process-lock :name "UPDATE-LOCK")
   #+lispworks (mp:make-lock)
   #+(and cmu mp) (mp:make-lock "UPDATE-LOCK")
-  #-(or ALLEGRO lispworks (and cmu mp)) NIL)
+  #+sb-thread (sb-thread:make-mutex :name "UPDATE-LOCK")
+  #-(or ALLEGRO lispworks (and cmu mp) sb-thread) NIL)
 
 
 ;;;===========================================================================
@@ -121,6 +121,35 @@
   (setf (mp:process-priority *main-event-loop-process*) 1)
   *main-event-loop-process*)
 
+;;; crude first attempt at SBCL main-event-loop-process
+;;; note th at this is, 
+#+sb-thread
+(defun launch-main-event-loop-process ()
+  "Spawn a process which is doing Garnet interaction all of the time.
+   RETURN the process."
+  (when (typep *main-event-loop-process* 'sb-thread:thread)
+    (sb-thread:terminate-thread *main-event-loop-process*))
+  (setf *main-event-loop-process*
+	(sb-thread:make-thread 
+	 #'(lambda ()
+	     ;; first, throw away any pending events
+	     (discard-all-pending-events)
+
+	     ;;; I don't know if this should be there.... [2006/01/10:rpg]
+	     #-NO-K-READER
+	     (eval-when (evaluate compile-toplevel load-toplevel)
+	       (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
+
+	     ;; RGA added an abort restart to the main event loop.
+	     (let ((root-window (gv device-info :current-root)))
+	       (restart-case
+		(loop
+		 (inter::default-event-handler root-window))
+		(abort () :report "Discard pending X events, restart loop"
+		       (discard-all-pending-events)))))
+	 :name "Garnet event loop"))
+  *main-event-loop-process*)
+
 
 #+lispworks
 (defun launch-main-event-loop-process ()
@@ -177,7 +206,7 @@
    (setf lisp::*max-event-to-sec* 0)
    *main-event-loop-process*)
 
-#-(or allegro lucid lispworks (and cmu mp))
+#-(or allegro lucid lispworks (and cmu mp) sb-thread)
 (defun launch-main-event-loop-process ())
 
 
@@ -216,7 +245,16 @@
     (mp:destroy-process *main-event-loop-process*)
     (setf *main-event-loop-process* nil)))
 
-#-(or allegro lucid lispworks (and cmu mp))
+#+sb-thread
+(defun kill-main-event-loop-process ()
+  "Kill the current main-event-loop process."
+  (when (and *main-event-loop-process*
+	     (typep *main-event-loop-process* sb-thread:thread))
+    (sbthread:terminate-thread *main-event-loop-process*)
+    (setf *main-event-loop-process* nil)))
+
+
+#-(or allegro lucid lispworks (and cmu mp) sb-thread)
 (defun kill-main-event-loop-process ())
 
 ;;;===========================================================================
@@ -257,6 +295,8 @@
        #+(and cmu mp)
        (not (equal "Run"
 		   (mp:process-whostate opal::*main-event-loop-process*)))
+       #+sb-thread
+       (sb-thread:thread-alive-p opal::*main-event-loop-process*)
        ))
 
 (defun running-main-event-loop-process-elsewhere-p ()
@@ -264,7 +304,8 @@
        (not (eq opal::*main-event-loop-process*
 		#+(or allegro lispworks (and cmu mp)) mp:*current-process*
 		#+lucid common-lisp-user::*current-process*
-		#-(or allegro lucid lispworks (and cmu mp)) T)
+		#+sb-thread sb-thread:*current-thread*
+		#-(or allegro lucid lispworks (and cmu mp) sb-thread) T)
 	    )))
 
 
@@ -291,6 +332,12 @@
       (unless (eq (mp:lock-owner *update-lock*) mp:*current-process*)
 	;; Lock only if lock is held by a different process, or unlocked.
 	(mp:process-lock *update-lock*)))
+
+  #+sb-thread
+  (when common-lisp-user::update-locking-p
+    (unless (eq (sb-thread:mutex-value *update-lock*)
+		sb-thread:*current-thread*)
+      (sb-thread:get-mutex *update-lock* sb-thread:*current-thread* t)))
       
   #+LUCID
   (if common-lisp-user::update-locking-p
@@ -315,4 +362,11 @@
     
   #+LUCID
   (if common-lisp-user::update-locking-p
-      (lcl:process-unlock *update-lock* common-lisp-user::*current-process* :ignore)))
+      (lcl:process-unlock *update-lock* common-lisp-user::*current-process* :ignore))
+
+  #+sb-thread
+  (when (and common-lisp-user::update-locking-p
+	     (eq (sb-thread:mutex-value *update-lock*)
+		 sb-thread:*current-thread*))
+    (sb-thread:release-mutex *update-lock*))
+  )

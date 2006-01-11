@@ -88,6 +88,36 @@
    (setf lisp::*max-event-to-sec* 0)
    *main-event-loop-process*)
 
+#+sb-thread
+(defun launch-main-event-loop-process ()
+  "Spawn a process which is doing Garnet interaction all of the time.
+   RETURN the process."
+  (when (typep *main-event-loop-process* 'sb-thread:thread)
+    (sb-thread:terminate-thread *main-event-loop-process*))
+  (setf *main-event-loop-process*
+	(sb-thread:make-thread 
+	 #'(lambda ()
+	     ;; first, throw away any pending events
+	     (discard-all-pending-events)
+
+	     ;;; I don't know if this should be there.... [2006/01/10:rpg]
+	     #-NO-K-READER
+	     (eval-when (evaluate compile-toplevel load-toplevel)
+	       (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
+
+	     ;; RGA added an abort restart to the main event loop.
+	     (let ((root-window (gv device-info :current-root)))
+	       (loop
+		 (restart-case
+		  (gg:with-garnet-error-handling
+		      "Main Interaction Loop"
+		    (loop
+		      (inter::default-event-handler root-window)))
+		  (abort () :report "Discard pending X events, restart loop"
+		       (discard-all-pending-events))))))
+	 :name "Garnet event loop"))
+  *main-event-loop-process*)
+
 (when *main-event-loop-process*
   (kill-main-event-loop-process)
   (launch-main-event-loop-process))

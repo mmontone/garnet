@@ -250,6 +250,8 @@
    (cdr (assoc :DISPLAY lisp::*environment-list*))
    #+(or allegro lispworks kcl clisp)
    (sys::getenv "DISPLAY")
+   #+sbcl
+   (sb-posix:getenv "DISPLAY")
    #+(and lucid lcl3.0)
    (lucid-common-lisp:environment-variable "DISPLAY")
    #+(and lucid (not lcl3.0))

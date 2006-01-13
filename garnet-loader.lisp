@@ -342,6 +342,9 @@ which may make it easier to run cross platform.
   (defpackage :DEMO-MOVELINE (:use :KR :COMMON-LISP) (:export DO-GO DO-STOP))
   )
 
+;;; OK, the following seems evil, an it really goofs up SBCL...
+;;; [2006/01/12:rpg]
+#|
 ;; Note: Mac Lisp requires that you repeat the full package definition
 (defpackage :COMMON-LISP-USER (:use :KR :KR-DEBUG :GARNET-DEBUG
 				    :COMMON-LISP #+apple :CCL
@@ -351,6 +354,12 @@ which may make it easier to run cross platform.
   (:nicknames :CL-USER :USER))
 #-(or lucid ansi-cl)
 (defpackage :COMMON-LISP (:nicknames :CL :LISP))
+|#
+;;; this seems far more benign.  I'm not going to worry too much about
+;;; antique CL implementations. [2006/01/12:rpg]
+(use-package '(:kr :kr-debug :garnet-debug
+	       #+apple :ccl #+clisp :ext
+	       #+cmu :extensions))
 
 ;;; *dont-load-modules-twice* tells whether to re-load modules
 ;;; if a user loads garnet-loader.lisp a second time.

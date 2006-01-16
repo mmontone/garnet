@@ -107,7 +107,7 @@
 	     (discard-all-pending-events)
 
 	     #-NO-K-READER
-	     (eval-when (eval compile load)
+	     (eval-when (:execute :compile-toplevel :load-toplevel)
 	       (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
 
 	     ;; RGA added an abort restart to the main event loop.
@@ -137,7 +137,7 @@
 
 	     ;;; I don't know if this should be there.... [2006/01/10:rpg]
 	     #-NO-K-READER
-	     (eval-when (evaluate compile-toplevel load-toplevel)
+	     (eval-when (:execute :compile-toplevel :load-toplevel)
 	       (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
 
 	     ;; RGA added an abort restart to the main event loop.
@@ -250,7 +250,7 @@
   "Kill the current main-event-loop process."
   (when (and *main-event-loop-process*
 	     (typep *main-event-loop-process* sb-thread:thread))
-    (sbthread:terminate-thread *main-event-loop-process*)
+    (sb-thread:terminate-thread *main-event-loop-process*)
     (setf *main-event-loop-process* nil)))
 
 

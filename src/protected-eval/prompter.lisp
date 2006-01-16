@@ -265,7 +265,7 @@ Change Log for Error-Gadget.lisp:
 			       '(:OK :APPLY :CANCEL))))
    (:eval? t) ; if T, then "EVAL" button is included.
    (:read-bindings nil)			; List of variables with
-   (:read-package (find-package :user))	; bindings (like a let
+   (:read-package (find-package :common-lisp-user))	; bindings (like a let
 					; statement).  These bindings
 					; are put in force when the
 					; input string is read. 
@@ -356,7 +356,7 @@ Change Log for Error-Gadget.lisp:
 		      &key (label-list '(:ok :cancel))
 			   (eval? t)
 			   (default-value nil)
-			   (read-package (find-package :user))
+			   (read-package (find-package :common-lisp-user))
 			   (read-bindings nil))
   "Displays a prompter gadget in the modless form.  Assumes that
 there is a selection-function which takes three values:

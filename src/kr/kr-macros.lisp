@@ -22,7 +22,7 @@
 
 (in-package "KR")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(SCHEMA
 	    CREATE-INSTANCE CREATE-PROTOTYPE CREATE-RELATION CREATE-SCHEMA
 	    FORMULA O-FORMULA
@@ -71,7 +71,7 @@
 ;;; 
 #|
 ;;; Currently turned off.
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (unless (find :lazy *features*)
     (pushnew :eager *features*)))
 |#

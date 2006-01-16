@@ -102,7 +102,7 @@
 
 	     ;;; I don't know if this should be there.... [2006/01/10:rpg]
 	     #-NO-K-READER
-	     (eval-when (evaluate compile-toplevel load-toplevel)
+	     (eval-when (:execute :compile-toplevel :load-toplevel)
 	       (set-dispatch-macro-character #\# #\k (function kr::k-reader)))
 
 	     ;; RGA added an abort restart to the main event loop.

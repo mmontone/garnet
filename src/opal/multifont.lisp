@@ -120,7 +120,7 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(MULTIFONT-TEXT
 	    
 	    SET-CURSOR-VISIBLE

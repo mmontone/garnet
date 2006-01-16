@@ -46,7 +46,7 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(shell-exec make-image get-garnet-bitmap directory-p
             time-to-string clip-and-map drawable-to-window)))
 

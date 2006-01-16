@@ -34,7 +34,7 @@
             (boundp 'opal::multifont-text))
   (load (garnet-pathnames "multifont" Garnet-Opal-PathName)))
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (garnet-mkdir-if-needed Garnet-Inter-Pathname))
 
 (Defvar Garnet-Inter-Files   ;; defvar rather than defparameter so can setq

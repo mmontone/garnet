@@ -49,7 +49,7 @@
 
 (in-package "OPAL")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(pixmap write-xpm-file read-xpm-file
 	    create-pixmap-image window-to-pixmap-image)))
 

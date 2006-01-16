@@ -21,7 +21,7 @@ Change log:
 
 (in-package "COMMON-LISP-USER")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (garnet-mkdir-if-needed Garnet-Utils-Pathname))
 
 (Defparameter Garnet-Utils-Files

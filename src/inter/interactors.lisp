@@ -183,7 +183,7 @@ Change log:
 (in-package "INTERACTORS")
 
 ;; the exported functions
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(
 	    ;; for animation
 	    start-animator Stop-Animator abort-animator animator-interactor

@@ -15,7 +15,7 @@
 (in-package "KR")
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (proclaim '(special common-lisp-user::*default-garnet-proclaim*))
   (if (boundp 'common-lisp-user::*default-garnet-proclaim*)
       (if common-lisp-user::*default-garnet-proclaim*

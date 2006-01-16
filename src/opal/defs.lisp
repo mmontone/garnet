@@ -123,7 +123,7 @@
 
 
 ;;; This is the export list for *some* of OPAL
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(bottom right center-x center-y
 	    gv-bottom gv-right gv-center-x gv-center-y
 	    gv-center-x-is-center-of gv-center-y-is-center-of

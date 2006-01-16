@@ -45,7 +45,7 @@
 ;;; Unless the user explicitly overrides this, set for maximum execution
 ;;; speed.
 ;;;
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (proclaim '(special common-lisp-user::*default-garnet-proclaim*))
   (if (boundp 'common-lisp-user::*default-garnet-proclaim*)
       (if common-lisp-user::*default-garnet-proclaim*
@@ -2535,14 +2535,14 @@
 
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defun cannot-be-quoted (value)
     (or (listp value)
 	(and (symbolp value)
 	     (not (keywordp value))))))
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
  (defun process-slot-descriptor (x)
    (if (listp x)
        (if (find-if #'cannot-be-quoted (cdr x))
@@ -2574,7 +2574,7 @@
 ;;; - REST OF THE LIST: all slot specifiers, with :IS-A removed (because that
 ;;;   information is moved to the prototype list).
 ;;;
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defun process-slots (slots)
     (let ((output nil)
 	  (is-a nil))
@@ -2760,7 +2760,7 @@
 
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defun creation-message (name)
     (when *print-new-instances*
 	  (if (and (listp name)
@@ -3106,7 +3106,7 @@
 ;;; defined.  This allows objects written with the *print-as-structure*
 ;;; notation to be read back in.
 ;;;
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defun k-reader (stream subchar arg)
     (declare (ignore subchar arg))
     (let ((next-char (read-char stream)))
@@ -3134,7 +3134,7 @@
 ;;; :NO-K-READER onto the *features* list to disable this feature.
 ;;;
 #-NO-K-READER
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (set-dispatch-macro-character #\# #\k (function k-reader)))
 
 

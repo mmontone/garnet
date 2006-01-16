@@ -66,7 +66,7 @@ Change log:
 (in-package "INTERACTORS")
 
 ;; the exported functions and variables
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(
 	    *global-accelerators*	; defined in interactors.lisp
 	    *global-first-accelerators*	; defined in interactors.lisp

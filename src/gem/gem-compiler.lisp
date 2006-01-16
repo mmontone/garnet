@@ -23,7 +23,7 @@
     "define-methods"
     ))
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (garnet-mkdir-if-needed Garnet-gem-Pathname))
 
 (dolist (file Garnet-Gem-Files)

@@ -15,7 +15,7 @@
 
 (in-package "GEM")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(init-device)))
 
 (declaim (special *root-window*))
@@ -27,13 +27,13 @@
 
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defvar *method-names* nil
     "Holds the method names.  This is used to create the Gem interface
    macros."))
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defvar *device-initializers* nil
     "An a-list which associates device types with the function to be called
      to initialize them."))
@@ -68,7 +68,7 @@
 ;;; -------------------------------------------------- Interface definitions
 
 
-(eval-when (eval compile load)
+(eval-when (:execute :compile-toplevel :load-toplevel)
   (defun find-or-create-name (name)
     (let ((pos (position name *method-names*)))
       (unless pos

@@ -28,7 +28,7 @@ Change log:
 
 (in-package "GARNET-UTILS")
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(WHILE
 	    UNTIL
 	    DO2LISTS

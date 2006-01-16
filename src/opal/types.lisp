@@ -23,7 +23,7 @@
 
 ;; kr-boolean is now defined in KR itself
 
-(eval-when (eval load compile)
+(eval-when (:execute :load-toplevel :compile-toplevel)
   (export '(items-type accelerators-type known-as-type filename-type
 	    inter-window-type))
 

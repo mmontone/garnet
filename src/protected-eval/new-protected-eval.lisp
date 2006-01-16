@@ -249,9 +249,15 @@ debug and (if applicable) continue.
 
 <context> should be a string describing user meaningful context in
 which error occured. "
+  #-sbcl
   `(handler-bind ((error ,#'(lambda (condition)
 			      (garnet-error-handler context condition))))
-     ,.forms))
+     ,.forms)
+  #+sbcl
+  `(handler-bind ((error #'(lambda (condition)
+			      (garnet-error-handler context condition))))
+     ,.forms)
+  )
 
 (defmacro with-garnet-user-error-handling (context &body forms)
   "Executes forms in a protected environment where errors are handled

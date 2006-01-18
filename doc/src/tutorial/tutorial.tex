@@ -13,7 +13,9 @@
 
 \Large{\textbf{Garnet Tutorial}} \\
 
-{\bf Andrew Mickish}  \\
+\large{{\bf Andrew Mickish}}  \\
+\textbf{Revised and translated to LaTeX by Robert P. Goldman}\\
+
 %\vspace{0.3in} 
 \today{} \\
 {\bf Abstract}
@@ -24,8 +26,10 @@
   Tour before starting the tutorial.
   \vspace{\fill}
   \input{creditetc}
-  % \end{center}
-  % \end{text}
+
+  Many thanks to Ross Moore for helpful advice in translating this
+  document into HTML using Latex2HTML.
+
 \end{titlepage}
 
 \tableofcontents{}
@@ -100,9 +104,13 @@ the actual \pr{view-object} or \pr{graphical-object} prototypes.)
 % \begin{group}
 % \bar{}
 \begin{figure}
-  \htmlimage{notransparent}
   \begin{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
     \epsfig{file=opal-inheritance.ps,width=.9\textwidth}
+\end{latexonly}
+    \htmladdimg{../gifs/opal-inheritance.gif}
   \end{center}
 \caption{The inheritance hierarchy among some of the Garnet prototype objects.
 All of the standard shapes in garnet are instances of the
@@ -206,9 +214,14 @@ similar objects as instances of a single prototype.
 
 \begin{figure}
 %\bar{}
-\begin{center}
-  \epsfig{file=proto-rects.ps}
-\end{center}
+  \begin{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+    \epsfig{file=proto-rects.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/proto-rects.gif}
+  \end{center}
 \caption{Three instances created from one prototype rectangle.}
 \tag{protoRects}
 \end{figure}
@@ -286,7 +299,14 @@ even when the prototype changes.
 \begin{center}
   %
 %\graphic{Postscript=`tutorial/changed-proto.ps',boundingbox=File}\end{center}
-  \epsfig{file=changed-proto.ps}\end{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+  \epsfig{file=changed-proto.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/changed-proto.gif}
+\end{center}
+
 \caption{The instances change whenever the prototype object changes.}
 \tag{changed-proto}
 %\bar{}
@@ -316,7 +336,12 @@ exceptions to the prototype object.
 %\bar{}
 \begin{center}
 %\graphic{Postscript=`tutorial/override.ps',boundingbox=File}\end{center}
-\epsfig{file=override.ps}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+  \epsfig{file=override.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/override.gif}
 \end{center}
 \caption{The width of R3 is overridden, so it is no longer inherited
 from the prototype.}
@@ -341,8 +366,15 @@ prototype, and it can be considered a default value.
 
 An important tool for examining properties of objects is the Inspector.
 This tool is loaded with Garnet by default, and resides in the package
-\pr{garnet-debug}.  The Inspector is described in detail in the Debugging
-Manual that starts on page \value{debug} of this reference manual.
+\pr{garnet-debug}.  
+\begin{latexonly}
+The Inspector is described in detail in the Debugging
+Manual\ifthenelse{\boolean{@standalone}}{.}{that starts on page \pageref{debug} of this reference manual.}
+\end{latexonly}
+\begin{htmlonly}
+The Inspector is described in detail in the Debugging
+Manual.
+\end{htmlonly}
 
 To run the inspector on our example of three rectangles, position the mouse
 over R3 (the black rectangle) in the window, and hit the HELP key.  If your
@@ -354,7 +386,12 @@ the lisp listener.  The Inspector window that appears will look like figure
 \begin{figure}
 \begin{center}
 %\graphic{Postscript=`tutorial/inspector.ps',boundingbox=File, magnify=.75}\end{center}
-\epsfig{file=inspector.ps}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+  \epsfig{file=inspector.ps}
+\end{latexonly}
+  \htmladdimg{../gifs/inspector.gif}
 \end{center}
 \caption{The Inspector displaying the slots and values of rectangle R3.}
 \tag{inspector}
@@ -600,7 +637,12 @@ vertical scroll bar might be conceptually organized.
 %\bar{}
 \begin{center}
 %\graphic{Postscript=`tutorial/v-scroll-hierarchy.ps',boundingbox=File,magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=v-scroll-hierarchy.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/v-scroll-hierarchy.gif}
                  \end{center}
 \caption{One possible hierarchy for the objects that make up a scroll bar.}
 \tag{v-scroll-hierarchy}
@@ -827,7 +869,12 @@ position whenever the rectangle is moved.
 %\bar{}
 \begin{center}
 %\graphic{Postscript=`tutorial/align-top.ps',boundingbox=File,magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=align-top.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/align-top.gif}
 \end{center}
 \caption{Three objects that are all aligned with the same top.  The
 top of the gray rectangle is constrained to the white rectangle, and
@@ -1008,7 +1055,12 @@ box that depend on the dimensions of the object it is over.
 %\bar{}
 \begin{center}
 %\graphic{Postscript=`tutorial/obj-over.ps',boundingbox=File, magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=obj-over.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/obj-over.gif}
 \end{center}
 \caption{A selection box drawn around an object.}
 \tag{obj-over}
@@ -1114,7 +1166,13 @@ possible.
 %\bar{}
 \begin{center}
 % graphic{Postscript=`tutorial/con-circles.ps',boundingbox=File}
-\epsfig{file=con-circles.ps}\end{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+\epsfig{file=con-circles.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/con-circles.gif}
+\end{center}
 \caption{An aggregadget with three circles as components.}
 \tag{concentric-circles}
 %\bar{}
@@ -1380,6 +1438,7 @@ to change colors.
    (:start-event :leftdown))
 
 {\it ; Unless using CMU, Allegro, Lucid, LispWorks, or MCL}
+\textit{; SBCL with thread support should work, too. }
 (inter:main-event-loop)
 {\it ; Hit F1 while the mouse is in the Garnet window to exit}
 \end{programexample}
@@ -1387,7 +1446,9 @@ to change colors.
 The \pr{main-event-loop} function causes Garnet to start paying
 attention to events (like clicking the mouse) that trigger the interactors.
 (A background process in CMU, Allegro, Lucid, LispWorks, and MCL always
-pays attention to events.)
+pays attention to events.\footnote{As of Jan 2006, we believe that
+  background threading also works with threaded SBCL, but this has not
+been thoroughly tested.})
 Now you can click on the rectangle
 repeatedly and it will change from white to black, and back again.
 From this observation, and knowing how we defined the
@@ -1404,8 +1465,17 @@ Lisp prompt.)
 %\bar{}
 \begin{center}
 % graphic{Postscript=`tutorial/inter-white.ps',boundingbox=File}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=inter-white.ps}  % graphic{Postscript=`tutorial/inter-black.ps',boundingbox=File}
-\epsfig{file=inter-black.ps}\end{center}
+\end{latexonly}
+    \htmladdimg{../gifs/inter-white.gif}
+\begin{latexonly}
+\epsfig{file=inter-black.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/inter-black.gif}
+\end{center}
 \caption{The rectangle CHANGING-RECT when its \pr{:selected} slot is NIL
 (the default), and when it is set to T by the interactor (when the
 mouse is clicked over it).}
@@ -1494,7 +1564,8 @@ whenever the mouse is clicked over any component of AGG.
    (:final-feedback-obj FEEDBACK-RECT)
    (:how-set :toggle))
 
-{\it ; Unless using CMU, Allegro, Lucid, LispWorks, or MCL}
+{\it ; Unless using CMU, Allegro, Lucid, LispWorks, or MCL} 
+\textit{; ... or probably threaded SBCL}
 (inter:main-event-loop)
 {\it ; Hit F1 while the mouse is in the Garnet window to exit}
 \end{programexample}
@@ -1582,6 +1653,7 @@ interactors working.
    (:start-where (list :element-of CIRCLE-AGG)))    {\it ; Work on the components of CIRCLE-AGG}
 
 {\it ; Unless using CMU, Allegro, Lucid, LispWorks, or MCL}
+\textit{; ... or probably threaded SBCL}
 (inter:main-event-loop)
 {\it ; Hit F1 while the mouse is in the Garnet window to exit}
 \end{programexample}
@@ -1712,7 +1784,13 @@ position values.
 %\bar{}
 \begin{center}
 % graphic{Postscript=`tutorial/two-rects.ps',boundingbox=File,magnify=.75}
-\epsfig{file=two-rects.ps}\end{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+\epsfig{file=two-rects.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/two-rects.gif}
+\end{center}
 \caption{The two rectangles R1 and R2, which are instances of PROTO-RECT.}
 \tag{twoRects}
 %\bar{}
@@ -1978,7 +2056,12 @@ automatically for the instances.
 %\bar{}
 \begin{center}
 % graphic{Postscript=`tutorial/several-buttons.ps',boundingbox=File,magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=several-buttons.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/several-buttons.gif}
 \end{center}
 \caption{The BUTTON object and two instances of it.}
 \tag{several-buttons}
@@ -2026,7 +2109,12 @@ aggregadget.  So, let's try the following code.
 \begin{figure}
 \begin{center}
 % graphic{Postscript=`tutorial/five-buttons.ps',boundingbox=File,magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=five-buttons.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/five-buttons.gif}
 \end{center}
 \caption{An aggrelist with an \pr{:items} value of 5 and the BUTTON
 aggregadget as its \pr{:item-prototype}.}
@@ -2210,6 +2298,7 @@ to try the code again with the values in place.
 (opal:update BUTTON-WIN)
 
 {\it ; Required if you are not using CMU, Allegro, Lucid, LispWorks, or MCL}
+\textit{; ... or probably threaded SBCL}
 (inter:main-event-loop)  {\it ; To start the interactors.}
                          {\it ; Hit F1 in the Garnet window to exit.}
 \end{programexample}
@@ -2217,7 +2306,12 @@ to try the code again with the values in place.
 \begin{figure}
 \begin{center}
 % graphic{Postscript=`tutorial/text-buttons.ps',boundingbox=File,magnify=.75}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
 \epsfig{file=text-buttons.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/text-buttons.gif}
 \end{center}
 \caption{The finished text button panel.}
 \tag{textButtons}
@@ -2225,7 +2319,7 @@ to try the code again with the values in place.
 \end{figure}
 
 Once you have entered the \pr{main-event-loop} (not necessary in CMUCL,
-Allegro, Lucid, LispWorks, or MCL), you can click on any of the buttons and
+Allegro, Lucid, LispWorks, or MCL\footnote{or probably threaded SBCL.}), you can click on any of the buttons and
 they will respond.  The movement comes from the interactor setting the
 \pr{:interim-selected} slot of the button that you press on, which
 causes the \pr{:left} and \pr{:top} slots of the components to be
@@ -2285,7 +2379,13 @@ their generated names.
 \begin{figure}
 \begin{center}
 % graphic{Postscript=`tutorial/unnamed-windows.ps',boundingbox=File,magnify=.75}
-\epsfig{file=unnamed-windows.ps}\end{center}
+\begin{makeimage}
+\end{makeimage}
+\begin{latexonly}
+\epsfig{file=unnamed-windows.ps}
+\end{latexonly}
+    \htmladdimg{../gifs/unnamed-windows.gif}
+    \end{center}
 \caption{Three windows created with the function \pr{Make-Win}.}
 \tag{unnamed-windows}
 \end{figure}
@@ -2580,8 +2680,8 @@ be used in \pr{gv} or \pr{s-value} calls as usual.
 \label{trace-inter}
 
 \begin{programexample}
-inter:Trace-Inter \&optional {\it interactor}\value{function}
-inter:Untrace-Inter\value{function}
+inter:Trace-Inter \&optional {\it trace-what} 
+inter:Untrace-Inter {\it trace-what} 
 \end{programexample}
 
 The function \pr{trace-inter} is often used to find out why an

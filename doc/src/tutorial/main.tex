@@ -6,8 +6,11 @@
 
 \usepackage{html}
 \usepackage{graphics}
+\usepackage{ifthen}
 
 \input{defs}
+\newboolean{@standalone}
+\setboolean{@standalone}{true}
 
 \oddsidemargin  -.5in         
 \evensidemargin -.5in         

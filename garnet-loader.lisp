@@ -1196,8 +1196,8 @@ to a 31 character filename with a .lisp suffix."
 
 ;;; note that I'm not sure that this works on anything aside from Unix
 ;;; variants. [2005/12/30:rpg]
-#+allegro
-(require :xcw)
+;;#+allegro
+;;(require :xcw)
 ;;; a test to try to make Xauth parsing of IPv6 addresses work.
 ;;; Didn't succeed... [2005/12/30:rpg]
 ;;;#+allegro
@@ -1217,8 +1217,8 @@ to a 31 character filename with a .lisp suffix."
 	#+cmu (ignore-errors (xlib:open-display d-name :display d-number))
 	#+allegro
 	(or
-	 (excl::ignore-errors
-	  (common-windows::open-display-with-auth d-name d-number))
+;;;	 (excl::ignore-errors
+;;;	  (common-windows::open-display-with-auth d-name d-number))
 	 (excl::ignore-errors
 	  (xlib:open-display d-name :display d-number))
 	 )

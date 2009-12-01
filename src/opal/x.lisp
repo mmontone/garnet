@@ -642,10 +642,15 @@ pixmap format in the list of valid formats."
 				  :icon-name icon-name)
     |#
     (xlib:set-wm-properties drawable
+;;;			    :client-machine
+;;;			    (or 
+;;;			     #+allegro
+;;;			     (sys:getenv "HOSTNAME")
+;;;			     "")
+			    :resource-name "Opal"
+			    :resource-class :opal
 			    :name title
 			    :icon-name icon-name)
-
-    
 
     ;;; The following allows you to destroy windows by hand using the
     ;;; window manager.  Unfortunately, this does not work in lispworks, but
@@ -1902,9 +1907,9 @@ pixmap format in the list of valid formats."
 			   :display *default-x-display-number*)
 	#+allegro
 	(or
-	 (ignore-errors
-	   (common-windows::open-display-with-auth
-	    opal::*default-x-display-name* *default-x-display-number*))
+;;;	 (ignore-errors
+;;;	   (common-windows::open-display-with-auth
+;;;	    opal::*default-x-display-name* *default-x-display-number*))
 	 (ignore-errors
 	   (xlib:open-display opal::*default-x-display-name*
 			   :display *default-x-display-number*)))
@@ -1934,8 +1939,8 @@ pixmap format in the list of valid formats."
 		:display *default-x-display-number*)
 	       #+allegro
 	       (or
-		(ignore-errors
-		  (xcw::open-display-with-auth opal::*default-x-display-name* *default-x-display-number*))
+;;;		(ignore-errors
+;;;		  (xcw::open-display-with-auth opal::*default-x-display-name* *default-x-display-number*))
 		(ignore-errors
 		  (xlib:open-display
 		   opal::*default-x-display-name*

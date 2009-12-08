@@ -1899,7 +1899,8 @@ pixmap format in the list of valid formats."
 	   #-allegro (ignore auth-name auth-data)
 	   )
   (setq *default-x-display-number*
-	(get-display-number opal::*default-x-display-name*))
+        opal::*default-x-display-number*)
+;;	(get-display-number opal::*default-x-display-name*))
 
   (setq opal::*default-x-display*
 	#-allegro

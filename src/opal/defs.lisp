@@ -259,6 +259,9 @@
    )
 
 (defun get-display-name (display)
+  "This function takes a full display name and,
+somewhat misleadingly, returns the HOST name, stripping
+off the display number."
   (do* ((dlist (coerce display 'list) (cdr dlist))
         (c (car dlist) (car dlist))
         (namelist nil)
@@ -266,14 +269,28 @@
        ((or (eq c nil) (eq c '#\:)) (coerce (reverse namelist) 'string))
        (push c namelist)))
 
+(defun get-display-number (display)
+  (declare (type string display))
+  (let ((dnum-start (position #\: display)))
+    (unless dnum-start
+      ;; assume it's display zero
+      (return-from get-display-number 0))
+    (incf dnum-start)
+    (let ((dnum-end (or (position #\. (subseq display dnum-start))
+                        (length display))))
+      (parse-integer (subseq display dnum-start dnum-end)))))
+
 
 (defun get-screen-number (display)
   (let* ((dlist (coerce display 'list))
          (numstr (progn
+                   ;; throw away anything up to a leading ":"
                    (do ((c (pop dlist) (pop dlist)))
                        ((or (eq c nil) (eq c '#\:))))
+                   ;; throw away up to the first "."
                    (do ((c (pop dlist) (pop dlist)))
                        ((or (eq c nil) (eq c '#\.))))
+                   ;; try to parse a number form here.
                    (do ((c (pop dlist) (pop dlist))
                         (numlist nil)
                         )
@@ -300,7 +317,12 @@
 
 ;;; DZG - this is unused (defvar *default-x-full-display-name*)
 (defvar *default-x-display-name*)
+(setf (documentation '*default-x-display-name* 'variable)
+      "This is an unfortunately misnamed entity, since it is
+actually an X HOSTNAME and not a display name in the sense of
+being a string display designator.")
 (defvar *default-x-display*)
+(defvar *default-x-display-number*)
 (defvar *default-x-screen-number*)
 (defvar *default-x-screen*)
 (defvar *default-x-root*)
@@ -348,6 +370,10 @@
 	  #-(or allegro clisp) (machine-instance)
 	  #+clisp ""
 	  #+allegro (short-site-name)))
+  (setf *default-x-display-number* 
+        (if full-display-name 
+            (get-display-number full-display-name)
+            0))
   (setq *default-x-screen-number* (get-screen-number full-display-name))
 
   ;; Set up all the Opal variables used to identify display, screen, etc.

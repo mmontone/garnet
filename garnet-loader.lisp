@@ -1161,14 +1161,18 @@ to a 31 character filename with a .lisp suffix."
 ;;;
 
 (defun get-full-display-name ()
+  ;; added the "or" because I couldn't figure a good way to trap the 
+  ;; "no other case fit" case with the reader macros... [2009/12/07:rpg]
+  (or
    #+cmu (cdr (assoc :DISPLAY lisp::*environment-list*))
    #+(or allegro lispworks kcl clisp) (sys::getenv "DISPLAY")
    #+(and lucid lcl3.0) (lucid-common-lisp:environment-variable "DISPLAY")
    #+(and lucid (not lcl3.0)) (system:environment-variable "DISPLAY")
+   #+sbcl (sb-posix:getenv "DISPLAY")
    ;; RGA hope this works as a sensible default.  Need a new function to
    ;; support other Lisp.
    ":0"
-   )
+   ))
 
 (defun get-display-name (display)
   (do* ((dlist (coerce display 'list) (cdr dlist))

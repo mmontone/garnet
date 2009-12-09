@@ -1140,7 +1140,7 @@ pixmap format in the list of valid formats."
   (multiple-value-bind (children parent root)
       (xlib:query-tree drawable)
     (declare (ignore children))
-    (if (eq parent root)
+    (if (xlib:drawable-equal parent root)
       (list drawable root)
       (cons drawable (lineage-of-drawable parent))))
   #+clx-cl-error

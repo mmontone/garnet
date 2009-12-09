@@ -65,26 +65,33 @@
   ;; by most of the lisp-specific commands.  Must close both streams.
   (multiple-value-bind (the-stream error-stream)
       #+allegro
-      (excl:run-shell-command command :wait NIL :output :stream
-			      :error-output :stream)
-      #+lucid
-      (lcl:run-program "/bin/sh" :arguments (list "-c" command)
-		       :wait NIL :output :stream :error-output :stream)
-      #+cmu
-      (ext:process-output (ext:run-program "/bin/sh" (list "-c" command)
-					   :wait NIL :output :stream))
-      #+lispworks
-      (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
-      #+clisp
-      (system::make-pipe-input-stream (string command))
-      #-(or allegro lucid cmu lispworks clisp)
-      (error "Don't know how to execute shell functions in this lisp")
+    (excl:run-shell-command command :wait NIL :output :stream
+                            :error-output :stream)
+    #+sbcl
+    (let ((process
+           (sb-ext:run-program "/bin/sh" (list "-c" command)
+                               :wait t :output :stream
+                               :error :stream)))
+      (values (sb-ext:process-output process)
+              (sb-ext:process-error process)))
+    #+lucid
+    (lcl:run-program "/bin/sh" :arguments (list "-c" command)
+                     :wait NIL :output :stream :error-output :stream)
+    #+cmu
+    (ext:process-output (ext:run-program "/bin/sh" (list "-c" command)
+                                         :wait NIL :output :stream))
+    #+lispworks
+    (foreign::open-pipe command :shell-type "/bin/sh" :buffered t)
+    #+clisp
+    (system::make-pipe-input-stream (string command))
+    #-(or allegro lucid cmu lispworks clisp sbcl)
+    (error "Don't know how to execute shell functions in this lisp")
       
-  (let ((output-string (make-array '(0)
-			  :element-type #+lucid 'string-char
-					#+allegro-v4.0 'cltl1::string-char
-                                        #-(or lucid allegro-v4.0) 'character
-			  :fill-pointer 0 :adjustable T)))
+    (let ((output-string (make-array '(0)
+                                     :element-type #+lucid 'string-char
+                                     #+allegro-v4.0 'cltl1::string-char
+                                     #-(or lucid allegro-v4.0) 'character
+                                     :fill-pointer 0 :adjustable T)))
       (do ((next-char (read-char the-stream NIL :eof)
 		      (read-char the-stream NIL :eof)))
 	  ((eq next-char :eof)

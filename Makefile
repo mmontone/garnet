@@ -3,6 +3,7 @@
 #
 CLISP=clisp
 CMUCL=lisp
+SBCL=sbcl
 
 all: clisp cmucl
 
@@ -11,6 +12,9 @@ clisp:
 
 cmucl:
 		$(CMUCL) < build.lisp
+
+sbcl:
+		$(SBCL) < build.lisp
 
 clean: clispclean cmuclclean
 

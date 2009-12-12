@@ -276,7 +276,7 @@ off the display number."
       ;; assume it's display zero
       (return-from get-display-number 0))
     (incf dnum-start)
-    (let ((dnum-end (or (position #\. (subseq display dnum-start))
+    (let ((dnum-end (or (position #\. display :start dnum-start)
                         (length display))))
       (parse-integer (subseq display dnum-start dnum-end)))))
 

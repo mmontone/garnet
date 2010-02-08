@@ -4,4 +4,5 @@
 #+clisp (ext:quit)
 #+cmu (quit)
 #+sbcl (sb-ext:quit)
+#+allegro (excl:exit)
 

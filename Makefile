@@ -4,6 +4,7 @@
 CLISP=clisp
 CMUCL=lisp
 SBCL=sbcl
+ALLEGRO=alisp
 
 all: clisp cmucl
 
@@ -15,6 +16,9 @@ cmucl:
 
 sbcl:
 		$(SBCL) < build.lisp
+
+allegro:
+		$(ALLEGRO) < build.lisp
 
 clean: clispclean cmuclclean
 

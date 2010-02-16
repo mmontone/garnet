@@ -1462,7 +1462,8 @@
       (when meta
 	(setf (a-formula-meta formula) NIL)
 	(destroy-schema meta)))
-    (vector-push-extend formula *reuse-formulas*)))
+    (when *reuse-formulas*
+      (vector-push-extend formula *reuse-formulas*))))
 
 
 

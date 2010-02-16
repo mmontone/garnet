@@ -162,7 +162,7 @@
 
 
 (defun make-image (filename &rest args)
-  #-(or cmu allegro lucid lispworks clisp apple)
+  #-(or cmu allegro lucid lispworks clisp apple sbcl)
     (error "Don't know how to automatically save an image for this lisp.
 Please consult your lisp's user manual for instructions.~%")
 
@@ -247,6 +247,11 @@ Please consult your lisp's user manual for instructions.~%")
  	  (append  ext:*after-save-initializations* (list #'garnet-restart-function))) 
     (apply #'ext:save-lisp filename extra-args))
   
+  #+sbcl
+  (progn
+    (pushnew #'garnet-restart-function sb-ext:*init-hooks*)
+    (apply #'sb-ext:save-lisp-and-die filename extra-args))
+  
   #+lispworks
   (apply #'system:save-image filename
 	                     :gc gc
@@ -297,21 +302,23 @@ Please consult your lisp's user manual for instructions.~%")
 ;;; This syntax works for all kinds of Unix shells: sh, csh, ksh, tcsh, ...
 ;;;
 (defun directory-p (pathname)
-  #+clisp
+  #+(or clisp sbcl)
   ;; 1. Needn't call a shell if we can do the test ourselves.
   ;; 2. In case pathname contains Latin-1 characters. clisp is 8 bit clean,
   ;;    while most Unix shells aren't.
-  (gu:probe-directory pathname)
+  (garnet-utils:probe-directory pathname)
 
   #+apple
   (ccl:directory-pathname-p pathname)
 
-  #-(or clisp apple)
+  
+  #-(or clisp apple sbcl)
   ;; command-string is the string that's going to be executed.
   (let ((command-string
 	 (concatenate 'string "test -d " pathname " && echo 1")))
     (unless (equal "" (shell-exec command-string))
-	    T)))
+	    T))
+)
 
 
 ;; This is an industrial-strength version of opal:directory-p.  The difference

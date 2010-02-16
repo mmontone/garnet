@@ -60,6 +60,7 @@
 #|
 ============================================================
 Change log:
+15-Feb-2010 Fred Gilham - Updates for SBCL, added Allegro 8.1.
 10/04/03 Russell Almond - Changed #+garnet-protected-eval to
                           (load-protected-eval-p) (Protected-eval
 			  basically replaces code in processes.lisp
@@ -229,7 +230,7 @@ which may make it easier to run cross platform.
 ;;; interactor can use the #+garnet-processes switch, instead of referring
 ;;; explicitly to different versions of lisp.
 ;;; RGA -- Added cmu and MCL (version 3 plus) to this list.
-#+(or allegro lucid lispworks (and cmu mp) ccl-3)
+#+(or allegro lucid lispworks (and cmu mp) ccl-3 sbcl)
 (pushnew :GARNET-PROCESSES *features*)
 
 ;;; The :GARNET-BINS option controls whether Garnet uses its own constructed
@@ -249,13 +250,22 @@ which may make it easier to run cross platform.
 ;; Set compiler optimization settings
 ;;
 (defvar *default-garnet-proclaim*
-  #+(or allegro lispworks apple) '(optimize (speed 3) (safety 1) (space 0)
-                                   (debug #+garnet-debug 3 #-garnet-debug 0))
+  #+(or allegro lispworks apple)
+  '(optimize (speed 3) (safety 1) (space 0) (debug #+garnet-debug 3 #-garnet-debug 0))
   ;; Lucid needs a safety of 1 and compilation-speed of 0 to avoid problems
   ;; with CLX calls.
   #+lucid '(optimize (compilation-speed 0) (safety 1) (speed 2))
+  ;; Debugging settings
+;;  #+sbcl '(optimize (speed 1) (safety 3) (debug 3) (space 1) (compilation-speed 0))
+  ;; Production settings
+  #+sbcl '(optimize (speed 3) (safety 1) (space 1) (debug 1) (compilation-speed 0))
   #+cmu '(optimize (speed 3) (safety 1) (space 0))
-  #-(or allegro lucid cmu lispworks apple) NIL)
+  #-(or allegro lucid cmu lispworks apple sbcl) NIL)
+
+
+#+sbcl
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (setf sb-ext:*muffled-warnings* 'sb-kernel::style-warning))
 
 (when *default-garnet-proclaim*
   (proclaim *default-garnet-proclaim*))
@@ -412,12 +422,13 @@ which may make it easier to run cross platform.
 load into your lisp.  Please set common-lisp-user::Garnet-Version before loading
 Garnet-Loader again."))
 
-(defvar Multiple-Garnet-Bin-Dirs nil
+(defvar Multiple-Garnet-Bin-Dirs t
   "Set this to T if you want the name of the bin directory to
    vary with the version of garnet, handy if you are debugging
    with multiple Lisp versions.")
 
 (defun Get-Garnet-Version ()
+  #+sbcl     :external-sbcl
   #+sparc    (or #+allegro-v4.0 :sparc-allegro
                  #+allegro-v4.1 :sparc-allegro4.1
                  #+allegro-v4.2 :sparc-allegro4.2
@@ -441,7 +452,7 @@ Garnet-Loader again."))
 		  #-ccl (version-error))
   #+macosx    (or #+allegro-v6.1 :macosx-acl-clx
 		  (version-error))
-  #-(or sparc dec3100 pa hpux clisp lispworks apple macosx) (version-error))
+  #-(or sparc dec3100 pa hpux clisp lispworks apple macosx sbcl) (version-error))
 
 ;;; Garnet-Version controls where the files are loaded from.
 ;;; Because this is a defvar, if Garnet-Version is set before this file is
@@ -451,6 +462,7 @@ Garnet-Loader again."))
 ;;; Your-Garnet-Pathname should be set appropriately.
 ;;;
 
+#+(or allegro-v8.1)(defparameter Garnet-Version :external-8.1-allegro)
 #+(or allegro-v6.2)(defparameter Garnet-Version :external-6.2-solaris)
 #+(or allegro-v6.1)(defparameter Garnet-Version :external-6.1-solaris)
 #+(or allegro-v5.0 allegro-v5.0.1)(defparameter Garnet-Version #+SUNOS4 :external-5.0-sunos
@@ -459,6 +471,7 @@ Garnet-Loader again."))
 		                     #-SUNOS4 :external-4.2-solaris)
 #+allegro-v4.1(defparameter Garnet-Version :external-4.1)
 #+cmu(defparameter Garnet-Version :external-cmu)
+#+clisp(defparameter Garnet-Version :external-clisp)
 #-(or cmu allegro)(defvar garnet-version(Get-Garnet-Version))
 
 (format T "~&** Loading Garnet Version ~a from ~s~%" Garnet-Version-Number Garnet-Version)
@@ -491,6 +504,7 @@ Garnet-Loader again."))
 (defvar Your-Garnet-Pathname
   (if (member garnet-version '(:external :external-cmu
 			       :external-sbcl
+			       :external-clisp
 			       :external-4.2
 			       :external-4.2-sunos
 			       :external-4.2-solaris
@@ -498,6 +512,7 @@ Garnet-Loader again."))
 			       :external-5.0-sunos
 			       :external-6.1-solaris
 			       :external-6.2-solaris
+			       :external-8.1-allegro
                                :mac :mac-osx :mac-clx
 			       :macosx-acl-clx))
       ;; This should work on Ansi compliant lisps.  Try it, if not
@@ -524,9 +539,23 @@ not support it."
   (merge-pathnames subdir dir)
   )
 
+
+;;; ripped from the bowels of asdf-install... [2006/01/05:rpg]       
+(defun directorify (name)
+  ;; input name may or may not have a training #\/, but we know we
+  ;; want a directory
+  (let ((path (pathname name)))
+    (if (pathname-name path)
+        (merge-pathnames
+         (make-pathname :directory `(:relative ,(pathname-name path)))
+         (make-pathname :directory (pathname-directory path)
+                        :host (pathname-host path)))
+        path)))
+
 ;;; RGA added this function as a cleaner way of handling the differences
 ;;; between Unix and Mac file naming conventions.  This will loose on pre-ansi
 ;;; lisps, but I can live with that (I think).
+
 
 ;;; RGA's original form really doesn't work properly in some lisps,
 ;;; because we are using it to create directory pathnames, but what
@@ -543,19 +572,6 @@ directory."
       (directorify raw-pathname))))
        
 
-;;; ripped from the bowels of asdf-install... [2006/01/05:rpg]       
-(defun directorify (name)
-  ;; input name may or may not have a training #\/, but we know we
-  ;; want a directory
-  (let ((path (pathname name)))
-    (if (pathname-name path)
-        (merge-pathnames
-         (make-pathname :directory `(:relative ,(pathname-name path)))
-         (make-pathname :directory (pathname-directory path)
-                        :host (pathname-host path)))
-        path)))
-       
-
 
 ;;; the following is just bloody awful, but I won't be able to fix it
 ;;; until version 4 comes along. [2006/01/05:rpg]
@@ -563,6 +579,7 @@ directory."
   (let ((directory-name
 	 (case version
 	   (:external-sbcl "bin.sbcl")
+	   (:external-8.1-allegro "bin8.1.allegro")
 	   (:external-6.2-solaris "bin6.2")
 	   (:external-6.1-solaris "bin6.1")
 	   (:external-5.0-solaris "bin5.0")
@@ -571,6 +588,7 @@ directory."
 	   (:external-4.2-solaris "bin.solaris")
 	   (:external-4.1 "bin4.1")
 	   (:external-cmu "cmu.bin")	;***
+	   (:external-clisp "clisp-bin")
 	   (:external "bin")
 	   (:sparc-allegro "sparc-allegro-bin")
 	   (:sparc-allegro4.1 "sparc-allegro4.1-bin")
@@ -582,7 +600,6 @@ directory."
 	   (:hp-allegro4.2 "hp-allegro4.2-bin")
 	   (:hp-lucid "hp-lucid-bin")
 	   (:hp-lucid4.0.3 "hp-lucid403-bin")
-	   (:clisp "clisp-bin")
 	   (:alpha-lw "alpha-lw-bin")
 	   (:mac "bin.mcl")
 	   (:mac-osx "bin.osx")
@@ -1003,6 +1020,17 @@ to a 31 character filename with a .lisp suffix."
   #+clisp (concatenate 'string "." (pathname-type (compile-file-pathname "foo.lisp"))))
 
 
+;;; RGA  This will lose on Windows
+(defun garnet-mkdir-if-needed (dirname)
+  "Creates the directory if it does not exist."
+  #+ansi-cl (ensure-directories-exist dirname :verbose t)
+  #-ansi-cl
+  ;; sds: ANSI CL spec does not require PROBE-FILE to work on directories
+  (unless (probe-file dirname)
+    #+apple(create-file dirname)
+    #-apple(garnet-shell-exec (format nil "mkdir ~A~%" dirname))))
+
+
 (defun Garnet-Compile (filename)
   (let ((pos (position #\: filename))
 	;; RGA hack to allow reading of unix formatted files.
@@ -1134,6 +1162,7 @@ to a 31 character filename with a .lisp suffix."
           (ccl::require-interface 'ColorPicker)
           (terpri))
    #+(or allegro sbcl cmu) (require :clx)
+   #+sbcl (require :sb-posix)
    #-(or apple sbcl cmu allegro) (load CLX-Loader)
    )
   (t
@@ -1451,15 +1480,6 @@ running Garnet."
   #-(or allegro lucid cmu lispworks clisp sbcl)
   (error "Don't know how to execute shell functions in this lisp"))
 
-;;; RGA  This will loose on Windows
-(defun garnet-mkdir-if-needed (dirname)
-  "Creates the directory if it does not exist."
-  #+ansi-cl (ensure-directories-exist dirname :verbose t)
-  #-ansi-cl
-  ;; sds: ANSI CL spec does not require PROBE-FILE to work on directories
-  (unless (probe-file dirname)
-    #+apple(create-file dirname)
-    #-apple(garnet-shell-exec (format nil "mkdir ~A~%" dirname))))
 (defun garnet-copy-files (src-dir bin-dir file-list)
   "Copies a list of files (usually loader files) from source directory
   to binary directory."
@@ -1470,3 +1490,7 @@ running Garnet."
       #-apple(garnet-shell-exec (format nil "cp ~A ~A~%" src dest)))))
 
 (format t "~%... Garnet Load Complete ...~%")
+
+#+sbcl
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (setf sb-ext:*muffled-warnings* 'sb-kernel::uninteresting-redefinition))

@@ -127,7 +127,8 @@
 (defun launch-main-event-loop-process ()
   "Spawn a process which is doing Garnet interaction all of the time.
    RETURN the process."
-  (when (typep *main-event-loop-process* 'sb-thread:thread)
+  (when (and (typep *main-event-loop-process* 'sb-thread:thread)
+	     (sb-thread:thread-alive-p *main-event-loop-process*))
     (sb-thread:terminate-thread *main-event-loop-process*))
   (setf *main-event-loop-process*
 	(sb-thread:make-thread 
@@ -248,10 +249,11 @@
 #+sb-thread
 (defun kill-main-event-loop-process ()
   "Kill the current main-event-loop process."
-  (when (and *main-event-loop-process*
-	     (typep *main-event-loop-process* sb-thread:thread))
-    (sb-thread:terminate-thread *main-event-loop-process*)
-    (setf *main-event-loop-process* nil)))
+  (let ((p *main-event-loop-process*))
+  (when (and (typep p 'sb-thread:thread)
+	     (sb-thread:thread-alive-p p))
+    (setf *main-event-loop-process* nil)
+    (sb-thread:terminate-thread p))))
 
 
 #-(or allegro lucid lispworks (and cmu mp) sb-thread)
@@ -300,8 +302,8 @@
        ))
 
 (defun running-main-event-loop-process-elsewhere-p ()
-  (and opal::*main-event-loop-process*
-       (not (eq opal::*main-event-loop-process*
+  (and *main-event-loop-process*
+       (not (eq *main-event-loop-process*
 		#+(or allegro lispworks (and cmu mp)) mp:*current-process*
 		#+lucid common-lisp-user::*current-process*
 		#+sb-thread sb-thread:*current-thread*

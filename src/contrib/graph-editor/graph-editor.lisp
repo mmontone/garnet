@@ -10,6 +10,7 @@
 ;(in-package :graph-editor :use '(:lisp :clos) :nicknames '(ge))
 (defpackage "GRAPH-EDITOR"
   (:nicknames "GE")
+  (:use common-lisp kr)
   (:export graph-node
 	   node-highlight-interactor link-highlight-interactor
 	   move-node-interactor delete-node-interactor delete-link-interactor
@@ -19,11 +20,12 @@
 	   menubar-menu-without-inverse graph-editor-menubar message-pane 
 	   graph-editor graph-editor-graph-agg
 	   ged-delete-node ged-delete-link ged-add-link
-	   ged-double-click))
+	   ged-double-click
+	   graph-edit-directory))
 
 (in-package "GE")
 
-(use-package :kr)		;Garnet
+;;(use-package :kr)		;Garnet
 
 
 
@@ -56,12 +58,12 @@
 ; aggregate are not drawn.  need to use a window to do this.
 
 
-(eval-when (compile eval load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (and (find-symbol "AGGREGRAPH" :opal)
 	       (boundp (find-symbol "AGGREGRAPH" :opal))
 	       (kr:schema-p (symbol-value (find-symbol "AGGREGRAPH" :opal))))
-    (load common-lisp-user::Garnet-Aggregraphs-Loader))
-  (common-lisp-user::garnet-load "gadgets:menubar-loader"))
+    (load cl-user::Garnet-Aggregraphs-Loader))
+  (cl-user::garnet-load "gadgets:menubar-loader"))
 
 
 
@@ -123,18 +125,21 @@
   (s-value (g-value self :window) :cursor (cons cursor mask))
   (opal:update (g-value self :window)))
 
-;;; Modified to make the system load 
+
+;; Save load directory.
+(defparameter *loaded-from-pathname* ".")
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (setf *loaded-from-pathname* (print *load-pathname*)))
+
 ; convenient way to define a cursor with a mask
 (defun define-cursor (name path mask-path)
   (create-instance name opal:bitmap
     (:image (opal:read-image 
-	     (merge-pathnames path (parse-namestring *load-truename*))))
+	     (merge-pathnames path *loaded-from-pathname*)))
     (:mask (create-instance nil opal:bitmap
 	     (:image (opal:read-image
 		      (merge-pathnames
-		       mask-path
-		       (parse-namestring *load-truename*)
-		       )))))))
+		       mask-path *loaded-from-pathname*)))))))
 
 
 ;; define some cursors for this window
@@ -564,56 +569,47 @@
   (:set-message #'(lambda (agg string)
 		    (kr-send (g-value agg :parent)
 			     :set-message (g-value agg :parent) string)))
-  (:source-roots (o-formula (gvl :parent :roots)))
-  (:children-function (o-formula (gvl :parent :children-function)))
-  (:info-function (o-formula (gvl :parent :info-function)))
-  ;; later we should put the node prototype up here, the link
-  ;; prototype, and also the prototype selectors.  [2004/06/17:rpg]
-  (:top (o-formula (gvl :parent :graph-top)))
-  (:height (o-formula (gvl :parent :graph-height)))
-  (:width (o-formula (gvl :parent :width)))
-  (:bottom (o-formula (+ (gvl :top) (gvl :height)))))
+  (:source-roots #f (gvl :parent :roots))
+  (:top #f (gvl :parent :graph-top))
+  (:height #f(gvl :parent :graph-height))
+  (:width #f (gvl :parent :width))
+  (:bottom #f(+ (gvl :top) (gvl :height))))
 
 
 
 
 ; Editor for DAGS, with menubar, a pane for the dag, and a message pane
 (create-instance 'graph-editor opal:aggregadget
-   ;; the following might oughta be changed to :source-roots
-   (:roots nil)
-   ;; added these to make the interface more like the one in the
-   ;; original opal:aggregraph [2004/06/17:rpg]
-   (:children-function NIL)
-   (:info-function NIL)
-   (:width 600)
-   (:menu-extra-space 50)
-   (:graph-top (o-formula (+ (gvl :menubar :bottom) (gvl :menu-extra-space))))
-   (:graph-height 200)
-   (:message-top (o-formula (gvl :graph :bottom)))
-   (:message-height 50)
-   (:parts
-    `((:menubar ,graph-editor-menubar
-		(:top 0)
-		(:bottom ,(o-formula (+ (gvl :top) (gvl :height)))))
-      (:divider1 ,opal:line		;separate menubar from graph
-		 (:x1 0)
-		 (:y1 ,(o-formula (gvl :parent :menubar :bottom)))
-		 (:x2 ,(o-formula (gvl :parent :width)))
-		 (:y2 ,(o-formula (gvl :y1))))
-      (:graph ,graph-editor-graph-agg)
-      (:divider2 ,opal:line		;separate graph from message
-		 (:x1 0)
-		 (:y1 ,(o-formula (gvl :parent :message-top)))
-		 (:x2 ,(o-formula (gvl :parent :width)))
-		 (:y2 ,(o-formula (gvl :y1))))
-      (:message ,message-pane		;to display messages.
-		(:top ,(o-formula (gvl :parent :message-top)))
-		(:bottom ,(o-formula (+ (gvl :top) (gvl :height))))
-		(:height ,(o-formula (gvl :parent :message-height)))
-		(:width ,(o-formula (gvl :parent :width))))
+  (:roots nil)
+  (:width 600)
+  (:menu-extra-space 50)
+  (:graph-top #f (+ (gvl :menubar :bottom) (gvl :menu-extra-space)))
+  (:graph-height 200)
+  (:message-top #f (gvl :graph :bottom))
+  (:message-height 50)
+  (:parts
+   `((:menubar ,graph-editor-menubar
+	       (:top 0)
+	       (:bottom ,#f(+ (gvl :top) (gvl :height))))
+     (:divider1 ,opal:line		;separate menubar from graph
+	       (:x1 0)
+	       (:y1 ,#f (gvl :parent :menubar :bottom))
+	       (:x2 ,#f (gvl :parent :width))
+	       (:y2 ,#f (gvl :y1)))
+     (:graph ,graph-editor-graph-agg)
+     (:divider2 ,opal:line		;separate graph from message
+	       (:x1 0)
+	       (:y1 ,#f (gvl :parent :message-top))
+	       (:x2 ,#f (gvl :parent :width))
+	       (:y2 ,#f (gvl :y1)))
+     (:message ,message-pane		;to display messages.
+	       (:top ,#f (gvl :parent :message-top))
+	       (:bottom ,#f (+ (gvl :top) (gvl :height)))
+	       (:height ,#f (gvl :parent :message-height))
+	       (:width ,#f (gvl :parent :width)))
 
-      ))
-   )
+     ))
+  )
 
 (define-method :set-mode graph-editor (self mode)
   (kr-send (g-value self :graph) :set-mode (g-value self :graph) mode))
@@ -631,9 +627,11 @@
 ; example of usage - an editor for file systems.
 ; It does not really delete your files, don't worry.
 
-(export '(graph-edit-directory))
+;;(export '(graph-edit-directory))
 
-(defun graph-edit-directory (&optional (root (pathname "./")))
+(defparameter *wild-pathname* (make-pathname :name :wild :type :wild))
+
+(defun graph-edit-directory (&optional (root (truename (pathname "./"))))
   (create-instance 'www inter:interactor-window
     (:title (format nil "Files in ~A" root))
     (:visible nil)
@@ -654,11 +652,15 @@
 			     (:children-function
 			      ,#'(lambda (pathname depth)
 				   (when (< depth 1)
-				     (directory (namestring pathname)))))
+				     (mapcar #'(lambda (p)
+						 (enough-namestring p pathname))
+					     (directory (make-pathname
+							 :directory (pathname-directory pathname)
+							 :defaults *wild-pathname*))))))
 			     )
 		     :divider2
 		     :message)))))
-       (setf ge agg)
+;;       (setf ge agg)
        agg)))
 
   (s-value www :width (g-value www :aggregate :width))

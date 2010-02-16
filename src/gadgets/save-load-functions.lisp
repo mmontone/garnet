@@ -206,7 +206,7 @@
 
 
 
-#-(or apple cmu)
+#-(or apple cmu sbcl)
 (defun real-path (path)
   (let* ((trimmed (string-right-trim "/" path))
          (len (length trimmed))
@@ -231,6 +231,14 @@
   (cond ((or (string= path "") (string= path "."))
 	 (lisp::namestring (ext::default-directory)))
 	(t path)))
+
+
+#+sbcl
+(defun real-path (path)
+  (cond ((or (string= path "") (string= path "."))
+	 (namestring *default-pathname-defaults*))
+	(t path)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; This function updates the file menu.  It is called
@@ -300,6 +308,35 @@
 ;;; This function gets the directory and puts it in the file
 ;;; menu.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;; SBCL adheres to a rather pedantic interpretation of the ANSI standard that sometimes
+;;; produces behavior that is not like other implementations.  This can be annoying at first
+;;; but eventually one gets the hang of it.
+#+SBCL
+(defparameter *wild-pathname* (make-pathname :name :wild :type :wild))
+
+
+#+SBCL
+(defun put-filenames-in-menu (save-gad dir-name)
+  (let ((file-list NIL)
+	(dir (directory (merge-pathnames dir-name *wild-pathname*)))
+	(save-win (g-value save-gad :window)))
+    (dolist (name dir)
+      (setf file-list 
+	    (cons 
+	     (string-left-trim '(#\/) (enough-namestring name (truename dir-name)))
+	     file-list)))
+    (setf file-list (sort file-list #'(lambda (x y) (string< x y))))
+    (push ".." file-list)
+    (s-value (g-value save-gad :file-menu) :items file-list)
+    (s-value (g-value save-gad :file-menu) :selected-ranks NIL)
+    (s-value (g-value save-gad :message) :string "")
+    (s-value (g-value save-gad :file-menu :scroll-bar) :value 0)
+    (opal:update save-win)))
+
+
+#-SBCL
 (defun put-filenames-in-menu (save-gad dir-name)
   (let ((file-list NIL)
 	#+clisp

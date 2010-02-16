@@ -269,16 +269,36 @@
   "An a-list of relations known to the system, with their inverse(s).
    Used for the creation of automatic reverse-links.")
 
+;;;
+;;; The following scheme is not SMP-safe, and breaks under SBCL.  Locking would be necessary to
+;;; do this correctly, but the garbage collector seems to work fast enough these days....
 
+#-sb-thread
 (defparameter *reuse-formulas* (make-array 1 :adjustable t :fill-pointer 0)
   "A list of formulas that have been destroyed and can be reused.  This
    avoids the need to allocate and deallocate formulas all the time.")
 
+#+sb-thread
+(defparameter *reuse-formulas* nil
+  "A list of formulas that have been destroyed and can be reused.  This
+   avoids the need to allocate and deallocate formulas all the time.")
+
+#-sb-thread
 (defparameter *reuse-slots* (make-array 1 :adjustable t :fill-pointer 0)
   "An array of slot arrays that have been destroyed and can be reused.  This
    avoids the need to allocate and deallocate arrays all the time.")
 
+#+sb-thread
+(defparameter *reuse-slots* nil
+  "An array of slot arrays that have been destroyed and can be reused.  This
+   avoids the need to allocate and deallocate arrays all the time.")
+
+#-sb-thread
 (defparameter *reuse-directories* (make-array 1 :adjustable t :fill-pointer 0)
+  "An array of directory arrays that have been destroyed and can be reused..")
+
+#+sb-thhread
+(defparameter *reuse-directories* nil
   "An array of directory arrays that have been destroyed and can be reused..")
 
 

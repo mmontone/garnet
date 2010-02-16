@@ -1,0 +1,80 @@
+#!/bin/sh
+
+#
+# $Id: build-garnet,v 1.1 2010/02/16 04:00:29 rotgut Exp $
+#
+
+#
+# Configure these paths for your system.
+#
+SBCL=/usr/local/bin/sbcl
+CMUCL=/usr/local/bin/lisp
+CLISP=/usr/bin/clisp
+ACL=/usr/local/allegro/8.1/alisp
+
+usage()
+{
+echo "
+  Usage: `basename $0` <platform>
+
+  where platform is one of:
+
+	sbcl	-- Steel Bank Common Lisp ($SBCL)
+
+	cmucl	-- CMU Common Lisp ($CMUCL)
+
+	clisp	-- Uh...clisp ($CLISP)
+
+	acl	-- Allegro Common Lisp (ANSI Version) ($ACL)
+
+  (If the above paths aren't correct, they should be set at the beginning
+  of the file $0).
+"
+}
+
+if [ $# -ne 1 ]; then
+    usage; exit 0;
+fi
+
+case $1 in
+    sbcl)
+	LISP=$SBCL
+	QUIT="(quit)"
+	IMAGE=garnet
+	;;
+    cmucl)
+	LISP=$CMUCL
+	QUIT="(quit)"
+	IMAGE=garnet.core
+	;;
+    clisp)
+	LISP="$CLISP -K full"
+	QUIT="(exit)"
+	IMAGE=garnet.mem
+	;;
+    acl)
+	LISP=$ACL
+	QUIT="(exit)"
+	IMAGE=garnet.dxl
+	;;
+    *)
+	usage;
+	exit -1
+	;;
+esac
+
+
+$LISP << EOF
+(load "garnet-prepare-compile")
+(defvar Garnet-Garnet-Debug NIL) ;; no debugging code
+(load "garnet-loader")
+(load "garnet-compiler")
+$QUIT
+EOF
+
+./garnet-after-compile
+
+$LISP << EOF
+(load "garnet-loader")
+(opal:make-image "$IMAGE" #+sbcl :executable #+sbcl t)
+EOF

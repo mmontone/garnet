@@ -76,10 +76,6 @@ Change log:
 (garnet-copy-files Garnet-c32-Src Garnet-c32-Pathname
 		   '("c32-loader.lisp"))
 
-
-
-
-#+(or allegro explorer lispworks lucid)
 (setf (get :garnet-modules :C32) t)
 
 (format t "... Done Compiling C32~%")

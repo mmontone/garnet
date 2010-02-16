@@ -174,7 +174,13 @@ Change log:
 	   ;; lower than main-event-loop-process.
 	   #'(lambda ()
 	       (Timer-Process-Main-Loop inter time once))
-	   :name "Garnet Timer"))
+	   :name "Garnet Timer")
+	  #+sb-thread
+	  (sb-thread:make-thread 
+	   #'(lambda ()
+	       (Timer-Process-Main-Loop inter time once))
+	   :name "Garnet Timer")
+	  )
     (if-debug inter (format T "Launching process ~s for ~s~%" timer-process
 			    inter))
     (s-value inter :timer-event-process timer-process)

@@ -1775,6 +1775,7 @@ pixmap format in the list of valid formats."
 ;;; objects in the window won't appear in Lucid and Allegro
 ;;; (due to some race condition).
 ;;;
+#-sb-thread
 (defun x-map-and-wait (a-window drawable)
   (let ((display (the-display a-window)))
     #+(or lucid allegro lispworks cmu)
@@ -1795,6 +1796,17 @@ pixmap format in the list of valid formats."
       (xlib:display-force-output display))))
 
 
+#+sb-thread
+(defun x-map-and-wait (a-window drawable)
+  (let ((display (the-display a-window)))
+    (sb-thread:with-recursive-lock (opal::*update-lock*)
+      (xlib:map-window drawable)
+      (xlib:display-force-output display)
+      )
+    (loop
+	 (if (eq (xlib:window-map-state drawable) :unmapped)
+	     (sleep .1)
+	     (return t)))))
 
 
 (defun x-max-character-ascent (root-window opal-font)

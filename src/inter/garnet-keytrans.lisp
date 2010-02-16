@@ -72,7 +72,7 @@ Change log:
 (defparameter *num-modifier-keys* 4) 
 
 
-(defparameter *num-mouse-buttons* 6) ;;3 buttons * 2 (for double-click
+(defparameter *num-mouse-buttons* 24) ;; XX At least 11 buttons....(was) 3 buttons * 2 (for double-click
 (defparameter *mouse-translation-dimensions*
   (list  (1+ *num-mouse-buttons*) (* *num-modifier-keys* *num-modifier-keys*)))
 

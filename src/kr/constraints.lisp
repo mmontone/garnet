@@ -120,9 +120,9 @@
 	(setf (a-formula-function formula)
 	      ;; This version does not work with CL version 2.  It is,
 	      ;; however, much more efficient than calling the compiler.
-	      #-(or CMU APPLE) `(lambda () ,form)
+	      #-(or CMU APPLE ANSI-CL) `(lambda () ,form)
 	      ;; This version works with CL version 2.
-	      #+(or CMU APPLE) (compile nil `(lambda () ,form)))
+	      #+(or CMU APPLE ANSI-CL) (compile nil `(lambda () ,form)))
 	(setf (a-formula-lambda formula) form)))
     formula)))
 

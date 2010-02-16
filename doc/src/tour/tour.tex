@@ -677,6 +677,9 @@ the string.
 \#k<MYBUTTONS>
 * \typ{(opal:add-component MYAGG MYBUTTONS)}
 \#k<MYBUTTONS>
+*\typ{(s-value mybuttons :value :left)}
+:left
+nil
 * \typ{(opal:update MYWINDOW)}
 NIL
 \end{programexample}
@@ -1056,6 +1059,7 @@ with your directory path to Garnet:}
   (:items '(:center :left :right))
   (:left 350)(:top 20))
 (opal:add-component MYAGG MYBUTTONS)
+(s-value mybuttons :value :left)          {\it ;do this before attaching to text}
 (opal:update MYWINDOW)
 \#-(or cmu allegro lucid lispworks apple)  {\it ;only do this if your Lisp is NOT a recent}
 (inter:main-event-loop)                   {\it ;version of CMU, Allegro, Lucid, or LispWorks}
@@ -1103,7 +1107,7 @@ the editior (except for the software loading, of course).}
 
 \begin{programexample}
 
-(garnet-load `demos:garnetdraw')
+(garnet-load "demos:garnetdraw")
 (garnetdraw:do-go)
 
 \end{programexample}

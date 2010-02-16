@@ -64,11 +64,11 @@
 
 
 (defun DIRECTORY-FN (namestring)
-  (let ((dir (directory #+cmu namestring
+  (let ((dir (directory #+(or cmu) namestring
 			#+apple (concatenate 'string (namestring namestring) "*")
                         #-(or cmu apple) 
                               (concatenate 'string (namestring namestring) "/")
-                          #-(or clisp cmu) :directories #-(or clisp cmu) t)))
+                          #-(or clisp cmu sbcl) :directories #-(or clisp cmu sbcl) t)))
     (if (or (null dir) (equal (car dir) namestring)) NIL dir)))
 
 ;;;

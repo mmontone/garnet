@@ -221,5 +221,9 @@ This file defines a host of Lisp utilities used by other Garnet code.
 		  ))
 	    ; The following causes an error if the directory does not exist
 	    (and (truename filename) t))
-  #-clisp (probe-file filename)
+
+  ;; Garnet under SBCL requires sb-posix.
+  #+sbcl
+  (ignore-errors (sb-posix:s-isdir (sb-posix:stat-mode (sb-posix:stat filename))))
+  #-(or clisp sbcl) (probe-file filename)
   )

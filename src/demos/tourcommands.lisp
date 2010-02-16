@@ -85,6 +85,7 @@
 		 (:Items '(:Center :left :right))
 		 (:left 350)(:top 20))
 (opal:add-component myagg mybuttons)
+(s-value mybuttons :value :left)          {\it ;do this before attaching to text}
 (opal:update mywindow)
 #-(or cmu allegro lucid lispworks)  ;only do this if your Lisp is NOT a
 (inter:main-event-loop)             ;recent version of CMU, Allegro, or Lucid.

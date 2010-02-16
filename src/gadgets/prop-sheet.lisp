@@ -446,8 +446,8 @@ Change log:
 			(+ (gvl :parent :v-spacing)
 			   (opal:gv-bottom (gv-local :self :prev)))
 			(gvl :parent :top))))
-   (:width (o-formula (+ (or (gvl :label-obj width) 0)
-			 (or (gvl :value-obj width) 0))))
+   (:width (o-formula (+ (or (gvl :label-obj :width) 0)
+			 (or (gvl :value-obj :width) 0))))
    (:label-obj NIL) ;label for this entry
    (:value-obj NIL) ;value for this entry.
                     ;Will be value-proto or a gadget

@@ -434,8 +434,7 @@
       (let* ((load-win (g-value gadget :window)))
 	(UNLESS (string= "" value)
 	  (when (OR (opal:directory-p value)  ; this half of Or, MUST come 1st
-		    (not (gu:probe-directory (concatenate 'string dir value))))
-
+		    (not (probe-file (concatenate 'string dir value))))
 	    (inter:beep)
 	    (setf valid-p NIL)
 	    (s-value gad :value "")

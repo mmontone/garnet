@@ -2,7 +2,7 @@
 ;; AggreTrees from Pedro Szekely.  These will probably be eventually
 ;; combined with aggregraphs.
 
-(in-package 'garnet-gadgets)
+(in-package :garnet-gadgets)
 
 (export '(AggreTree-1
 	  AggreTree-2
@@ -60,10 +60,6 @@ revert-aggretree-node - redisplays the tree starting at a specific node.
 
 ----------------------------------------------------------------------------
 Known bugs and planned enhancements:
-
-Bugs:
-- Why do I need to do (update vp T) in the interactor final function to get
-  the display to update?
 
 Planned enhancements:
 - Define formulas for :width and :height that don't depend on :left and :top.
@@ -467,16 +463,16 @@ The aggregadget
 
 (define-method :instantiate-prototype AggreTree-2
     (agg parent-node previous tree node-prototype)
-  (declare (ignore agg))
-  (let ((node (or (pop (g-value agg :node-free-list))
-		  (create-instance nil node-prototype
-		    (:left (o-formula (compute-aggretree-2-node-left)))
-		    (:top (o-formula (compute-aggretree-2-node-top)))
-		    (:tree-height (o-formula (compute-aggretree-2-height)))))))
-    (s-value node :previous previous)
-    (s-value node :parent-node parent-node)
-    (s-value node :tree tree)
-    (values node)))
+    ;; (declare (ignore agg))
+    (let ((node (or (pop (g-value agg :node-free-list))
+		    (create-instance nil node-prototype
+		      (:left (o-formula (compute-aggretree-2-node-left)))
+		      (:top (o-formula (compute-aggretree-2-node-top)))
+		      (:tree-height (o-formula (compute-aggretree-2-height)))))))
+      (s-value node :previous previous)
+      (s-value node :parent-node parent-node)
+      (s-value node :tree tree)
+      (values node)))
 
 
 (define-method :destroy-me AggreTree-2 (agg &optional top-level-p)
@@ -527,7 +523,7 @@ Demos.
 (defun aggretree-demo ()
   (let ((agg
 	 (create-instance nil AggreTree-2
-	   (:children-function #'(lambda (ob) (get-local-values ob :is-a-inv)))
+	   (:children-function #'(lambda (ob) (kr::get-local-values ob :is-a-inv)))
 	   (:expansion-level 1)
 	   (:tree opal:line)
 	   (:line-style opal:dotted-line)
@@ -535,7 +531,7 @@ Demos.
 	    (create-instance 'My-Tree-Node opal:text
 	      (:string (o-formula
 			(let* ((info (gvl :tree))
-			       (children (get-local-values info :is-a-inv)))
+			       (children (kr::get-local-values info :is-a-inv)))
 			  (if (and (zerop (gvl :expansion-level))
 				   children)
 			      (format nil "~S ...(~S)" info (length children))
@@ -550,8 +546,7 @@ Demos.
 		,#'(lambda (inter ob)
 		     (let ((level (g-value ob :expansion-level)))
 		       (s-value ob :expansion-level (if (> level 0) 0 1))
-		       (revert-aggretree-node (g-value ob :parent :parent) ob)
-		       #+out(opal:update (g-value ob :window) T))))))))))
+		       (revert-aggretree-node (g-value ob :parent :parent) ob))))))))))
     (create-instance 'aggretree-vp inter:interactor-window
       (:left 10) (:top 10) (:width 500) (:height 600)
       (:aggregate agg))

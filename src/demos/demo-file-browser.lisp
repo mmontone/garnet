@@ -54,21 +54,21 @@
       (let ((file (file-namestring pathname)))
 	;; CMU file-namestring can return null.
 	(if (or (null file) (string= file "")) ; then pathname is a directory.
-	                        ; So strip off the "/", get the directory name,
-	                        ; and restore the "/".
+                                        ; So strip off the "/", get the directory name,
+                                        ; and restore the "/".
             #+apple (file-namestring (string-right-trim ":" (namestring pathname)))
 	    #-apple (let ((directory (string-right-trim "/" (namestring pathname))))
-	                 (concatenate 'string (file-namestring directory) "/"))
-            file))  ; else we already got the file name.
+                      (concatenate 'string (file-namestring directory) "/"))
+            file))                ; else we already got the file name.
       ""))
 
 
 (defun DIRECTORY-FN (namestring)
   (let ((dir (directory #+(or cmu) namestring
-			#+apple (concatenate 'string (namestring namestring) "*")
-                        #-(or cmu apple) 
-                              (concatenate 'string (namestring namestring) "/")
-                          #-(or clisp cmu sbcl) :directories #-(or clisp cmu sbcl) t)))
+			#+(or apple sbcl) (concatenate 'string (namestring namestring) "*")
+                        #-(or cmu apple sbcl) 
+                        (concatenate 'string (namestring namestring) "/")
+                        #-(or clisp cmu sbcl) :directories #-(or clisp cmu sbcl) t)))
     (if (or (null dir) (equal (car dir) namestring)) NIL dir)))
 
 ;;;

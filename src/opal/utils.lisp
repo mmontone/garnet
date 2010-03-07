@@ -302,17 +302,16 @@ Please consult your lisp's user manual for instructions.~%")
 ;;; This syntax works for all kinds of Unix shells: sh, csh, ksh, tcsh, ...
 ;;;
 (defun directory-p (pathname)
-  #+(or clisp sbcl)
+  #+(or clisp sbcl allegro)
   ;; 1. Needn't call a shell if we can do the test ourselves.
   ;; 2. In case pathname contains Latin-1 characters. clisp is 8 bit clean,
   ;;    while most Unix shells aren't.
   (garnet-utils:probe-directory pathname)
 
-  #+apple
+  #+clozure-common-lisp
   (ccl:directory-pathname-p pathname)
 
-  
-  #-(or clisp apple sbcl)
+  #-(or clisp clozure-common-lisp sbcl allegro)
   ;; command-string is the string that's going to be executed.
   (let ((command-string
 	 (concatenate 'string "test -d " pathname " && echo 1")))

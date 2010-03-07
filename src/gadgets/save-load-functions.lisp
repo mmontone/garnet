@@ -206,7 +206,7 @@
 
 
 
-#-(or apple cmu sbcl)
+#-(or cmu sbcl)
 (defun real-path (path)
   (let* ((trimmed (string-right-trim "/" path))
          (len (length trimmed))
@@ -350,7 +350,7 @@
 			#+cmu :check-for-subdirs #+cmu NIL
 			#+cmu :truenamep #+cmu NIL
 			#+cmu :follow-links #+cmu NIL
-                        #-(or cmu clisp) :directories #-(or cmu clisp) t))
+                        #-(or cmu sbcl clisp) :directories #-(or cmu sbcl clisp) t))
 	(save-win (g-value save-gad :window)))
     (dolist (name dir)
 	    (setf file-list (cons (string-left-trim #+apple '(#\:)

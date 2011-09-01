@@ -587,7 +587,7 @@ directory."
 	   (:external-4.2-sunos "bin.sunos")
 	   (:external-4.2-solaris "bin.solaris")
 	   (:external-4.1 "bin4.1")
-	   (:external-cmu "cmu.bin")	;***
+	   (:external-cmu "bin.cmu")	;***
 	   (:external-clisp "clisp-bin")
 	   (:external "bin")
 	   (:sparc-allegro "sparc-allegro-bin")

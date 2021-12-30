@@ -297,7 +297,7 @@
 (defparameter *reuse-directories* (make-array 1 :adjustable t :fill-pointer 0)
   "An array of directory arrays that have been destroyed and can be reused..")
 
-#+sb-thhread
+#+sb-thread
 (defparameter *reuse-directories* nil
   "An array of directory arrays that have been destroyed and can be reused..")
 
